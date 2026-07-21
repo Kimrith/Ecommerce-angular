@@ -1,48 +1,109 @@
-<!-- Navbar with Output Event Binding -->
-<app-navbar (toggleSidebarMobile)="toggleSidebar()"></app-navbar>
-
-<div class="min-h-screen bg-gray-50 flex flex-col font-sans">
-  
-  <!-- ================= MOBILE SIDEBAR DRAWER (Overlay) ================= -->
+<!-- Navbar -->
+<app-navbar
+  (toggleSidebarMobile)="toggleSidebar()">
+</app-navbar>
+<div class="min-h-screen bg-gray-50">
+  <!-- Mobile Sidebar -->
   @if (isSidebarOpen) {
     <div class="fixed inset-0 z-50 lg:hidden flex">
-      <!-- Dark backdrop background -->
-      <div class="fixed inset-0 bg-black/50 transition-opacity" (click)="toggleSidebar()"></div>
-
-      <!-- Sliding Sidebar Content Panel -->
-      <div class="relative flex-1 max-w-xs w-full bg-white p-6 overflow-y-auto flex flex-col shadow-xl z-10 space-y-4">
-        <div class="flex items-center justify-between pb-4 border-b border-gray-100">
-          <span class="font-bold text-lg text-gray-900">Filters</span>
-          <button (click)="toggleSidebar()" class="text-gray-400 hover:text-gray-600 p-1 rounded-md focus:outline-none">
-            <svg class="h-6 w-6" fill="none" viewBox="0 0 24 24" stroke="currentColor">
-              <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M6 18L18 6M6 6l12 12" />
-            </svg>
+      <!-- Overlay -->
+      <div
+        class="fixed inset-0 bg-black/50"
+        (click)="toggleSidebar()">
+      </div>
+      <!-- Sidebar -->
+      <aside
+        class="
+        relative
+        w-[85%]
+        max-w-sm
+        h-full
+        bg-white
+        p-5
+        shadow-xl
+        z-10
+        overflow-y-auto
+        ">
+        <div class="flex justify-between items-center mb-6">
+          <h2 class="text-lg font-bold">
+            Filters
+          </h2>
+          <button
+            class="
+            w-8 h-8
+            rounded-full
+            hover:bg-gray-100
+            text-gray-600
+            "
+            (click)="toggleSidebar()">
+            ✕
           </button>
         </div>
-        
-        <!-- Reusable Sidebar for Mobile Drawer -->
         <app-sidebar></app-sidebar>
-      </div>
+      </aside>
     </div>
   }
-
-  <!-- ================= MAIN CONTAINER (Desktop Sidebar + Content) ================= -->
-  <div class="flex-1 flex max-w-7xl w-full mx-auto px-4 sm:px-6 lg:px-8 py-6 gap-8">
-    
-    <!-- Desktop Sidebar (Hidden on mobile screens, visible on large screens) -->
-    <aside class="hidden lg:block w-64 shrink-0">
-      <app-sidebar></app-sidebar>
-    </aside>
-
-    <!-- ================= MAIN CONTENT AREA ================= -->
-    <main class="flex-1">
-      <div class="bg-white border border-dashed border-gray-300 rounded-xl p-8 min-h-[500px] flex items-center justify-center text-gray-400">
-        <!-- Active Angular Route Component Renders Here -->
-        <router-outlet></router-outlet>
-      </div>
-    </main>
-
+  <!-- Content -->
+  <div
+    class="
+    mx-auto
+    px-4
+    sm:px-6
+    lg:px-8
+    py-5
+    sm:py-8
+    ">
+    <div
+      class="
+      flex
+      flex-col
+      lg:flex-row
+      gap-5
+      lg:gap-8
+      ">
+      <!-- Desktop Sidebar -->
+      <aside
+        class="
+        hidden
+        lg:block
+        w-72
+        flex-shrink-0
+        ">
+        <div
+          class="
+          sticky
+          top-24
+          bg-white
+          rounded-2xl
+          border
+          border-gray-200
+          shadow-sm
+          p-6
+          ">
+          <h3 class="text-lg font-bold mb-5">
+            Filters
+          </h3>
+          <app-sidebar></app-sidebar>
+        </div>
+      </aside>
+      <!-- Page -->
+      <main class="flex-1 min-w-0">
+        <div
+          class="
+          bg-white
+          rounded-2xl
+          border
+          border-gray-200
+          shadow-sm
+          p-4
+          sm:p-6
+          lg:p-8
+          ">
+          <router-outlet></router-outlet>
+        </div>
+      </main>
+    </div>
   </div>
 </div>
-
+<!-- Footer -->
 <app-footer></app-footer>

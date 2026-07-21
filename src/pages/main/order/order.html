@@ -1,0 +1,140 @@
+<!-- Header -->
+<div class="mb-8">
+  <h2 class="text-3xl font-bold text-gray-900">
+    My Orders
+  </h2>
+  <p class="text-gray-500 mt-2">
+    Track your orders, payment status, and delivery information.
+  </p>
+</div>
+<!-- Order Filter -->
+<div class="flex flex-wrap gap-3 mb-8">
+  <button
+    class="px-5 py-2 rounded-xl bg-orange-500 text-white">
+    All Orders
+  </button>
+  <button
+    class="px-5 py-2 rounded-xl bg-gray-100 text-gray-700 hover:bg-gray-200">
+    Pending
+  </button>
+  <button
+    class="px-5 py-2 rounded-xl bg-gray-100 text-gray-700 hover:bg-gray-200">
+    Shipping
+  </button>
+  <button
+    class="px-5 py-2 rounded-xl bg-gray-100 text-gray-700 hover:bg-gray-200">
+    Completed
+  </button>
+</div>
+<!-- Order Card -->
+<section class="space-y-6">
+  <!-- Order 1 -->
+  <div
+    class="bg-white border border-gray-200 rounded-2xl p-6">
+    <!-- Order Header -->
+    <div class="flex flex-col sm:flex-row sm:justify-between gap-4 mb-6">
+      <div>
+        <h3 class="font-bold text-gray-900">
+          Order #ORD-10001
+        </h3>
+        <p class="text-sm text-gray-500 mt-1">
+          Placed on July 21, 2026
+        </p>
+      </div>
+      <span
+        class="px-4 py-2 rounded-xl bg-yellow-100 text-yellow-700 text-sm font-semibold">
+        Pending
+      </span>
+    </div>
+
+    <!-- Product -->
+    <app-order-cart></app-order-cart>
+    <app-order-cart></app-order-cart>
+    <app-order-cart></app-order-cart>
+    <app-order-cart></app-order-cart>
+    
+    <!-- Order Information -->
+    <div
+      class="grid grid-cols-1 md:grid-cols-3 gap-5 mt-6">
+      <div>
+        <h4 class="text-sm text-gray-500">
+          Payment
+        </h4>
+        <p class="font-semibold text-gray-900 mt-1">
+          KHQR
+        </p>
+      </div>
+      <div>
+        <h4 class="text-sm text-gray-500">
+          Delivery
+        </h4>
+        <p class="font-semibold text-gray-900 mt-1">
+          Phnom Penh
+        </p>
+      </div>
+      <div>
+        <h4 class="text-sm text-gray-500">
+          Total
+        </h4>
+        <p class="font-semibold text-gray-900 mt-1">
+          $299
+        </p>
+      </div>
+    </div>
+    <!-- Action -->
+    <div
+      class="flex justify-end gap-3 mt-6">
+      <button
+        class="px-5 py-2 rounded-xl border border-gray-200 hover:bg-gray-50">
+        View Details
+      </button>
+      <button
+        class="px-5 py-2 rounded-xl bg-orange-500 text-white hover:bg-orange-600">
+        Track Order
+      </button>
+    </div>
+  </div>
+
+
+
+
+
+  <!-- Order 2 -->
+  <div
+    class="bg-white border border-gray-200 rounded-2xl p-6">
+
+
+    <div class="flex justify-between">
+
+      <div>
+
+        <h3 class="font-bold text-gray-900">
+          Order #ORD-10002
+        </h3>
+
+        <p class="text-sm text-gray-500 mt-1">
+          Placed on July 18, 2026
+        </p>
+
+      </div>
+
+
+      <span
+        class="px-4 py-2 rounded-xl bg-green-100 text-green-700 text-sm font-semibold">
+        Completed
+      </span>
+
+
+    </div>
+
+
+    <div class="mt-5 text-gray-500">
+      Product delivered successfully.
+    </div>
+
+
+  </div>
+
+
+
+</section>
