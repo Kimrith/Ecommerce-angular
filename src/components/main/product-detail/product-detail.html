@@ -1,1 +1,164 @@
-<p>product-detail works!</p>
+<div class="min-h-screen bg-gray-50">
+  <!-- Breadcrumb -->
+  <div class="mb-6 text-sm text-gray-500">
+    <a routerLink="/" class="hover:text-orange-600">
+      Home
+    </a>
+    <span class="mx-2">/</span>
+    <a routerLink="/products" class="hover:text-orange-600">
+      Products
+    </a>
+    <span class="mx-2">/</span>
+    <span class="text-gray-900 font-medium">
+      Wireless Headphones
+    </span>
+  </div>
+  <!-- Product Detail -->
+  <section class="bg-white rounded-3xl border border-gray-100 shadow-sm p-6 md:p-8">
+    <div class="grid grid-cols-1 lg:grid-cols-2 gap-10">
+      <!-- Product Image -->
+      <div>
+        <div class="bg-gray-100 rounded-3xl h-[450px] flex items-center justify-center overflow-hidden">
+          <img
+            src="https://images.unsplash.com/photo-1505740420928-5e560c06d30e?w=800"
+            class="w-full h-full object-cover"
+            alt="Product">
+        </div>
+        <!-- Thumbnail -->
+        <div class="flex gap-4 mt-5">
+          <div class="w-20 h-20 rounded-xl overflow-hidden border-2 border-orange-500">
+            <img
+              src="https://images.unsplash.com/photo-1505740420928-5e560c06d30e?w=200"
+              class="w-full h-full object-cover">
+          </div>
+          <div class="w-20 h-20 rounded-xl overflow-hidden border border-gray-200">
+            <img
+              src="https://images.unsplash.com/photo-1484704849700-f032a568e944?w=200"
+              class="w-full h-full object-cover">
+          </div>
+          <div class="w-20 h-20 rounded-xl overflow-hidden border border-gray-200">
+            <img
+              src="https://images.unsplash.com/photo-1583394838336-acd977736f90?w=200"
+              class="w-full h-full object-cover">
+          </div>
+        </div>
+      </div>
+      <!-- Product Info -->
+      <div>
+        <span class="text-sm font-semibold text-orange-600 uppercase">
+          Electronics
+        </span>
+        <h1 class="text-3xl md:text-4xl font-bold text-gray-900 mt-3">
+          Wireless Headphones
+        </h1>
+        <!-- Rating -->
+        <div class="flex items-center gap-2 mt-4">
+
+          <div class="text-orange-500">
+            ★★★★★
+          </div>
+
+          <span class="text-gray-500 text-sm">
+            4.8 (256 Reviews)
+          </span>
+
+        </div>
+        <!-- Price -->
+        <div class="mt-6">
+
+          <span class="text-4xl font-bold text-gray-900">
+            $299
+          </span>
+
+          <span class="ml-3 text-gray-400 line-through">
+            $399
+          </span>
+
+        </div>
+
+        <!-- Description -->
+        <p class="text-gray-600 mt-6 leading-relaxed">
+          Premium noise cancelling wireless headphones with
+          high quality sound, comfortable design and long battery life.
+        </p>
+
+        <!-- Quantity -->
+        <div class="mt-6">
+
+          <p class="font-semibold text-gray-900 mb-3">
+            Quantity
+          </p>
+
+
+          <div class="flex items-center border rounded-xl w-fit">
+
+            <button
+              class="px-4 py-2 hover:bg-gray-100">
+              -
+            </button>
+
+            <span class="px-5">
+              1
+            </span>
+
+            <button
+              class="px-4 py-2 hover:bg-gray-100">
+              +
+            </button>
+
+          </div>
+
+        </div>
+
+        <div class="flex flex-col sm:flex-row gap-4 mt-8">
+            <button
+                (click) = 'goBack()'
+                class="flex-1 border border-orange-500 text-orange-600 hover:bg-orange-50 py-3 rounded-xl font-semibold transition text-center">
+                ← Back
+            </button>
+            <button
+                class="flex-1 bg-orange-500 hover:bg-orange-600 text-white py-3 rounded-xl font-semibold transition">
+                Add To Cart
+            </button>
+        </div>
+      </div>
+    </div>
+  </section>
+  <!-- Product Information -->
+  <section class="mt-8 bg-white rounded-3xl border border-gray-100 shadow-sm p-6 md:p-8">
+    <h2 class="text-2xl font-bold text-gray-900 mb-4">
+      Product Details
+    </h2>
+    <p class="text-gray-600 leading-relaxed">
+      Experience powerful sound with premium wireless technology.
+      Designed for everyday use with comfortable ear cushions,
+      clear audio quality, and reliable performance.
+    </p>
+    <div class="grid grid-cols-1 md:grid-cols-3 gap-5 mt-8">
+      <div class="bg-gray-50 rounded-2xl p-5">
+        <h3 class="font-semibold">
+          Brand
+        </h3>
+        <p class="text-gray-500 mt-1">
+          Sony
+        </p>
+      </div>
+      <div class="bg-gray-50 rounded-2xl p-5">
+        <h3 class="font-semibold">
+          Category
+        </h3>
+        <p class="text-gray-500 mt-1">
+          Electronics
+        </p>
+      </div>
+      <div class="bg-gray-50 rounded-2xl p-5">
+        <h3 class="font-semibold">
+          Availability
+        </h3>
+        <p class="text-green-600 mt-1">
+          In Stock
+        </p>
+      </div>
+    </div>
+  </section>
+</div>

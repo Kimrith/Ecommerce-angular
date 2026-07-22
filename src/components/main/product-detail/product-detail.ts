@@ -1,3 +1,4 @@
+import { Location } from '@angular/common';
 import { Component } from '@angular/core';
 
 @Component({
@@ -6,4 +7,11 @@ import { Component } from '@angular/core';
   templateUrl: './product-detail.html',
   styleUrl: './product-detail.css',
 })
-export class ProductDetail {}
+export class ProductDetail {
+
+  constructor(private location: Location) {}
+  
+  goBack() {
+    this.location.back()
+  }
+}

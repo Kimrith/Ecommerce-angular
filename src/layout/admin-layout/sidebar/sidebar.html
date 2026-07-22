@@ -1,0 +1,147 @@
+<div class="h-screen bg-white border-r border-slate-200 p-5 flex flex-col">
+
+
+  <!-- Logo -->
+  <div class="mb-8">
+
+    <h1 class="text-2xl font-bold text-orange-600">
+      ShopSphere
+    </h1>
+
+    <p class="text-xs text-slate-400 uppercase tracking-widest mt-1">
+      Admin Panel
+    </p>
+
+  </div>
+
+
+
+  <!-- Menu -->
+  <nav class="flex-1">
+
+    <p class="text-xs font-bold text-slate-400 uppercase tracking-widest px-3 mb-3">
+      Menu
+    </p>
+
+
+    <ul class="space-y-1">
+
+
+      <!-- Dashboard -->
+      <li>
+        <a
+          routerLink="/admin"
+          routerLinkActive="bg-orange-50 text-orange-600 font-semibold"
+          [routerLinkActiveOptions]="{exact:true}"
+          class="flex items-center justify-between px-3 py-3 rounded-xl text-slate-600 hover:bg-slate-100 transition">
+
+          <span>
+            Dashboard
+          </span>
+
+        </a>
+      </li>
+
+
+
+      <!-- Products -->
+      <li>
+        <a
+          routerLink="/admin/products"
+          routerLinkActive="bg-orange-50 text-orange-600 font-semibold"
+          class="flex items-center justify-between px-3 py-3 rounded-xl text-slate-600 hover:bg-slate-100 transition">
+
+          Products
+
+        </a>
+      </li>
+
+
+
+      <!-- Categories -->
+      <li>
+        <a
+          routerLink="/admin/categories"
+          routerLinkActive="bg-orange-50 text-orange-600 font-semibold"
+          class="flex items-center justify-between px-3 py-3 rounded-xl text-slate-600 hover:bg-slate-100 transition">
+
+          Categories
+
+        </a>
+      </li>
+
+
+
+      <!-- Orders -->
+      <li>
+        <a
+          routerLink="/admin/orders"
+          routerLinkActive="bg-orange-50 text-orange-600 font-semibold"
+          class="flex items-center justify-between px-3 py-3 rounded-xl text-slate-600 hover:bg-slate-100 transition">
+
+          Orders
+
+        </a>
+      </li>
+
+
+
+      <!-- Users -->
+      <li>
+        <a
+          routerLink="/admin/users"
+          routerLinkActive="bg-orange-50 text-orange-600 font-semibold"
+          class="flex items-center justify-between px-3 py-3 rounded-xl text-slate-600 hover:bg-slate-100 transition">
+
+          Users
+
+        </a>
+      </li>
+
+
+
+      <!-- Payments -->
+      <li>
+        <a
+          routerLink="/admin/payments"
+          routerLinkActive="bg-orange-50 text-orange-600 font-semibold"
+          class="flex items-center justify-between px-3 py-3 rounded-xl text-slate-600 hover:bg-slate-100 transition">
+
+          Payments
+
+        </a>
+      </li>
+
+
+    </ul>
+
+  </nav>
+
+
+
+
+  <!-- Bottom -->
+  <div class="border-t border-slate-200 pt-4">
+
+
+    <a
+      routerLink="/"
+      class="flex items-center px-3 py-3 rounded-xl text-slate-600 hover:bg-slate-100 transition">
+
+      Back To Store
+
+    </a>
+
+
+    <button
+      class="w-full mt-2 text-left px-3 py-3 rounded-xl text-red-500 hover:bg-red-50 transition">
+
+      Logout
+
+    </button>
+
+
+  </div>
+
+
+</div>

@@ -1,3 +1,5 @@
+// main.route.ts
+
 import { Routes } from '@angular/router';
 import { MainLayout } from '../../../layout/main-layout/main-layout/main-layout';
 import { Dashboard } from '../../../pages/main/dashboard/dashboard';
@@ -9,42 +11,74 @@ import { Paymentmethod } from '../../../pages/main/paymentmethod/paymentmethod';
 import { CategoryDetail } from '../../../components/main/category-detail/category-detail';
 import { Products } from '../../../components/main/products/products';
 import { ProductDetail } from '../../../components/main/product-detail/product-detail';
+import { Register } from '../../../pages/main/register/register';
+import { Login } from '../../../pages/main/login/login';
 
-export const routes: Routes = [
-    {
+
+export const mainRoutes: Routes = [
+
+  {
+    path: '',
+    component: MainLayout,
+    children: [
+
+      {
         path: '',
         component: Dashboard
-    },
-    {
-        path: "about",
+      },
+
+      {
+        path: 'about',
         component: About
-    },
-    {
-        path: "contact",
+      },
+
+      {
+        path: 'contact',
         component: Contact
-    },
-    {
-        path: "setting",
+      },
+
+      {
+        path: 'setting',
         component: Setting
-    },
-    {
-        path: "orders",
+      },
+
+      {
+        path: 'orders',
         component: Order
-    },
-    {
+      },
+
+      {
         path: 'paymentmethod',
         component: Paymentmethod
-    },
-    {
+      },
+
+      {
         path: 'categories/:id',
         component: CategoryDetail
-    },
-    {
-    path: 'products',
-    component: Products
-    },
-    {
-    path: 'products/:id',
-    component: ProductDetail
-    }
+      },
+
+      {
+        path: 'products/:id',
+        component: ProductDetail
+      },
+
+      {
+        path: 'products',
+        component: Products
+      }
+
+    ]
+  },
+
+
+  {
+    path: 'auth/register',
+    component: Register
+  },
+
+  {
+    path: 'auth/login',
+    component: Login
+  }
+
 ];

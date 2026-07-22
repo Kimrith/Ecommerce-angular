@@ -1,0 +1,21 @@
+<div class="min-h-screen bg-slate-100">
+  <!-- Sidebar -->
+  <aside class="fixed left-0 top-0 h-screen w-72 bg-white border-r border-slate-200">
+    <app-sidebar></app-sidebar>
+  </aside>
+  <!-- Main -->
+  <div class="ml-72">
+    <!-- Navbar -->
+    <header class="sticky top-0 z-50">
+
+      <app-navbar></app-navbar>
+
+    </header>
+    <!-- Content -->
+    <main class="p-6">
+      <router-outlet></router-outlet>
+    </main>
+    <!-- Footer -->
+    <app-footer></app-footer>
+  </div>
+</div>

@@ -1,26 +1,10 @@
 import { Routes } from '@angular/router';
-import { MainLayout } from '../layout/main-layout/main-layout/main-layout';
-import { Login } from '../pages/main/login/login';
-import { Register } from '../pages/main/register/register';
+import { mainRoutes } from './routes/main/main.route';
+import { adminRoutes } from './routes/admin/admin.route';
+
+
 
 export const routes: Routes = [
-  {
-    path: '',
-    component: MainLayout,
-    children: [
-      {
-        path: '',
-        loadChildren: () =>
-          import('./routes/main/main.route').then(m => m.routes)
-      }
-    ]
-  },
-  {
-    path: 'auth/register',
-    component: Register
-  },
-  {
-    path: 'auth/login',
-    component: Login
-  }
+  ...mainRoutes,
+  ...adminRoutes
 ];
