@@ -1,5 +1,5 @@
 import { Component } from '@angular/core';
-import { ProductCart } from '../../../shared/components/main-layout/product-cart/product-cart';
+import { ProductCart } from '../product-cart/product-cart';
 import { Pagination } from '../../../shared/components/main-layout/pagination/pagination';
 
 @Component({

@@ -1,0 +1,46 @@
+<div class="space-y-6">
+
+  <!-- Header -->
+  <div class="flex flex-col md:flex-row md:items-center md:justify-between gap-4">
+
+    <div>
+      <h1 class="text-3xl font-bold text-slate-900">
+        Products
+      </h1>
+
+      <p class="text-slate-500 mt-1">
+        Manage your store products.
+      </p>
+    </div>
+
+    <button class="px-5 py-3 bg-orange-500 hover:bg-orange-600 text-white rounded-xl font-semibold transition">
+      + Add Product
+    </button>
+
+  </div>
+
+  <!-- Search -->
+  <div class="bg-white p-4 rounded-2xl border border-slate-200 shadow-sm">
+
+    <div class="flex flex-col md:flex-row gap-4">
+
+      <input
+        type="text"
+        placeholder="Search product..."
+        class="flex-1 border border-slate-200 rounded-xl px-4 py-3 outline-none focus:ring-2 focus:ring-orange-500">
+
+      <select class="border border-slate-200 rounded-xl px-4 py-3">
+        <option>All Categories</option>
+        <option>Electronics</option>
+        <option>Fashion</option>
+        <option>Accessories</option>
+      </select>
+
+    </div>
+
+  </div>
+
+  <!-- Products Table -->
+  <app-product-tables></app-product-tables>
+
+</div>

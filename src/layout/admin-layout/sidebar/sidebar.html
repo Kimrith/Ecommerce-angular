@@ -1,6 +1,4 @@
 <div class="h-screen bg-white border-r border-slate-200 p-5 flex flex-col">
-
-
   <!-- Logo -->
   <div class="mb-8">
 
@@ -13,135 +11,82 @@
     </p>
 
   </div>
-
-
-
   <!-- Menu -->
   <nav class="flex-1">
-
     <p class="text-xs font-bold text-slate-400 uppercase tracking-widest px-3 mb-3">
       Menu
     </p>
-
-
     <ul class="space-y-1">
-
-
       <!-- Dashboard -->
       <li>
-        <a
+        <RouterLink 
           routerLink="/admin"
           routerLinkActive="bg-orange-50 text-orange-600 font-semibold"
           [routerLinkActiveOptions]="{exact:true}"
           class="flex items-center justify-between px-3 py-3 rounded-xl text-slate-600 hover:bg-slate-100 transition">
-
           <span>
             Dashboard
           </span>
-
-        </a>
+        </RouterLink>
       </li>
-
-
 
       <!-- Products -->
       <li>
-        <a
+        <RouterLink
           routerLink="/admin/products"
           routerLinkActive="bg-orange-50 text-orange-600 font-semibold"
           class="flex items-center justify-between px-3 py-3 rounded-xl text-slate-600 hover:bg-slate-100 transition">
-
           Products
-
-        </a>
+        </RouterLink>
       </li>
-
-
-
       <!-- Categories -->
       <li>
-        <a
+        <RouterLink
           routerLink="/admin/categories"
           routerLinkActive="bg-orange-50 text-orange-600 font-semibold"
           class="flex items-center justify-between px-3 py-3 rounded-xl text-slate-600 hover:bg-slate-100 transition">
-
           Categories
-
-        </a>
+        </RouterLink>
       </li>
-
-
-
       <!-- Orders -->
       <li>
-        <a
+        <RouterLink
           routerLink="/admin/orders"
           routerLinkActive="bg-orange-50 text-orange-600 font-semibold"
           class="flex items-center justify-between px-3 py-3 rounded-xl text-slate-600 hover:bg-slate-100 transition">
-
           Orders
-
-        </a>
+        </RouterLink>
       </li>
-
-
-
       <!-- Users -->
       <li>
-        <a
+        <RouterLink
           routerLink="/admin/users"
           routerLinkActive="bg-orange-50 text-orange-600 font-semibold"
           class="flex items-center justify-between px-3 py-3 rounded-xl text-slate-600 hover:bg-slate-100 transition">
-
           Users
-
-        </a>
+        </RouterLink>
       </li>
-
-
-
       <!-- Payments -->
       <li>
-        <a
+        <RouterLink
           routerLink="/admin/payments"
           routerLinkActive="bg-orange-50 text-orange-600 font-semibold"
           class="flex items-center justify-between px-3 py-3 rounded-xl text-slate-600 hover:bg-slate-100 transition">
-
           Payments
-
-        </a>
+        </RouterLink>
       </li>
-
-
     </ul>
-
   </nav>
-
-
-
-
   <!-- Bottom -->
   <div class="border-t border-slate-200 pt-4">
-
-
-    <a
+    <RouterLink
       routerLink="/"
       class="flex items-center px-3 py-3 rounded-xl text-slate-600 hover:bg-slate-100 transition">
-
       Back To Store
-
-    </a>
-
-
+    </RouterLink>
     <button
       class="w-full mt-2 text-left px-3 py-3 rounded-xl text-red-500 hover:bg-red-50 transition">
-
       Logout
-
     </button>
-
-
   </div>
-
-
 </div>
