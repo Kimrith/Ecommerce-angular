@@ -1,6 +1,5 @@
 <div class="space-y-6">
 
-
   <!-- Header -->
   <div>
     <h1 class="text-3xl font-bold text-slate-900">
@@ -12,14 +11,10 @@
     </p>
   </div>
 
-
-
   <!-- Stats -->
   <section class="grid grid-cols-1 sm:grid-cols-2 xl:grid-cols-4 gap-6">
 
-
     <div class="bg-white rounded-2xl border border-slate-200 p-6 shadow-sm">
-
       <p class="text-sm text-slate-500">
         Total Revenue
       </p>
@@ -31,13 +26,9 @@
       <p class="text-sm text-green-600 mt-3">
         +12% this month
       </p>
-
     </div>
 
-
-
     <div class="bg-white rounded-2xl border border-slate-200 p-6 shadow-sm">
-
       <p class="text-sm text-slate-500">
         Total Orders
       </p>
@@ -49,13 +40,9 @@
       <p class="text-sm text-green-600 mt-3">
         +8% this month
       </p>
-
     </div>
 
-
-
     <div class="bg-white rounded-2xl border border-slate-200 p-6 shadow-sm">
-
       <p class="text-sm text-slate-500">
         Customers
       </p>
@@ -67,13 +54,9 @@
       <p class="text-sm text-green-600 mt-3">
         +5% this month
       </p>
-
     </div>
 
-
-
     <div class="bg-white rounded-2xl border border-slate-200 p-6 shadow-sm">
-
       <p class="text-sm text-slate-500">
         Products
       </p>
@@ -85,23 +68,15 @@
       <p class="text-sm text-orange-600 mt-3">
         15 Low Stock
       </p>
-
     </div>
 
-
   </section>
-
-
-
-
 
   <!-- Charts -->
   <section class="grid grid-cols-1 xl:grid-cols-2 gap-6">
 
-
     <!-- Revenue Chart -->
     <div class="bg-white rounded-2xl border border-slate-200 p-6 shadow-sm">
-
 
       <div class="flex justify-between items-center mb-5">
 
@@ -109,93 +84,55 @@
           Revenue Overview
         </h2>
 
-
         <select class="text-sm border border-slate-200 rounded-xl px-3 py-2">
-
-          <option>
-            This Year
-          </option>
-
-          <option>
-            This Month
-          </option>
-
+          <option>This Year</option>
+          <option>This Month</option>
         </select>
 
-
       </div>
 
-
-      <div class="h-72 bg-slate-50 rounded-xl flex items-center justify-center">
-
-        <p class="text-slate-400">
-          Line Chart Here
-        </p>
-
+      <!-- Chart Canvas -->
+      <div class="h-72">
+        <canvas id="salesChart" class="w-full h-full"></canvas>
       </div>
-
 
     </div>
 
-
-
-
-
     <!-- Order Chart -->
     <div class="bg-white rounded-2xl border border-slate-200 p-6 shadow-sm">
-
 
       <h2 class="text-lg font-bold text-slate-900 mb-5">
         Order Status
       </h2>
 
-
-      <div class="h-72 bg-slate-50 rounded-xl flex items-center justify-center">
-
-        <p class="text-slate-400">
-          Doughnut Chart Here
-        </p>
-
+      <!-- Chart Canvas -->
+      <div class="h-72">
+        <canvas id="orderChart" class="w-full h-full"></canvas>
       </div>
-
 
     </div>
 
-
   </section>
-
-
-
-
 
   <!-- Tables -->
   <section class="grid grid-cols-1 xl:grid-cols-2 gap-6">
 
-
-
     <!-- Recent Orders -->
     <div class="bg-white rounded-2xl border border-slate-200 p-6 shadow-sm">
 
-
       <div class="flex justify-between mb-5">
-
         <h2 class="font-bold text-lg">
           Recent Orders
         </h2>
 
-        <button class="text-orange-600 text-sm">
+        <button class="text-orange-600 text-sm hover:underline">
           View All
         </button>
-
       </div>
-
-
 
       <div class="space-y-4">
 
-
-        <div class="flex justify-between">
-
+        <div class="flex justify-between items-center">
           <div>
             <p class="font-semibold">
               #ORD-1001
@@ -206,18 +143,12 @@
             </p>
           </div>
 
-
           <span class="text-green-600 font-semibold">
             Completed
           </span>
-
-
         </div>
 
-
-
-        <div class="flex justify-between">
-
+        <div class="flex justify-between items-center">
           <div>
             <p class="font-semibold">
               #ORD-1002
@@ -228,70 +159,72 @@
             </p>
           </div>
 
-
           <span class="text-orange-600 font-semibold">
             Pending
           </span>
-
-
         </div>
 
+        <div class="flex justify-between items-center">
+          <div>
+            <p class="font-semibold">
+              #ORD-1003
+            </p>
+
+            <p class="text-sm text-slate-500">
+              Bluetooth Speaker
+            </p>
+          </div>
+
+          <span class="text-red-500 font-semibold">
+            Cancelled
+          </span>
+        </div>
 
       </div>
 
-
     </div>
-
-
-
-
 
     <!-- Low Stock -->
     <div class="bg-white rounded-2xl border border-slate-200 p-6 shadow-sm">
-
 
       <h2 class="font-bold text-lg mb-5">
         Low Stock Products
       </h2>
 
-
       <div class="space-y-4">
 
-
         <div class="flex justify-between">
-
-          <span>
-            iPhone Case
-          </span>
-
+          <span>iPhone Case</span>
           <span class="text-red-500 font-semibold">
             3 left
           </span>
-
         </div>
 
-
-
         <div class="flex justify-between">
-
-          <span>
-            Gaming Mouse
-          </span>
-
+          <span>Gaming Mouse</span>
           <span class="text-red-500 font-semibold">
             5 left
           </span>
-
         </div>
 
+        <div class="flex justify-between">
+          <span>USB-C Cable</span>
+          <span class="text-red-500 font-semibold">
+            7 left
+          </span>
+        </div>
+
+        <div class="flex justify-between">
+          <span>Mechanical Keyboard</span>
+          <span class="text-red-500 font-semibold">
+            2 left
+          </span>
+        </div>
 
       </div>
 
-
     </div>
 
-
   </section>
-
 
 </div>

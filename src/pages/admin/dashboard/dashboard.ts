@@ -1,6 +1,5 @@
-import { Component, AfterViewInit } from '@angular/core';
+import { AfterViewInit, Component } from '@angular/core';
 import Chart from 'chart.js/auto';
-
 
 @Component({
   selector: 'app-dashboard',
@@ -10,94 +9,42 @@ import Chart from 'chart.js/auto';
 })
 export class Dashboard implements AfterViewInit {
 
-
   ngAfterViewInit(): void {
 
-
     new Chart('salesChart', {
-
       type: 'line',
-
       data: {
-
-        labels: [
-          'Jan',
-          'Feb',
-          'Mar',
-          'Apr',
-          'May',
-          'Jun'
-        ],
-
+        labels: ['Jan', 'Feb', 'Mar', 'Apr', 'May', 'Jun'],
         datasets: [
           {
             label: 'Revenue',
-
-            data: [
-              2500,
-              4000,
-              3200,
-              6500,
-              5000,
-              8500
-            ],
-
-            tension: 0.4
-
-          }
-        ]
-
+            data: [2500, 4000, 3200, 6500, 5000, 8500],
+            tension: 0.4,
+            fill: false,
+          },
+        ],
       },
-
-
       options: {
-
         responsive: true,
-
-        maintainAspectRatio: false
-
-      }
-
+        maintainAspectRatio: false,
+      },
     });
-
-
 
     new Chart('orderChart', {
-
       type: 'doughnut',
-
       data: {
-
-        labels: [
-          'Completed',
-          'Pending',
-          'Cancelled'
-        ],
-
+        labels: ['Completed', 'Pending', 'Cancelled'],
         datasets: [
           {
-            data: [
-              75,
-              15,
-              10
-            ]
-          }
-        ]
-
+            data: [75, 15, 10],
+          },
+        ],
       },
-
-
       options: {
-
         responsive: true,
-
-        maintainAspectRatio: false
-
-      }
-
+        maintainAspectRatio: false,
+      },
     });
 
-
   }
-
 }

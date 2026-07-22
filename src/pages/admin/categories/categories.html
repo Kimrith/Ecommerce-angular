@@ -1,0 +1,38 @@
+<div class="space-y-6">
+  <!-- Header -->
+  <div class="flex flex-col md:flex-row md:items-center md:justify-between gap-4">
+    <div>
+      <h1 class="text-3xl font-bold text-slate-900">
+        Categories
+      </h1>
+      <p class="text-slate-500 mt-1">
+        Manage product categories.
+      </p>
+    </div>
+    <button class="px-5 py-3 bg-orange-500 hover:bg-orange-600 text-white rounded-xl font-semibold transition">
+      + Add Category
+    </button>
+  </div>
+
+  <!-- Search -->
+  <div class="bg-white rounded-2xl border border-slate-200 shadow-sm p-4">
+
+    <div class="flex flex-col md:flex-row gap-4">
+
+      <input
+        type="text"
+        placeholder="Search category..."
+        class="flex-1 border border-slate-200 rounded-xl px-4 py-3 outline-none focus:ring-2 focus:ring-orange-500">
+
+      <button class="px-5 py-3 bg-slate-900 text-white rounded-xl hover:bg-slate-800 transition">
+        Search
+      </button>
+
+    </div>
+
+  </div>
+
+  <!-- Categories Table -->
+  <app-categories-tables></app-categories-tables>
+
+</div>

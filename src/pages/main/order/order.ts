@@ -1,5 +1,5 @@
 import { Component } from '@angular/core';
-import { OrderCart } from '../../../shared/components/main-layout/order-cart/order-cart';
+import { OrderCart } from '../../../components/main/order-cart/order-cart';
 
 @Component({
   selector: 'app-order',
