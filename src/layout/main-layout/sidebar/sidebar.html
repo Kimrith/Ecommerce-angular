@@ -2,28 +2,193 @@
 
   <!-- Page Navigation -->
   <div class="bg-white p-5 rounded-2xl border border-slate-200 shadow-xl shadow-slate-200/50">
-    <h3 class="text-xs font-bold text-slate-400 uppercase tracking-widest mb-3 px-2">Navigation</h3>
+
+    <h3 class="text-xs font-bold text-slate-400 uppercase tracking-widest mb-3 px-2">
+      Navigation
+    </h3>
+
     <ul class="space-y-1 text-sm text-slate-600">
-      <li><RouterLink routerLink="/" routerLinkActive="bg-orange-600 text-white font-medium shadow-lg shadow-orange-600/25" [routerLinkActiveOptions]="{exact: true}" class="flex items-center gap-3 py-2 px-3 rounded-xl hover:bg-slate-100 hover:text-slate-900 transition-all">Home</RouterLink></li>
-      <li><RouterLink routerLink="/about" routerLinkActive="bg-orange-600 text-white font-medium shadow-lg shadow-orange-600/25" class="flex items-center gap-3 py-2 px-3 rounded-xl hover:bg-slate-100 hover:text-slate-900 transition-all">About</RouterLink></li>
-      <li><RouterLink routerLink="/contact" routerLinkActive="bg-orange-600 text-white font-medium shadow-lg shadow-orange-600/25" class="flex items-center gap-3 py-2 px-3 rounded-xl hover:bg-slate-100 hover:text-slate-900 transition-all">Contact</RouterLink></li>
-      <li><RouterLink routerLink="/setting" routerLinkActive="bg-orange-600 text-white font-medium shadow-lg shadow-orange-600/25" class="flex items-center gap-3 py-2 px-3 rounded-xl hover:bg-slate-100 hover:text-slate-900 transition-all">Setting</RouterLink></li>
-      <li><RouterLink routerLink="/paymentmethod" routerLinkActive="bg-orange-600 text-white font-medium shadow-lg shadow-orange-600/25" class="flex items-center gap-3 py-2 px-3 rounded-xl hover:bg-slate-100 hover:text-slate-900 transition-all">Payment Method</RouterLink></li>
-      <li><RouterLink routerLink="/orders" routerLinkActive="bg-orange-600 text-white font-medium shadow-lg shadow-orange-600/25" class="flex items-center gap-3 py-2 px-3 rounded-xl hover:bg-slate-100 hover:text-slate-900 transition-all">Orders</RouterLink></li>
-      <li><RouterLink routerLink="/auth/register" routerLinkActive="bg-orange-600 text-white font-medium shadow-lg shadow-orange-600/25" class="flex items-center gap-3 py-2 px-3 rounded-xl hover:bg-slate-100 hover:text-slate-900 transition-all">Register</RouterLink></li>
+
+      <!-- Home -->
+      <li>
+        <a
+          routerLink="/"
+          routerLinkActive="bg-orange-50 text-orange-600 font-semibold"
+          [routerLinkActiveOptions]="{ exact: true }"
+          class="flex items-center justify-between py-2 px-3 rounded-xl transition-all hover:bg-slate-100 hover:text-slate-900">
+
+          Home
+
+        </a>
+      </li>
+
+
+      <!-- About -->
+      <li>
+        <a
+          routerLink="/about"
+          routerLinkActive="bg-orange-50 text-orange-600 font-semibold"
+          class="flex items-center justify-between py-2 px-3 rounded-xl transition-all hover:bg-slate-100 hover:text-slate-900">
+
+          About
+
+        </a>
+      </li>
+
+
+      <!-- Contact -->
+      <li>
+        <a
+          routerLink="/contact"
+          routerLinkActive="bg-orange-50 text-orange-600 font-semibold"
+          class="flex items-center justify-between py-2 px-3 rounded-xl transition-all hover:bg-slate-100 hover:text-slate-900">
+
+          Contact
+
+        </a>
+      </li>
+
+
+      <!-- Setting -->
+      <li>
+        <a
+          routerLink="/setting"
+          routerLinkActive="bg-orange-50 text-orange-600 font-semibold"
+          class="flex items-center justify-between py-2 px-3 rounded-xl transition-all hover:bg-slate-100 hover:text-slate-900">
+
+          Setting
+
+        </a>
+      </li>
+
+
+      <!-- Payment Method -->
+      <li>
+        <a
+          routerLink="/paymentmethod"
+          routerLinkActive="bg-orange-50 text-orange-600 font-semibold"
+          class="flex items-center justify-between py-2 px-3 rounded-xl transition-all hover:bg-slate-100 hover:text-slate-900">
+
+          Payment Method
+
+        </a>
+      </li>
+
+
+      <!-- Orders -->
+      <li>
+        <a
+          routerLink="/orders"
+          routerLinkActive="bg-orange-50 text-orange-600 font-semibold"
+          class="flex items-center justify-between py-2 px-3 rounded-xl transition-all hover:bg-slate-100 hover:text-slate-900">
+
+          Orders
+
+        </a>
+      </li>
+
+
+      <!-- Register -->
+      <li>
+        <a
+          routerLink="/auth/register"
+          routerLinkActive="bg-orange-50 text-orange-600 font-semibold"
+          class="flex items-center justify-between py-2 px-3 rounded-xl transition-all hover:bg-slate-100 hover:text-slate-900">
+
+          Register
+
+        </a>
+      </li>
+
     </ul>
+
   </div>
 
-  <!-- Category Filter -->
   <div class="bg-white p-5 rounded-2xl border border-slate-200 shadow-xl shadow-slate-200/50">
-    <h3 class="text-xs font-bold text-slate-400 uppercase tracking-widest mb-3 px-2">Categories</h3>
+    <h3 class="text-xs font-bold text-slate-400 uppercase tracking-widest mb-3 px-2">
+      Categories
+    </h3>
+
     <ul class="space-y-1 text-sm text-slate-600">
-      <li><a href="#" class="flex items-center justify-between py-2 px-3 rounded-xl bg-orange-50 text-orange-600 font-semibold transition-all">All Products</a></li>
-      <li><a href="#" class="flex items-center justify-between py-2 px-3 rounded-xl hover:bg-slate-100 hover:text-slate-900 transition-all">Electronics & Gadgets</a></li>
-      <li><a href="#" class="flex items-center justify-between py-2 px-3 rounded-xl hover:bg-slate-100 hover:text-slate-900 transition-all">Apparel & Fashion</a></li>
-      <li><a href="#" class="flex items-center justify-between py-2 px-3 rounded-xl hover:bg-slate-100 hover:text-slate-900 transition-all">Home & Kitchen</a></li>
-      <li><a href="#" class="flex items-center justify-between py-2 px-3 rounded-xl hover:bg-slate-100 hover:text-slate-900 transition-all">Sports & Outdoors</a></li>
-      <li><a href="#" class="flex items-center justify-between py-2 px-3 rounded-xl hover:bg-slate-100 hover:text-slate-900 transition-all">Beauty & Health</a></li>
+
+      <!-- All Products -->
+      <li>
+        <a
+          routerLink="/products"
+          routerLinkActive="bg-orange-50 text-orange-600 font-semibold"
+          [routerLinkActiveOptions]="{ exact: true }"
+          class="flex items-center justify-between py-2 px-3 rounded-xl transition-all hover:bg-slate-100 hover:text-slate-900">
+
+          All Products
+
+        </a>
+      </li>
+
+
+      <!-- Electronics -->
+      <li>
+        <a
+          [routerLink]="['/categories', 1]"
+          routerLinkActive="bg-orange-50 text-orange-600 font-semibold"
+          class="flex items-center justify-between py-2 px-3 rounded-xl transition-all hover:bg-slate-100 hover:text-slate-900">
+
+          Electronics & Gadgets
+
+        </a>
+      </li>
+
+
+      <!-- Fashion -->
+      <li>
+        <a
+          [routerLink]="['/categories', 2]"
+          routerLinkActive="bg-orange-50 text-orange-600 font-semibold"
+          class="flex items-center justify-between py-2 px-3 rounded-xl transition-all hover:bg-slate-100 hover:text-slate-900">
+
+          Apparel & Fashion
+
+        </a>
+      </li>
+
+
+      <!-- Home -->
+      <li>
+        <a
+          [routerLink]="['/categories', 3]"
+          routerLinkActive="bg-orange-50 text-orange-600 font-semibold"
+          class="flex items-center justify-between py-2 px-3 rounded-xl transition-all hover:bg-slate-100 hover:text-slate-900">
+
+          Home & Kitchen
+
+        </a>
+      </li>
+
+
+      <!-- Sports -->
+      <li>
+        <a
+          [routerLink]="['/categories', 4]"
+          routerLinkActive="bg-orange-50 text-orange-600 font-semibold"
+          class="flex items-center justify-between py-2 px-3 rounded-xl transition-all hover:bg-slate-100 hover:text-slate-900">
+
+          Sports & Outdoors
+
+        </a>
+      </li>
+
+
+      <!-- Beauty -->
+      <li>
+        <a
+          [routerLink]="['/categories', 5]"
+          routerLinkActive="bg-orange-50 text-orange-600 font-semibold"
+          class="flex items-center justify-between py-2 px-3 rounded-xl transition-all hover:bg-slate-100 hover:text-slate-900">
+
+          Beauty & Health
+
+        </a>
+      </li>
+
     </ul>
   </div>
 
