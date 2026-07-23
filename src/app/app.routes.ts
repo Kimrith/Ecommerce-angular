@@ -1,10 +1,10 @@
 import { Routes } from '@angular/router';
 import { mainRoutes } from './routes/main/main.route';
-import { adminRoutes } from './routes/admin/admin.route';
+import { sellersRoutes } from './routes/sellers/sellers.route';
 
 
 
 export const routes: Routes = [
   ...mainRoutes,
-  ...adminRoutes
+  ...sellersRoutes
 ];

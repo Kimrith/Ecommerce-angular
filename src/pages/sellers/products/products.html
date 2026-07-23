@@ -13,9 +13,18 @@
       </p>
     </div>
 
-    <button class="px-5 py-3 bg-orange-500 hover:bg-orange-600 text-white rounded-xl font-semibold transition">
+    <button
+      (click)="openProductModal()"
+      class="px-5 py-3 bg-orange-500 hover:bg-orange-600 text-white rounded-xl font-semibold transition">
       + Add Product
     </button>
+
+
+    @if (showProductModal) {
+      <app-product-form-modal
+        (close)="closeProductModal()">
+      </app-product-form-modal>
+    }
 
   </div>
 

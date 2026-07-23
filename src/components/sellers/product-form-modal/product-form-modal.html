@@ -1,0 +1,154 @@
+<!-- Modal Overlay -->
+<div class="fixed inset-0 z-50 flex items-center justify-center bg-black/50 p-4">
+
+  <!-- Modal -->
+  <div class="w-full max-w-3xl rounded-2xl bg-white shadow-xl">
+
+    <!-- Header -->
+    <div class="flex items-center justify-between border-b border-slate-200 px-6 py-4">
+
+      <div>
+        <h2 class="text-xl font-bold text-slate-900">
+          Add Product
+        </h2>
+
+        <p class="text-sm text-slate-500">
+          Create a new product for your store.
+        </p>
+      </div>
+
+
+        <button
+        (click)="closeModal()"
+        class="text-2xl text-slate-400 hover:text-slate-700">
+        &times;
+        </button>
+
+    </div>
+
+
+
+    <!-- Form -->
+    <div class="space-y-6 p-6">
+      <!-- Product Image -->
+      <div>
+        <label class="mb-2 block text-sm font-medium text-slate-700">
+          Product Image
+        </label>
+
+        <div
+          class="flex h-40 items-center justify-center rounded-xl border-2 border-dashed border-slate-300 bg-slate-50">
+          <button
+            class="rounded-lg bg-blue-600 px-4 py-2 text-white hover:bg-blue-700">
+            Upload Image
+          </button>
+        </div>
+      </div>
+      <!-- Product Info -->
+      <div class="grid gap-6 md:grid-cols-2">
+        <div>
+          <label class="mb-2 block text-sm font-medium text-slate-700">
+            Product Name
+          </label>
+
+          <input
+            type="text"
+            placeholder="Enter product name"
+            class="w-full rounded-lg border border-slate-300 px-4 py-2 focus:border-blue-500 focus:outline-none">
+        </div>
+
+        <div>
+          <label class="mb-2 block text-sm font-medium text-slate-700">
+            Category
+          </label>
+
+          <select
+            class="w-full rounded-lg border border-slate-300 px-4 py-2 focus:border-blue-500 focus:outline-none">
+
+            <option>
+              Electronics
+            </option>
+
+            <option>
+              Fashion
+            </option>
+
+            <option>
+              Home
+            </option>
+
+          </select>
+
+        </div>
+      </div>
+      <!-- Price & Stock -->
+      <div class="grid gap-6 md:grid-cols-3">
+        <div>
+          <label class="mb-2 block text-sm font-medium text-slate-700">
+            Price
+          </label>
+
+          <input
+            type="number"
+            placeholder="$0.00"
+            class="w-full rounded-lg border border-slate-300 px-4 py-2">
+        </div>
+        <div>
+          <label class="mb-2 block text-sm font-medium text-slate-700">
+            Stock
+          </label>
+
+          <input
+            type="number"
+            placeholder="Quantity"
+            class="w-full rounded-lg border border-slate-300 px-4 py-2">
+        </div>
+
+        <div>
+          <label class="mb-2 block text-sm font-medium text-slate-700">
+            SKU
+          </label>
+
+          <input
+            type="text"
+            placeholder="SKU-001"
+            class="w-full rounded-lg border border-slate-300 px-4 py-2">
+        </div>
+      </div>
+      <!-- Description -->
+      <div>
+        <label class="mb-2 block text-sm font-medium text-slate-700">
+          Description
+        </label>
+
+        <textarea
+          rows="4"
+          placeholder="Product description..."
+          class="w-full rounded-lg border border-slate-300 px-4 py-2 focus:border-blue-500 focus:outline-none"></textarea>
+      </div>
+      <!-- Status -->
+      <div class="flex items-center gap-3">
+
+        <input
+          type="checkbox"
+          class="h-4 w-4 rounded border-slate-300">
+
+        <label class="text-sm text-slate-700">
+          Publish product immediately
+        </label>
+      </div>
+    </div>
+    <!-- Footer -->
+    <div class="flex justify-end gap-3 border-t border-slate-200 px-6 py-4">
+      <button
+        (click) = "closeModal()"
+        class="rounded-lg border border-slate-300 px-5 py-2 text-slate-700 hover:bg-slate-100">
+        Cancel
+      </button>
+      <button
+        class="rounded-lg bg-blue-600 px-5 py-2 text-white hover:bg-blue-700">
+        Save Product
+      </button>
+    </div>
+  </div>
+</div>
