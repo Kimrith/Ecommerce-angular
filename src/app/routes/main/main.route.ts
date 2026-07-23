@@ -11,8 +11,9 @@ import { Paymentmethod } from '../../../pages/main/paymentmethod/paymentmethod';
 import { CategoryDetail } from '../../../components/main/category-detail/category-detail';
 import { Products } from '../../../components/main/products/products';
 import { ProductDetail } from '../../../components/main/product-detail/product-detail';
-import { Register } from '../../../pages/main/register/register';
-import { Login } from '../../../pages/main/login/login';
+import { Register } from '../../../shared/auth/register/register';
+import { Login } from '../../../shared/auth/login/login';
+import { Error } from '../../../shared/components/error/error';
 
 
 export const mainRoutes: Routes = [
@@ -79,6 +80,11 @@ export const mainRoutes: Routes = [
   {
     path: 'auth/login',
     component: Login
-  }
+  },
+
+  // {
+  //   path: '**',
+  //   component: Error
+  // }
 
 ];

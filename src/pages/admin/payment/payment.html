@@ -1,0 +1,97 @@
+<div class="space-y-6">
+  <div class="flex flex-col md:flex-row md:items-center md:justify-between gap-4">
+    <div>
+      <h1 class="text-3xl font-bold text-slate-900">Payments</h1>
+      <p class="text-slate-500 mt-1">Manage customer payments and seller transactions.</p>
+    </div>
+  </div>
+
+  <div class="grid gap-6 md:grid-cols-4">
+    <div class="bg-white rounded-2xl border border-slate-200 shadow-sm p-6">
+      <p class="text-sm text-slate-500">Total Revenue</p>
+      <h2 class="text-3xl font-bold text-slate-900 mt-2">$245,800</h2>
+    </div>
+
+    <div class="bg-white rounded-2xl border border-slate-200 shadow-sm p-6">
+      <p class="text-sm text-slate-500">Completed Payments</p>
+      <h2 class="text-3xl font-bold text-green-600 mt-2">11,250</h2>
+    </div>
+
+    <div class="bg-white rounded-2xl border border-slate-200 shadow-sm p-6">
+      <p class="text-sm text-slate-500">Pending Payments</p>
+      <h2 class="text-3xl font-bold text-orange-500 mt-2">120</h2>
+    </div>
+
+    <div class="bg-white rounded-2xl border border-slate-200 shadow-sm p-6">
+      <p class="text-sm text-slate-500">Refunds</p>
+      <h2 class="text-3xl font-bold text-red-600 mt-2">$4,500</h2>
+    </div>
+  </div>
+
+  <div class="bg-white rounded-2xl border border-slate-200 shadow-sm p-4">
+    <div class="flex flex-col md:flex-row gap-4">
+      <input type="text" placeholder="Search transaction ID..." class="flex-1 px-4 py-3 rounded-xl border border-slate-200 outline-none focus:ring-2 focus:ring-orange-500">
+
+      <select class="px-4 py-3 rounded-xl border border-slate-200">
+        <option>All Payment Status</option>
+        <option>Completed</option>
+        <option>Pending</option>
+        <option>Failed</option>
+        <option>Refunded</option>
+      </select>
+
+      <button class="px-5 py-3 bg-slate-900 text-white rounded-xl">
+        Search
+      </button>
+    </div>
+  </div>
+
+  <div class="bg-white rounded-2xl border border-slate-200 shadow-sm overflow-hidden">
+    <div class="overflow-x-auto">
+      <table class="w-full">
+        <thead class="bg-slate-50 border-b border-slate-200">
+          <tr>
+            <th class="px-6 py-4 text-left text-sm text-slate-600">Transaction ID</th>
+            <th class="px-6 py-4 text-left text-sm text-slate-600">Customer</th>
+            <th class="px-6 py-4 text-left text-sm text-slate-600">Payment Method</th>
+            <th class="px-6 py-4 text-left text-sm text-slate-600">Amount</th>
+            <th class="px-6 py-4 text-left text-sm text-slate-600">Status</th>
+            <th class="px-6 py-4 text-left text-sm text-slate-600">Action</th>
+          </tr>
+        </thead>
+
+        <tbody class="divide-y divide-slate-100">
+          <tr>
+            <td class="px-6 py-4 font-semibold text-slate-900">
+              TXN-10001
+            </td>
+
+            <td class="px-6 py-4 text-slate-700">
+              John Doe
+            </td>
+
+            <td class="px-6 py-4 text-slate-700">
+              KHQR
+            </td>
+
+            <td class="px-6 py-4 font-semibold">
+              $150
+            </td>
+
+            <td class="px-6 py-4">
+              <span class="px-3 py-1 rounded-full text-xs bg-green-100 text-green-700">
+                Completed
+              </span>
+            </td>
+
+            <td class="px-6 py-4">
+              <button class="px-3 py-2 bg-blue-600 text-white rounded-lg text-sm">
+                View
+              </button>
+            </td>
+          </tr>
+        </tbody>
+      </table>
+    </div>
+  </div>
+</div>

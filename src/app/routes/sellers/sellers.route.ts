@@ -6,6 +6,8 @@ import { Orders } from "../../../pages/sellers/orders/orders";
 import { Setting } from "../../../pages/sellers/setting/setting";
 import { Payments } from "../../../pages/sellers/payments/payments";
 import { SellersLayout } from "../../../layout/sellers-layout/sellers-layout/sellers-layout";
+import { Feedback } from "../../../pages/sellers/feedback/feedback";
+import { Error } from "../../../shared/components/error/error";
 
 
 export const sellersRoutes: Routes = [
@@ -36,7 +38,15 @@ export const sellersRoutes: Routes = [
             {
                 path: 'payments',
                 component: Payments
-            }
+            },
+            {
+                path: 'feedback',
+                component: Feedback
+            },
         ]
-    }
+    },
+    // {
+    //     path: '**',
+    //     component: Error
+    // }
 ]
