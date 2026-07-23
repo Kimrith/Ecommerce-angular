@@ -14,8 +14,8 @@ export class ProductFormModal {
     this.close.emit();
   }
 
-  @HostListener('document:keydown.escape', ['$event'])
-  handleEscape(event: KeyboardEvent) {
+  @HostListener('document:keydown.escape')
+  handleEscape() {
     this.closeModal();
   }
 }
