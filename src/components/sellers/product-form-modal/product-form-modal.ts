@@ -18,5 +18,4 @@ export class ProductFormModal {
   handleEscape() {
     this.closeModal();
   }
-
 }
