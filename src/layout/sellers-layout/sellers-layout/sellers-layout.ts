@@ -5,14 +5,14 @@ import { Footer } from '../footer/footer';
 import { RouterOutlet } from '@angular/router';
 
 @Component({
-  selector: 'app-admin-layout',
+  selector: 'app-sellers-layout',
   imports: [
     Sidebar,
     Navbar,
     Footer,
     RouterOutlet
   ],
-  templateUrl: './admin-layout.html',
-  styleUrl: './admin-layout.css',
+  templateUrl: './sellers-layout.html',
+  styleUrl: './sellers-layout.css',
 })
-export class AdminLayout {}
+export class SellersLayout {}
