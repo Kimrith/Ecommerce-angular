@@ -14,12 +14,17 @@
     </div>
 
     <button
-      class="rounded-xl bg-orange-500 px-5 py-3 font-semibold text-white hover:bg-orange-600">
+      (click) = "openAddSellerModal()"
+      class="rounded-xl bg-orange-500 px-5 py-3 font-semibold cursor-pointer text-white hover:bg-orange-600">
       + Add Seller
     </button>
-
   </div>
 
+  @if (showAddSellerModal) {
+    <app-add-seller-popup
+      (close)="closeAddSellerModal()">
+    </app-add-seller-popup>
+  }
 
   <!-- Statistics -->
   <div class="grid gap-6 md:grid-cols-4">
