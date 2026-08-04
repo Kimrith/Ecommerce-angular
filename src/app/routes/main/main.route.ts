@@ -73,12 +73,12 @@ export const mainRoutes: Routes = [
 
 
   {
-    path: 'auth/register',
+    path: 'register',
     component: Register
   },
 
   {
-    path: 'auth/login',
+    path: 'login',
     component: Login
   },
 

@@ -4,14 +4,20 @@
       <h1 class="text-3xl font-bold text-slate-900">Products</h1>
       <p class="text-slate-500 mt-1">Manage all products from sellers.</p>
     </div>
-    <button class="px-5 py-3 bg-orange-500 hover:bg-orange-600 text-white rounded-xl font-semibold transition">
+    <button (click)="openAddProductModal()"
+      class="px-5 py-3 bg-orange-500 hover:bg-orange-600 text-white rounded-xl font-semibold transition">
       + Add Product
     </button>
   </div>
 
+  @if (showAddProductModal) {
+  <app-add-product-form-model (close)="closeAddProductModal()"></app-add-product-form-model>
+  }
+
   <div class="bg-white rounded-2xl border border-slate-200 shadow-sm p-4">
     <div class="flex flex-col md:flex-row gap-4">
-      <input type="text" placeholder="Search product..." class="flex-1 px-4 py-3 rounded-xl border border-slate-200 outline-none focus:ring-2 focus:ring-orange-500">
+      <input type="text" placeholder="Search product..."
+        class="flex-1 px-4 py-3 rounded-xl border border-slate-200 outline-none focus:ring-2 focus:ring-orange-500" />
       <select class="px-4 py-3 rounded-xl border border-slate-200 outline-none">
         <option>All Categories</option>
         <option>Electronics</option>
@@ -44,44 +50,49 @@
             <th class="px-6 py-4 text-left text-sm font-semibold text-slate-600">Action</th>
           </tr>
         </thead>
-
         <tbody class="divide-y divide-slate-100">
+          @for (p of products; track p.id) {
           <tr>
             <td class="px-6 py-4">
               <div class="flex items-center gap-3">
-                <img src="https://via.placeholder.com/50" class="w-12 h-12 rounded-xl object-cover">
+                <img [src]="p.imageUrl || 'https://via.placeholder.com/50'" class="w-12 h-12 rounded-xl object-cover">
                 <div>
-                  <p class="font-semibold text-slate-900">iPhone 15 Pro</p>
-                  <p class="text-sm text-slate-500">SKU: IP15-001</p>
+                  <p class="font-semibold text-slate-900">{{ p.name }}</p>
+                  <p class="text-sm text-slate-500">SKU: {{ p.sku }}</p>
                 </div>
               </div>
             </td>
 
             <td class="px-6 py-4 text-slate-700">
-              Tech Store
+              {{ p.storeName || p.sellerName || 'N/A' }}
             </td>
 
             <td class="px-6 py-4 text-slate-700">
-              Electronics
+              {{ p.categoryName || 'N/A' }}
             </td>
 
             <td class="px-6 py-4 font-semibold text-slate-900">
-              $999
+              ${{ p.price }}
             </td>
 
             <td class="px-6 py-4 text-slate-700">
-              25
+              {{ p.initialStock ?? p.availableQuantity }}
             </td>
 
             <td class="px-6 py-4">
-              <span class="px-3 py-1 rounded-full text-xs font-semibold bg-green-100 text-green-700">
-                Active
+              <span class="px-3 py-1 rounded-full text-xs font-semibold" [ngClass]="{
+                    'bg-green-100 text-green-700': p.status === 2 || p.status === 'Approved',
+                    'bg-yellow-100 text-yellow-700': p.status === 1 || p.status === 'Pending',
+                    'bg-red-100 text-red-700': p.status === 3 || p.status === 'Rejected' || p.status === 5
+                  }">
+                {{ p.statusText || p.status }}
               </span>
             </td>
 
             <td class="px-6 py-4">
               <div class="flex gap-2">
-                <button class="px-3 py-2 rounded-lg bg-blue-600 text-white text-sm hover:bg-blue-700">
+                <button (click)="viewDetail(p)"
+                  class="px-3 py-2 rounded-lg bg-blue-600 text-white text-sm hover:bg-blue-700">
                   View
                 </button>
                 <button class="px-3 py-2 rounded-lg bg-red-600 text-white text-sm hover:bg-red-700">
@@ -90,53 +101,23 @@
               </div>
             </td>
           </tr>
-
+          } @empty {
           <tr>
-            <td class="px-6 py-4">
-              <div class="flex items-center gap-3">
-                <img src="https://via.placeholder.com/50" class="w-12 h-12 rounded-xl object-cover">
-                <div>
-                  <p class="font-semibold text-slate-900">Gaming Keyboard</p>
-                  <p class="text-sm text-slate-500">SKU: KB-100</p>
-                </div>
-              </div>
-            </td>
-
-            <td class="px-6 py-4 text-slate-700">
-              Gaming Store
-            </td>
-
-            <td class="px-6 py-4 text-slate-700">
-              Accessories
-            </td>
-
-            <td class="px-6 py-4 font-semibold text-slate-900">
-              $120
-            </td>
-
-            <td class="px-6 py-4 text-slate-700">
-              50
-            </td>
-
-            <td class="px-6 py-4">
-              <span class="px-3 py-1 rounded-full text-xs font-semibold bg-yellow-100 text-yellow-700">
-                Pending
-              </span>
-            </td>
-
-            <td class="px-6 py-4">
-              <div class="flex gap-2">
-                <button class="px-3 py-2 rounded-lg bg-green-600 text-white text-sm">
-                  Approve
-                </button>
-                <button class="px-3 py-2 rounded-lg bg-red-600 text-white text-sm">
-                  Reject
-                </button>
-              </div>
+            <td colspan="7" class="px-6 py-8 text-center text-slate-500">
+              No products available.
             </td>
           </tr>
+          }
         </tbody>
       </table>
     </div>
   </div>
 </div>
+
+<!-- 👇 Bound pagination attributes and handler -->
+<app-pagination [pageNumber]="pageNumber" [pageSize]="pageSize" [totalItems]="totalItems" [totalPages]="totalPages"
+  (pageChange)="onPageChanged($event)">
+</app-pagination>
+
+<app-product-view-detail *ngIf="selectedItem" [product]="selectedItem" (close)="selectedItem = null">
+</app-product-view-detail>

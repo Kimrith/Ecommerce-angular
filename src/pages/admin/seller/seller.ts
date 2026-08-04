@@ -1,24 +1,20 @@
 import { Component } from '@angular/core';
-import { AddSellerPopup } from '../../../components/admin/add-seller-popup/add-seller-popup';
+import { AddSellerFormModel } from '../../../components/admin/add-seller-form-model/add-seller-form-model';
 
 @Component({
   selector: 'app-seller',
-  imports: [AddSellerPopup],
+  imports: [AddSellerFormModel],
   templateUrl: './seller.html',
   styleUrl: './seller.css',
 })
 export class Seller {
-
   showAddSellerModal = false;
-
 
   openAddSellerModal() {
     this.showAddSellerModal = true;
   }
 
-
   closeAddSellerModal() {
     this.showAddSellerModal = false;
   }
-
 }

@@ -1,0 +1,83 @@
+<div class="fixed inset-0 z-50 flex items-center justify-center bg-black/40 backdrop-blur-sm" (click)="closeModal()">
+  <div class="w-full max-w-2xl rounded-2xl bg-white shadow-2xl" (click)="$event.stopPropagation()">
+    <!-- Header -->
+    <div class="flex items-center justify-between border-b px-6 py-5">
+      <div>
+        <h2 class="text-2xl font-bold text-gray-800">Add New Category</h2>
+        <p class="mt-1 text-sm text-gray-500">Create a new product category.</p>
+      </div>
+
+      <button type="button" (click)="closeModal()"
+        class="cursor-pointer rounded-lg p-2 text-gray-500 hover:bg-gray-100 hover:text-red-500">
+        ✕
+      </button>
+    </div>
+
+    <!-- Form -->
+    <form class="p-6" (ngSubmit)="saveCategory()">
+      <div class="space-y-5">
+        <!-- Category Name -->
+        <div>
+          <label class="mb-2 block text-sm font-medium text-gray-700"> Category Name </label>
+
+          <input [(ngModel)]="category.name" name="name" type="text" placeholder="Electronics"
+            class="w-full rounded-xl border border-gray-300 px-4 py-3 outline-none focus:border-orange-500 focus:ring-2 focus:ring-orange-200" />
+        </div>
+
+        <!-- Slug -->
+        <div>
+          <label class="mb-2 block text-sm font-medium text-gray-700"> Slug </label>
+
+          <input [(ngModel)]="category.slug" name="slug" type="text" placeholder="electronics"
+            class="w-full rounded-xl border border-gray-300 px-4 py-3 outline-none focus:border-orange-500 focus:ring-2 focus:ring-orange-200" />
+        </div>
+
+        <!-- Status -->
+        <!-- Status -->
+        <div>
+          <label class="mb-2 block text-sm font-medium text-gray-700"> Status </label>
+
+          <select [(ngModel)]="category.status" name="status"
+            class="w-full rounded-xl border border-gray-300 px-4 py-3 focus:border-orange-500">
+            <option [value]="0">Draft</option>
+            <option [value]="1">Pending</option>
+            <option [value]="2">Approved</option>
+            <option [value]="3">Rejected</option>
+            <option [value]="4">Archived</option>
+          </select>
+        </div>
+
+        <!-- Description -->
+        <div>
+          <label class="mb-2 block text-sm font-medium text-gray-700"> Description </label>
+
+          <textarea [(ngModel)]="category.description" name="description" rows="4"
+            placeholder="Enter category description..."
+            class="w-full rounded-xl border border-gray-300 px-4 py-3 outline-none focus:border-orange-500 focus:ring-2 focus:ring-orange-200">
+          </textarea>
+        </div>
+
+        <!-- Category Image -->
+        <div>
+          <label class="mb-2 block text-sm font-medium text-gray-700"> Category Image </label>
+
+          <input type="file" (change)="onFileSelected($event)"
+            class="block w-full cursor-pointer rounded-xl border border-gray-300 p-3 file:mr-4 file:rounded-lg file:border-0 file:bg-orange-500 file:px-4 file:py-2 file:text-white" />
+        </div>
+      </div>
+
+      <!-- Footer -->
+      <div class="mt-8 flex justify-end gap-3">
+        <button type="button" (click)="closeModal()"
+          class="cursor-pointer rounded-xl border border-gray-300 px-6 py-3 hover:bg-gray-100">
+          Cancel
+        </button>
+
+        <button type="submit"
+          class="cursor-pointer rounded-xl bg-orange-500 px-6 py-3 font-semibold text-white hover:bg-orange-600">
+          Save Category
+        </button>
+      </div>
+    </form>
+  </div>
+</div>

@@ -9,12 +9,14 @@ import { Order } from "../../../pages/admin/order/order";
 import { Report } from "../../../pages/admin/report/report";
 import { Setting } from "../../../pages/admin/setting/setting";
 import { Payment } from "../../../pages/admin/payment/payment";
-
+import { Login } from "../../../shared/auth/login/login";
+import { AuthGuard } from "../../../Service/Guard/auth-guard";
 
 export const adminRoutes: Routes = [
     {
         path: 'admin',
         component: AdminLayout,
+        canActivate: [AuthGuard], // Protects all admin child routes
         children: [
             {
                 path: '',
@@ -53,5 +55,9 @@ export const adminRoutes: Routes = [
                 component: Payment
             }
         ]
+    },
+    {
+        path: 'login',
+        component: Login
     }
-]
+];
