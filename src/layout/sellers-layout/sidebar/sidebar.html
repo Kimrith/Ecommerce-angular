@@ -23,7 +23,8 @@
           routerLink="/sellers"
           routerLinkActive="bg-orange-50 text-orange-600 font-semibold"
           [routerLinkActiveOptions]="{exact:true}"
-          class="flex items-center justify-between px-3 py-3 rounded-xl text-slate-600 hover:bg-slate-100 transition">
+          class="flex items-center gap-3 px-3 py-3 rounded-xl text-slate-600 hover:bg-slate-100 transition">
+          <span class="material-symbols-outlined">dashboard</span>
           <span>
             Dashboard
           </span>
@@ -35,8 +36,9 @@
         <RouterLink
           routerLink="/sellers/products"
           routerLinkActive="bg-orange-50 text-orange-600 font-semibold"
-          class="flex items-center justify-between px-3 py-3 rounded-xl text-slate-600 hover:bg-slate-100 transition">
-          Products
+          class="flex items-center gap-3 px-3 py-3 rounded-xl text-slate-600 hover:bg-slate-100 transition">
+          <span class="material-symbols-outlined">inventory_2</span>
+          <span>Products</span>
         </RouterLink>
       </li>
       <!-- Categories -->
@@ -44,8 +46,9 @@
         <RouterLink
           routerLink="/sellers/categories"
           routerLinkActive="bg-orange-50 text-orange-600 font-semibold"
-          class="flex items-center justify-between px-3 py-3 rounded-xl text-slate-600 hover:bg-slate-100 transition">
-          Categories
+          class="flex items-center gap-3 px-3 py-3 rounded-xl text-slate-600 hover:bg-slate-100 transition">
+          <span class="material-symbols-outlined">category</span>
+          <span>Categories</span>
         </RouterLink>
       </li>
       <!-- Orders -->
@@ -53,8 +56,9 @@
         <RouterLink
           routerLink="/sellers/orders"
           routerLinkActive="bg-orange-50 text-orange-600 font-semibold"
-          class="flex items-center justify-between px-3 py-3 rounded-xl text-slate-600 hover:bg-slate-100 transition">
-          Orders
+          class="flex items-center gap-3 px-3 py-3 rounded-xl text-slate-600 hover:bg-slate-100 transition">
+          <span class="material-symbols-outlined">shopping_cart</span>
+          <span>Orders</span>
         </RouterLink>
       </li>
       <!-- FeedBack -->
@@ -62,8 +66,9 @@
         <RouterLink
           routerLink="/sellers/feedback"
           routerLinkActive="bg-orange-50 text-orange-600 font-semibold"
-          class="flex items-center justify-between px-3 py-3 rounded-xl text-slate-600 hover:bg-slate-100 transition">
-          FeedBack
+          class="flex items-center gap-3 px-3 py-3 rounded-xl text-slate-600 hover:bg-slate-100 transition">
+          <span class="material-symbols-outlined">reviews</span>
+          <span>FeedBack</span>
         </RouterLink>
       </li>
       <!-- Users -->
@@ -71,8 +76,9 @@
         <RouterLink
           routerLink="/sellers/setting"
           routerLinkActive="bg-orange-50 text-orange-600 font-semibold"
-          class="flex items-center justify-between px-3 py-3 rounded-xl text-slate-600 hover:bg-slate-100 transition">
-          Setting
+          class="flex items-center gap-3 px-3 py-3 rounded-xl text-slate-600 hover:bg-slate-100 transition">
+          <span class="material-symbols-outlined">settings</span>
+          <span>Setting</span>
         </RouterLink>
       </li>
       <!-- Payments -->
@@ -80,8 +86,9 @@
         <RouterLink
           routerLink="/sellers/payments"
           routerLinkActive="bg-orange-50 text-orange-600 font-semibold"
-          class="flex items-center justify-between px-3 py-3 rounded-xl text-slate-600 hover:bg-slate-100 transition">
-          Payments
+          class="flex items-center gap-3 px-3 py-3 rounded-xl text-slate-600 hover:bg-slate-100 transition">
+          <span class="material-symbols-outlined">payments</span>
+          <span>Payments</span>
         </RouterLink>
       </li>
     </ul>
@@ -90,12 +97,14 @@
   <div class="border-t border-slate-200 pt-4">
     <RouterLink
       routerLink="/"
-      class="flex items-center px-3 py-3 rounded-xl text-slate-600 hover:bg-slate-100 transition">
-      Back To Store
+      class="flex items-center gap-3 px-3 py-3 rounded-xl text-slate-600 hover:bg-slate-100 transition">
+      <span class="material-symbols-outlined">arrow_back</span>
+      <span>Back To Store</span>
     </RouterLink>
     <button
-      class="w-full mt-2 text-left px-3 py-3 rounded-xl text-red-500 hover:bg-red-50 transition">
-      Logout
+      class="flex w-full mt-2 items-center gap-3 px-3 py-3 rounded-xl text-red-500 hover:bg-red-50 transition">
+      <span class="material-symbols-outlined">logout</span>
+      <span>Logout</span>
     </button>
   </div>
 </div>

@@ -1,173 +1,165 @@
 <div class="space-y-6">
-
-  <!-- Header -->
-  <div>
-    <h1 class="text-3xl font-bold text-slate-900">Settings</h1>
-    <p class="mt-1 text-slate-500">
-      Manage your account information and security settings.
-    </p>
-  </div>
-
-  <!-- Account -->
-  <div class="bg-white rounded-2xl border border-slate-200 shadow-sm">
-    <div class="border-b border-slate-200 px-6 py-4">
-      <h2 class="text-xl font-semibold text-slate-900">Account</h2>
-      <p class="text-sm text-slate-500">
-        Update your personal information.
+  <form action="">
+    <!-- Header -->
+    <div>
+      <h1 class="text-3xl font-bold text-slate-900">Settings</h1>
+      <p class="mt-1 text-slate-500">
+        Manage your account information and security settings.
       </p>
     </div>
 
-    <div class="p-6 space-y-6">
+    <!-- Account -->
+    <div class="bg-white rounded-2xl border border-slate-200 shadow-sm">
+      <div class="border-b border-slate-200 px-6 py-4">
+        <h2 class="text-xl font-semibold text-slate-900">Account</h2>
+        <p class="text-sm text-slate-500">
+          Update your personal information.
+        </p>
+      </div>
 
-      <!-- Avatar -->
-      <div class="flex items-center gap-5">
-        <div
-          class="flex h-20 w-20 items-center justify-center rounded-full bg-slate-100 text-2xl font-bold text-slate-600">
-          CK
+      <div class="p-6 space-y-6">
+
+        <!-- Avatar -->
+        <div class="flex items-center gap-5">
+          <!-- Dynamically display image if profileImageUrl exists, otherwise show initials -->
+          <div *ngIf="!state.profileImageUrl"
+            class="flex h-20 w-20 items-center justify-center rounded-full bg-slate-100 text-2xl font-bold text-slate-600">
+            {{ getInitials(state.fullName) }}
+          </div>
+          <img *ngIf="state.profileImageUrl" [src]="state.profileImageUrl.startsWith('data:') ? state.profileImageUrl : (imgBaseUrl + state.profileImageUrl)" alt="Profile Avatar"
+            class="h-20 w-20 rounded-full object-cover">
+
+          <div>
+            <!-- Hidden File Input -->
+            <input type="file" #fileInput (change)="onFileSelected($event)" accept="image/png, image/jpeg"
+              class="hidden">
+
+            <button type="button" (click)="fileInput.click()"
+              class="rounded-lg bg-blue-600 px-4 py-2 text-white hover:bg-blue-700">
+              Upload Photo
+            </button>
+
+            <p class="mt-2 text-sm text-slate-500">
+              JPG, PNG. Max 2 MB.
+            </p>
+          </div>
         </div>
 
-        <div>
-          <button
-            class="rounded-lg bg-blue-600 px-4 py-2 text-white hover:bg-blue-700">
-            Upload Photo
+        <!-- Form -->
+        <div class="grid gap-6 md:grid-cols-2">
+
+          <div>
+            <label class="mb-2 block text-sm font-medium text-slate-700">
+              Full Name
+            </label>
+            <input [(ngModel)]="state.fullName" name="fullName" type="text"
+              class="w-full rounded-lg border border-slate-300 px-4 py-2 focus:border-blue-500 focus:outline-none">
+          </div>
+
+          <div>
+            <label class="mb-2 block text-sm font-medium text-slate-700">
+              Email
+            </label>
+            <input [(ngModel)]="state.email" name="email" type="email"
+              class="w-full rounded-lg border border-slate-300 px-4 py-2 focus:border-blue-500 focus:outline-none">
+          </div>
+
+          <div>
+            <label class="mb-2 block text-sm font-medium text-slate-700">
+              Phone Number
+            </label>
+            <input [(ngModel)]="state.phoneNumber" name="phoneNumber" type="text"
+              class="w-full rounded-lg border border-slate-300 px-4 py-2 focus:border-blue-500 focus:outline-none">
+          </div>
+
+          <div>
+            <label class="mb-2 block text-sm font-medium text-slate-700">
+              Shop Name
+            </label>
+            <input [(ngModel)]="state.shopName" name="shopName" type="text" placeholder="Enter shop name"
+              class="w-full rounded-lg border border-slate-300 px-4 py-2 focus:border-blue-500 focus:outline-none">
+          </div>
+
+        </div>
+
+        <div class="flex justify-end">
+          <button type="button" (click)="updateSeller()"
+            class="rounded-lg bg-blue-600 px-6 py-2 text-white hover:bg-blue-700">
+            Save Changes
           </button>
-
-          <p class="mt-2 text-sm text-slate-500">
-            JPG, PNG. Max 2 MB.
-          </p>
-        </div>
-      </div>
-
-      <!-- Form -->
-      <div class="grid gap-6 md:grid-cols-2">
-
-        <div>
-          <label class="mb-2 block text-sm font-medium text-slate-700">
-            Full Name
-          </label>
-
-          <input
-            type="text"
-            value="John Doe"
-            class="w-full rounded-lg border border-slate-300 px-4 py-2 focus:border-blue-500 focus:outline-none">
-        </div>
-
-        <div>
-          <label class="mb-2 block text-sm font-medium text-slate-700">
-            Email
-          </label>
-
-          <input
-            type="email"
-            value="seller@example.com"
-            class="w-full rounded-lg border border-slate-300 px-4 py-2 focus:border-blue-500 focus:outline-none">
-        </div>
-
-        <div>
-          <label class="mb-2 block text-sm font-medium text-slate-700">
-            Phone Number
-          </label>
-
-          <input
-            type="text"
-            value="+855 12 345 678"
-            class="w-full rounded-lg border border-slate-300 px-4 py-2 focus:border-blue-500 focus:outline-none">
-        </div>
-
-        <div>
-          <label class="mb-2 block text-sm font-medium text-slate-700">
-            Username
-          </label>
-
-          <input
-            type="text"
-            value="johnseller"
-            class="w-full rounded-lg border border-slate-300 px-4 py-2 focus:border-blue-500 focus:outline-none">
         </div>
 
       </div>
-
-      <div class="flex justify-end">
-        <button
-          class="rounded-lg bg-blue-600 px-6 py-2 text-white hover:bg-blue-700">
-          Save Changes
-        </button>
-      </div>
-
-    </div>
-  </div>
-
-  <!-- Security -->
-  <div class="bg-white rounded-2xl border border-slate-200 shadow-sm">
-    <div class="border-b border-slate-200 px-6 py-4">
-      <h2 class="text-xl font-semibold text-slate-900">Security</h2>
-      <p class="text-sm text-slate-500">
-        Update your password and secure your account.
-      </p>
     </div>
 
-    <div class="p-6 space-y-6">
-
-      <div>
-        <label class="mb-2 block text-sm font-medium text-slate-700">
-          Current Password
-        </label>
-
-        <input
-          type="password"
-          placeholder="••••••••"
-          class="w-full rounded-lg border border-slate-300 px-4 py-2 focus:border-blue-500 focus:outline-none">
+    <!-- Security -->
+    <div class="bg-white rounded-2xl border border-slate-200 shadow-sm mt-6">
+      <div class="border-b border-slate-200 px-6 py-4">
+        <h2 class="text-xl font-semibold text-slate-900">Security</h2>
+        <p class="text-sm text-slate-500">
+          Update your password and secure your account.
+        </p>
       </div>
 
-      <div class="grid gap-6 md:grid-cols-2">
+      <div class="p-6 space-y-6">
 
         <div>
           <label class="mb-2 block text-sm font-medium text-slate-700">
-            New Password
+            Current Password
           </label>
-
-          <input
-            type="password"
-            placeholder="••••••••"
+          <input [(ngModel)]="state.currentPassword" name="currentPassword" type="password" placeholder="••••••••"
             class="w-full rounded-lg border border-slate-300 px-4 py-2 focus:border-blue-500 focus:outline-none">
         </div>
 
-        <div>
-          <label class="mb-2 block text-sm font-medium text-slate-700">
-            Confirm Password
-          </label>
+        <div class="grid gap-6 md:grid-cols-2">
 
-          <input
-            type="password"
-            placeholder="••••••••"
-            class="w-full rounded-lg border border-slate-300 px-4 py-2 focus:border-blue-500 focus:outline-none">
+          <div>
+            <label class="mb-2 block text-sm font-medium text-slate-700">
+              New Password
+            </label>
+            <input [(ngModel)]="state.newPassword" name="newPassword" type="password" placeholder="••••••••"
+              class="w-full rounded-lg border border-slate-300 px-4 py-2 focus:border-blue-500 focus:outline-none">
+          </div>
+
+          <div>
+            <label class="mb-2 block text-sm font-medium text-slate-700">
+              Confirm Password
+            </label>
+            <input [(ngModel)]="state.confirmPassword" name="confirmPassword" type="password" placeholder="••••••••"
+              class="w-full rounded-lg border border-slate-300 px-4 py-2 focus:border-blue-500 focus:outline-none">
+          </div>
+
+        </div>
+
+        <!-- Security Tips -->
+        <div class="rounded-xl border border-amber-200 bg-amber-50 p-4">
+          <h3 class="font-semibold text-amber-800">
+            Password Requirements
+          </h3>
+
+          <ul class="mt-2 list-disc space-y-1 pl-5 text-sm text-amber-700">
+            <li>Minimum 8 characters</li>
+            <li>At least one uppercase letter</li>
+            <li>At least one lowercase letter</li>
+            <li>At least one number</li>
+            <li>At least one special character</li>
+          </ul>
+        </div>
+
+        <div class="flex justify-end">
+          <button type="button" (click)="changePassword()"
+            class="rounded-lg bg-red-600 px-6 py-2 text-white hover:bg-red-700">
+            Change Password
+          </button>
         </div>
 
       </div>
-
-      <!-- Security Tips -->
-      <div class="rounded-xl border border-amber-200 bg-amber-50 p-4">
-        <h3 class="font-semibold text-amber-800">
-          Password Requirements
-        </h3>
-
-        <ul class="mt-2 list-disc space-y-1 pl-5 text-sm text-amber-700">
-          <li>Minimum 8 characters</li>
-          <li>At least one uppercase letter</li>
-          <li>At least one lowercase letter</li>
-          <li>At least one number</li>
-          <li>At least one special character</li>
-        </ul>
-      </div>
-
-      <div class="flex justify-end">
-        <button
-          class="rounded-lg bg-red-600 px-6 py-2 text-white hover:bg-red-700">
-          Change Password
-        </button>
-      </div>
-
     </div>
-  </div>
+  </form>
 
+  <!-- Toast Notification Component -->
+  @if(showToast) {
+  <app-toast [message]="toastMessage" (dismissed)="showToast = false">
+  </app-toast>
+  }
 </div>

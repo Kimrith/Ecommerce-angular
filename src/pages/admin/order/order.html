@@ -1,97 +1,275 @@
 <div class="space-y-6">
-  <div class="flex flex-col md:flex-row md:items-center md:justify-between gap-4">
+  <!-- Header -->
+  <div class="flex flex-col gap-4 md:flex-row md:items-center md:justify-between">
     <div>
       <h1 class="text-3xl font-bold text-slate-900">Orders</h1>
-      <p class="text-slate-500 mt-1">Manage all customer orders across the platform.</p>
+      <p class="mt-1 text-slate-500">Manage all customer orders across the platform.</p>
     </div>
   </div>
 
-  <div class="grid gap-6 md:grid-cols-4">
-    <div class="bg-white rounded-2xl border border-slate-200 shadow-sm p-6">
-      <p class="text-sm text-slate-500">Total Orders</p>
-      <h2 class="text-3xl font-bold text-slate-900 mt-2">12,540</h2>
+  <!-- Statistics -->
+  <div class="grid gap-4 sm:grid-cols-2 md:grid-cols-3 lg:grid-cols-4 xl:grid-cols-8">
+    <!-- Total Orders -->
+    <div (click)="filterByStatus('')"
+      class="rounded-2xl border p-5 shadow-sm hover:shadow-md transition duration-200 cursor-pointer"
+      [ngClass]="selectedStatus === '' ? 'border-orange-500 bg-orange-50/10 shadow-md ring-1 ring-orange-500/20' : 'border-slate-200/80 bg-white hover:border-slate-300'">
+      <div class="flex items-center justify-between">
+        <p class="text-xs font-medium uppercase tracking-wider text-slate-500">Total Orders</p>
+        <span class="p-2 rounded-xl bg-slate-100 text-slate-600">
+          <svg class="w-4 h-4" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+            <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2"
+              d="M9 5H7a2 2 0 00-2 2v12a2 2 0 002 2h10a2 2 0 002-2V7a2 2 0 00-2-2h-2M9 5a2 2 0 002 2h2a2 2 0 002-2M9 5a2 2 0 012-2h2a2 2 0 012 2m-3 7h3m-3 4h3m-6-4h.01M9 16h.01" />
+          </svg>
+        </span>
+      </div>
+      <h2 class="mt-3 text-2xl font-bold text-slate-900">{{ stats.totalOrders }}</h2>
     </div>
 
-    <div class="bg-white rounded-2xl border border-slate-200 shadow-sm p-6">
-      <p class="text-sm text-slate-500">Pending</p>
-      <h2 class="text-3xl font-bold text-orange-500 mt-2">120</h2>
+    <!-- Pending Orders -->
+    <div (click)="filterByStatus('Pending')"
+      class="rounded-2xl border p-5 shadow-sm hover:shadow-md transition duration-200 cursor-pointer"
+      [ngClass]="selectedStatus === 'Pending' ? 'border-amber-500 bg-amber-50/10 shadow-md ring-1 ring-amber-500/20' : 'border-slate-200/80 bg-white hover:border-slate-300'">
+      <div class="flex items-center justify-between">
+        <p class="text-xs font-medium uppercase tracking-wider text-slate-500">Pending</p>
+        <span class="p-2 rounded-xl bg-amber-50 text-amber-600">
+          <svg class="w-4 h-4" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+            <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2"
+              d="M12 8v4l3 3m6-3a9 9 0 11-18 0 9 9 0 0118 0z" />
+          </svg>
+        </span>
+      </div>
+      <h2 class="mt-3 text-2xl font-bold text-amber-600">{{ stats.pending }}</h2>
     </div>
 
-    <div class="bg-white rounded-2xl border border-slate-200 shadow-sm p-6">
-      <p class="text-sm text-slate-500">Completed</p>
-      <h2 class="text-3xl font-bold text-green-600 mt-2">11,800</h2>
+    <!-- Processing Orders -->
+    <div (click)="filterByStatus('Processing')"
+      class="rounded-2xl border p-5 shadow-sm hover:shadow-md transition duration-200 cursor-pointer"
+      [ngClass]="selectedStatus === 'Processing' ? 'border-blue-500 bg-blue-50/10 shadow-md ring-1 ring-blue-500/20' : 'border-slate-200/80 bg-white hover:border-slate-300'">
+      <div class="flex items-center justify-between">
+        <p class="text-xs font-medium uppercase tracking-wider text-slate-500">Processing</p>
+        <span class="p-2 rounded-xl bg-blue-50 text-blue-600">
+          <svg class="w-4 h-4" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+            <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2"
+              d="M19.428 15.428a2 2 0 00-1.022-.547l-2.387-.477a6 6 0 00-3.86.517l-.318.158a6 6 0 01-3.86.517L6.05 15.21a2 2 0 00-1.806.547M8 4h8l-1 1v5.172a2 2 0 00.586 1.414l5 5c1.26 1.26.367 3.414-1.415 3.414H4.828c-1.782 0-2.674-2.154-1.414-3.414l5-5A2 2 0 009 10.172V5L8 4z" />
+          </svg>
+        </span>
+      </div>
+      <h2 class="mt-3 text-2xl font-bold text-blue-600">{{ stats.processing }}</h2>
     </div>
 
-    <div class="bg-white rounded-2xl border border-slate-200 shadow-sm p-6">
-      <p class="text-sm text-slate-500">Cancelled</p>
-      <h2 class="text-3xl font-bold text-red-600 mt-2">620</h2>
+    <!-- Shipped Orders -->
+    <div (click)="filterByStatus('Shipped')"
+      class="rounded-2xl border p-5 shadow-sm hover:shadow-md transition duration-200 cursor-pointer"
+      [ngClass]="selectedStatus === 'Shipped' ? 'border-indigo-500 bg-indigo-50/10 shadow-md ring-1 ring-indigo-500/20' : 'border-slate-200/80 bg-white hover:border-slate-300'">
+      <div class="flex items-center justify-between">
+        <p class="text-xs font-medium uppercase tracking-wider text-slate-500">Shipped</p>
+        <span class="p-2 rounded-xl bg-indigo-50 text-indigo-600">
+          <svg class="w-4 h-4" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+            <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2"
+              d="M5 8h14M5 8a2 2 0 110-4h14a2 2 0 110 4M5 8v10a2 2 0 002 2h10a2 2 0 002-2V8m-9 4h4" />
+          </svg>
+        </span>
+      </div>
+      <h2 class="mt-3 text-2xl font-bold text-indigo-600">{{ stats.shipped }}</h2>
+    </div>
+
+    <!-- Delivered Orders -->
+    <div (click)="filterByStatus('Delivered')"
+      class="rounded-2xl border p-5 shadow-sm hover:shadow-md transition duration-200 cursor-pointer"
+      [ngClass]="selectedStatus === 'Delivered' ? 'border-emerald-500 bg-emerald-50/10 shadow-md ring-1 ring-emerald-500/20' : 'border-slate-200/80 bg-white hover:border-slate-300'">
+      <div class="flex items-center justify-between">
+        <p class="text-xs font-medium uppercase tracking-wider text-slate-500">Delivered</p>
+        <span class="p-2 rounded-xl bg-emerald-50 text-emerald-600">
+          <svg class="w-4 h-4" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+            <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M5 13l4 4L19 7" />
+          </svg>
+        </span>
+      </div>
+      <h2 class="mt-3 text-2xl font-bold text-emerald-600">{{ stats.delivered }}</h2>
+    </div>
+
+    <!-- Cancelled Orders -->
+    <div (click)="filterByStatus('Cancelled')"
+      class="rounded-2xl border p-5 shadow-sm hover:shadow-md transition duration-200 cursor-pointer"
+      [ngClass]="selectedStatus === 'Cancelled' ? 'border-red-500 bg-red-50/10 shadow-md ring-1 ring-red-500/20' : 'border-slate-200/80 bg-white hover:border-slate-300'">
+      <div class="flex items-center justify-between">
+        <p class="text-xs font-medium uppercase tracking-wider text-slate-500">Cancelled</p>
+        <span class="p-2 rounded-xl bg-red-50 text-red-700">
+          <svg class="w-4 h-4" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+            <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2"
+              d="M18.364 18.364A9 9 0 005.636 5.636m12.728 12.728A9 9 0 015.636 5.636m12.728 12.728L5.636 5.636" />
+          </svg>
+        </span>
+      </div>
+      <h2 class="mt-3 text-2xl font-bold text-red-700">{{ stats.cancelled }}</h2>
+    </div>
+
+    <!-- Refunded Orders -->
+    <div (click)="filterByStatus('Refunded')"
+      class="rounded-2xl border p-5 shadow-sm hover:shadow-md transition duration-200 cursor-pointer"
+      [ngClass]="selectedStatus === 'Refunded' ? 'border-purple-500 bg-purple-50/10 shadow-md ring-1 ring-purple-500/20' : 'border-slate-200/80 bg-white hover:border-slate-300'">
+      <div class="flex items-center justify-between">
+        <p class="text-xs font-medium uppercase tracking-wider text-slate-500">Refunded</p>
+        <span class="p-2 rounded-xl bg-purple-50 text-purple-600">
+          <svg class="w-4 h-4" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+            <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2"
+              d="M12 8c-1.657 0-3 .895-3 2s1.343 2 3 2 3 .895 3 2-1.343 2-3 2m0-8c1.11 0 2.08.402 2.599 1M12 8V7m0 1v8m0 0v1m0-1c-1.11 0-2.08-.402-2.599-1M21 12a9 9 0 11-18 0 9 9 0 0118 0z" />
+          </svg>
+        </span>
+      </div>
+      <h2 class="mt-3 text-2xl font-bold text-purple-600">{{ stats.refunded }}</h2>
+    </div>
+
+    <!-- Suspended Orders -->
+    <div (click)="filterByStatus('Suspended')"
+      class="rounded-2xl border p-5 shadow-sm hover:shadow-md transition duration-200 cursor-pointer"
+      [ngClass]="selectedStatus === 'Suspended' ? 'border-red-700 bg-red-50/10 shadow-md ring-1 ring-red-700/20' : 'border-slate-200/80 bg-white hover:border-slate-300'">
+      <div class="flex items-center justify-between">
+        <p class="text-xs font-medium uppercase tracking-wider text-slate-500">Suspended</p>
+        <span class="p-2 rounded-xl bg-red-100 text-red-800">
+          <svg class="w-4 h-4" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+            <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2"
+              d="M12 9v2m0 4h.01m-6.938 4h13.856c1.54 0 2.502-1.667 1.732-3L13.732 4c-.77-1.333-2.694-1.333-3.464 0L3.34 16c-.77 1.333.192 3 1.732 3z" />
+          </svg>
+        </span>
+      </div>
+      <h2 class="mt-3 text-2xl font-bold text-red-800">{{ stats.suspended }}</h2>
     </div>
   </div>
 
+  <!-- Search Filter -->
   <div class="bg-white rounded-2xl border border-slate-200 shadow-sm p-4">
     <div class="flex flex-col md:flex-row gap-4">
-      <input type="text" placeholder="Search order ID or customer..." class="flex-1 px-4 py-3 rounded-xl border border-slate-200 outline-none focus:ring-2 focus:ring-orange-500">
+      <input type="text" [(ngModel)]="searchTerm" (ngModelChange)="applyFilters()" (keyup.enter)="searchOrders()"
+        placeholder="Search order by ID, customer name or email..."
+        class="flex-1 px-4 py-3 rounded-xl border border-slate-200 outline-none focus:ring-2 focus:ring-orange-500" />
 
-      <select class="px-4 py-3 rounded-xl border border-slate-200">
-        <option>All Status</option>
-        <option>Pending</option>
-        <option>Processing</option>
-        <option>Completed</option>
-        <option>Cancelled</option>
+      <select [(ngModel)]="selectedStatus" (change)="searchOrders()"
+        class="px-4 py-3 rounded-xl border border-slate-200 outline-none focus:ring-2 focus:ring-orange-500 cursor-pointer bg-white">
+        <option value="">All Statuses</option>
+        <option value="Pending">Pending</option>
+        <option value="Processing">Processing</option>
+        <option value="Shipped">Shipped</option>
+        <option value="Delivered">Delivered</option>
+        <option value="Cancelled">Cancelled</option>
+        <option value="Refunded">Refunded</option>
+        <option value="Suspended">Suspended</option>
       </select>
-
-      <button class="px-5 py-3 bg-slate-900 text-white rounded-xl">
-        Search
-      </button>
     </div>
   </div>
 
-  <div class="bg-white rounded-2xl border border-slate-200 shadow-sm overflow-hidden">
-    <div class="overflow-x-auto">
-      <table class="w-full">
-        <thead class="bg-slate-50 border-b border-slate-200">
-          <tr>
-            <th class="px-6 py-4 text-left text-sm text-slate-600">Order ID</th>
-            <th class="px-6 py-4 text-left text-sm text-slate-600">Customer</th>
-            <th class="px-6 py-4 text-left text-sm text-slate-600">Seller</th>
-            <th class="px-6 py-4 text-left text-sm text-slate-600">Amount</th>
-            <th class="px-6 py-4 text-left text-sm text-slate-600">Status</th>
-            <th class="px-6 py-4 text-left text-sm text-slate-600">Action</th>
-          </tr>
-        </thead>
+  <!-- Orders Table -->
+  <div class="overflow-hidden rounded-2xl border border-slate-200 bg-white shadow-sm">
+    <table class="w-full text-left border-collapse">
+      <thead class="bg-slate-50 border-b border-slate-100 text-xs font-semibold uppercase text-slate-500">
+        <tr>
+          <th class="px-6 py-4">ID</th>
+          <th class="px-6 py-4">Order ID</th>
+          <th class="px-6 py-4">Customer</th>
+          <th class="px-6 py-4">Date</th>
+          <th class="px-6 py-4">Amount</th>
+          <th class="px-6 py-4">Status</th>
+          <th class="px-6 py-4">Actions</th>
+        </tr>
+      </thead>
+      <tbody class="divide-y divide-slate-100">
+        @for (order of paginatedOrders; track order.id) {
+        <tr class="hover:bg-slate-50/50 transition-colors">
+          <td class="px-6 py-4">{{order.id}}</td>
 
-        <tbody class="divide-y divide-slate-100">
-          <tr>
-            <td class="px-6 py-4 font-semibold text-slate-900">
-              #ORD-1001
-            </td>
+          <!-- Order ID -->
+          <td class="px-6 py-4 font-bold text-slate-900 text-sm">
+            {{ order.orderNumber || ('#ORD-' + order.id) }}
+          </td>
 
-            <td class="px-6 py-4 text-slate-700">
-              John Doe
-            </td>
+          <!-- Customer details -->
+          <td class="px-6 py-4">
+            <div class="flex flex-col">
+              <span class="font-semibold text-slate-900 text-sm">{{ order.customerName }}</span>
+              <span class="text-xs text-slate-500">{{ order.customerEmail }}</span>
+            </div>
+          </td>
 
-            <td class="px-6 py-4 text-slate-700">
-              Tech Store
-            </td>
+          <!-- Date details -->
+          <td class="px-6 py-4 text-xs text-slate-600 font-medium">
+            {{ order.createdAt | date: 'mediumDate' }}
+            <span class="text-slate-400 ml-1">{{ order.createdAt | date: 'shortTime' }}</span>
+          </td>
 
-            <td class="px-6 py-4 font-semibold">
-              $250
-            </td>
+          <!-- Amount details -->
+          <td class="px-6 py-4 font-bold text-slate-900 text-sm">
+            {{ order.totalAmount | currency: order.currency || 'USD' }}
+          </td>
 
-            <td class="px-6 py-4">
-              <span class="px-3 py-1 rounded-full text-xs bg-green-100 text-green-700">
-                Completed
-              </span>
-            </td>
+          <!-- Status Dropdown -->
+          <td class="px-6 py-4">
+            <div class="relative inline-block">
+              <select [(ngModel)]="order.statusString" (change)="onStatusChange(order, $event)"
+                class="px-3 py-1.5 rounded-lg !text-white text-xs font-semibold hover:opacity-90 outline-none cursor-pointer transition-colors"
+                [ngClass]="{
+                  'bg-amber-500': order.statusString === 'Pending',
+                  'bg-blue-500': order.statusString === 'Processing',
+                  'bg-indigo-500': order.statusString === 'Shipped',
+                  'bg-emerald-600': order.statusString === 'Delivered',
+                  'bg-rose-600': order.statusString === 'Cancelled',
+                  'bg-purple-600': order.statusString === 'Refunded',
+                  'bg-red-700': order.statusString === 'Suspended',
+                  'bg-slate-500': !order.statusString || (
+                    order.statusString !== 'Pending' &&
+                    order.statusString !== 'Processing' &&
+                    order.statusString !== 'Shipped' &&
+                    order.statusString !== 'Delivered' &&
+                    order.statusString !== 'Cancelled' &&
+                    order.statusString !== 'Refunded' &&
+                    order.statusString !== 'Suspended'
+                  )
+                }">
+                <option value="Pending" class="bg-white text-slate-800 font-medium">Pending</option>
+                <option value="Processing" class="bg-white text-slate-800 font-medium">Processing</option>
+                <option value="Shipped" class="bg-white text-slate-800 font-medium">Shipped</option>
+                <option value="Delivered" class="bg-white text-slate-800 font-medium">Delivered</option>
+                <option value="Cancelled" class="bg-white text-slate-800 font-medium">Cancelled</option>
+                <option value="Refunded" class="bg-white text-slate-800 font-medium">Refunded</option>
+                <option value="Suspended" class="bg-white text-slate-800 font-medium">Suspended</option>
+              </select>
+            </div>
+          </td>
 
-            <td class="px-6 py-4">
-              <button class="px-3 py-2 bg-blue-600 text-white rounded-lg text-sm">
-                View
-              </button>
-            </td>
-          </tr>
-        </tbody>
-      </table>
-    </div>
+          <!-- Actions Column -->
+          <td class="px-6 py-4">
+            <button (click)="viewOrder(order)"
+              class="rounded-lg bg-blue-600 px-3 py-2 text-sm text-white hover:bg-blue-700 cursor-pointer">
+              View
+            </button>
+          </td>
+        </tr>
+        } @empty {
+        <tr>
+          <td colspan="6" class="px-6 py-8 text-center text-slate-500">
+            No orders found matching the criteria.
+          </td>
+        </tr>
+        }
+      </tbody>
+    </table>
+  </div>
+
+  <!-- Pagination -->
+  <div class="mt-6">
+    <app-pagination [pageNumber]="pageNumber" [pageSize]="pageSize" [totalItems]="totalItems"
+      [totalPages]="totalPages" itemLabel="orders" (pageChange)="onPageChange($event)">
+    </app-pagination>
   </div>
 </div>
+
+<!-- Order Details Modal -->
+@if(showViewDetail) {
+<app-order-view-detail [order]="selectedOrder" (close)="showViewDetail = false">
+</app-order-view-detail>
+}
+
+<!-- Toast Notification Component -->
+@if(showToast) {
+<app-toast [message]="toastMessage" (dismissed)="showToast = false">
+</app-toast>
+}

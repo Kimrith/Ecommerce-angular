@@ -1,4 +1,120 @@
 <div class="space-y-6">
+
+  <!-- Statistics -->
+  <div class="grid gap-4 sm:grid-cols-2 md:grid-cols-3 lg:grid-cols-4 xl:grid-cols-7">
+
+    <!-- Total Categories -->
+    <div (click)="filterByStatus('')"
+      class="rounded-2xl border p-5 shadow-sm hover:shadow-md transition duration-200 cursor-pointer"
+      [ngClass]="selectedStatus === '' ? 'border-orange-500 bg-orange-50/10 shadow-md ring-1 ring-orange-500/20' : 'border-slate-200/80 bg-white hover:border-slate-300'">
+      <div class="flex items-center justify-between">
+        <p class="text-xs font-medium uppercase tracking-wider text-slate-500">Total Categories</p>
+        <span class="p-2 rounded-xl bg-slate-100 text-slate-600">
+          <svg class="w-4 h-4" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+            <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2"
+              d="M20 7l-8-4-8 4m16 0l-8 4m8-4v10l-8 4m0-10L4 7m8 4v10M4 7v10l8 4" />
+          </svg>
+        </span>
+      </div>
+      <h2 class="mt-3 text-2xl font-bold text-slate-900">{{ stats.totalCategories }}</h2>
+    </div>
+
+    <!-- Draft -->
+    <div (click)="filterByStatus('0')"
+      class="rounded-2xl border p-5 shadow-sm hover:shadow-md transition duration-200 cursor-pointer"
+      [ngClass]="selectedStatus === '0' ? 'border-slate-500 bg-slate-50/10 shadow-md ring-1 ring-slate-500/20' : 'border-slate-200/80 bg-white hover:border-slate-300'">
+      <div class="flex items-center justify-between">
+        <p class="text-xs font-medium uppercase tracking-wider text-slate-500">Draft</p>
+        <span class="p-2 rounded-xl bg-slate-100 text-slate-600">
+          <svg class="w-4 h-4" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+            <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2"
+              d="M11 5H6a2 2 0 00-2 2v11a2 2 0 002 2h11a2 2 0 002-2v-5m-1.414-9.414a2 2 0 112.828 2.828L11.828 15H9v-2.828l8.586-8.586z" />
+          </svg>
+        </span>
+      </div>
+      <h2 class="mt-3 text-2xl font-bold text-slate-700">{{ stats.draft }}</h2>
+    </div>
+
+    <!-- Pending Approval -->
+    <div (click)="filterByStatus('1')"
+      class="rounded-2xl border p-5 shadow-sm hover:shadow-md transition duration-200 cursor-pointer"
+      [ngClass]="selectedStatus === '1' ? 'border-amber-500 bg-amber-50/10 shadow-md ring-1 ring-amber-500/20' : 'border-slate-200/80 bg-white hover:border-slate-300'">
+      <div class="flex items-center justify-between">
+        <p class="text-xs font-medium uppercase tracking-wider text-slate-500">Pending</p>
+        <span class="p-2 rounded-xl bg-amber-50 text-amber-600">
+          <svg class="w-4 h-4" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+            <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2"
+              d="M12 8v4l3 3m6-3a9 9 0 11-18 0 9 9 0 0118 0z" />
+          </svg>
+        </span>
+      </div>
+      <h2 class="mt-3 text-2xl font-bold text-amber-600">{{ stats.pending }}</h2>
+    </div>
+
+    <!-- Approved -->
+    <div (click)="filterByStatus('2')"
+      class="rounded-2xl border p-5 shadow-sm hover:shadow-md transition duration-200 cursor-pointer"
+      [ngClass]="selectedStatus === '2' ? 'border-emerald-500 bg-emerald-50/10 shadow-md ring-1 ring-emerald-500/20' : 'border-slate-200/80 bg-white hover:border-slate-300'">
+      <div class="flex items-center justify-between">
+        <p class="text-xs font-medium uppercase tracking-wider text-slate-500">Approved</p>
+        <span class="p-2 rounded-xl bg-emerald-50 text-emerald-600">
+          <svg class="w-4 h-4" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+            <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M5 13l4 4L19 7" />
+          </svg>
+        </span>
+      </div>
+      <h2 class="mt-3 text-2xl font-bold text-emerald-600">{{ stats.approved }}</h2>
+    </div>
+
+    <!-- Rejected -->
+    <div (click)="filterByStatus('3')"
+      class="rounded-2xl border p-5 shadow-sm hover:shadow-md transition duration-200 cursor-pointer"
+      [ngClass]="selectedStatus === '3' ? 'border-rose-500 bg-rose-50/10 shadow-md ring-1 ring-rose-500/20' : 'border-slate-200/80 bg-white hover:border-slate-300'">
+      <div class="flex items-center justify-between">
+        <p class="text-xs font-medium uppercase tracking-wider text-slate-500">Rejected</p>
+        <span class="p-2 rounded-xl bg-rose-50 text-rose-600">
+          <svg class="w-4 h-4" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+            <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M6 18L18 6M6 6l12 12" />
+          </svg>
+        </span>
+      </div>
+      <h2 class="mt-3 text-2xl font-bold text-rose-600">{{ stats.rejected }}</h2>
+    </div>
+
+    <!-- Archived -->
+    <div (click)="filterByStatus('4')"
+      class="rounded-2xl border p-5 shadow-sm hover:shadow-md transition duration-200 cursor-pointer"
+      [ngClass]="selectedStatus === '4' ? 'border-blue-500 bg-blue-50/10 shadow-md ring-1 ring-blue-500/20' : 'border-slate-200/80 bg-white hover:border-slate-300'">
+      <div class="flex items-center justify-between">
+        <p class="text-xs font-medium uppercase tracking-wider text-slate-500">Archived</p>
+        <span class="p-2 rounded-xl bg-blue-50 text-blue-600">
+          <svg class="w-4 h-4" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+            <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2"
+              d="M5 8h14M5 8a2 2 0 110-4h14a2 2 0 110 4M5 8v10a2 2 0 002 2h10a2 2 0 002-2V8m-9 4h4" />
+          </svg>
+        </span>
+      </div>
+      <h2 class="mt-3 text-2xl font-bold text-blue-600">{{ stats.archived }}</h2>
+    </div>
+
+    <!-- Suspended -->
+    <div (click)="filterByStatus('5')"
+      class="rounded-2xl border p-5 shadow-sm hover:shadow-md transition duration-200 cursor-pointer"
+      [ngClass]="selectedStatus === '5' ? 'border-red-500 bg-red-50/10 shadow-md ring-1 ring-red-500/20' : 'border-slate-200/80 bg-white hover:border-slate-300'">
+      <div class="flex items-center justify-between">
+        <p class="text-xs font-medium uppercase tracking-wider text-slate-500">Suspended</p>
+        <span class="p-2 rounded-xl bg-red-50 text-red-700">
+          <svg class="w-4 h-4" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+            <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2"
+              d="M18.364 18.364A9 9 0 005.636 5.636m12.728 12.728A9 9 0 015.636 5.636m12.728 12.728L5.636 5.636" />
+          </svg>
+        </span>
+      </div>
+      <h2 class="mt-3 text-2xl font-bold text-red-700">{{ stats.suspended }}</h2>
+    </div>
+
+  </div>
+
   <div class="flex flex-col md:flex-row md:items-center md:justify-between gap-4">
     <div>
       <h1 class="text-3xl font-bold text-slate-900">
@@ -9,8 +125,7 @@
       </p>
     </div>
 
-    <button 
-      (click)="openCategoryModal()"
+    <button (click)="openCategoryModal()"
       class="px-5 py-3 bg-orange-500 hover:bg-orange-600 text-white rounded-xl font-semibold transition">
       + Add Category
     </button>
@@ -19,24 +134,21 @@
   <div class="bg-white rounded-2xl border border-slate-200 shadow-sm p-4">
     <div class="flex flex-col md:flex-row gap-4">
 
-      <input
-        type="text"
-        placeholder="Search category..."
+      <input type="text" [(ngModel)]="searchTerm" placeholder="Search category..."
         class="flex-1 border border-slate-200 rounded-xl px-4 py-3 outline-none focus:ring-2 focus:ring-orange-500">
-
-      <button class="px-5 py-3 bg-slate-900 text-white rounded-xl hover:bg-slate-800 transition">
-        Search
-      </button>
-
     </div>
   </div>
 
-  <app-categories-tables></app-categories-tables>
+  <app-categories-tables #categoryTable [selectedStatus]="selectedStatus" [searchTerm]="searchTerm"
+    [pageNumber]="pageNumber" [pageSize]="pageSize" 
+    (totalItemsChange)="totalItems = $event" (totalPagesChange)="totalPages = $event"
+    (edit)="onEditCategory($event)" (delete)="onDeleteCategory($event)"></app-categories-tables>
 
-</div>
+  <app-pagination [pageNumber]="pageNumber" [pageSize]="pageSize" [totalItems]="totalItems" [totalPages]="totalPages"
+    (pageChange)="onPageChanged($event)" [itemLabel]="'categories'"></app-pagination>
 
-@if(showCategoryModal){
-  <app-categories-form-model
-    (close)="closeCategoryModal()">
+  @if(showCategoryModal){
+  <app-categories-form-model [categoryData]="selectedCategory" (close)="closeCategoryModal()"
+    (categoryAdded)="categoryTable.getSellerCategories(); loadSellerStatistics()">
   </app-categories-form-model>
-}
+  }

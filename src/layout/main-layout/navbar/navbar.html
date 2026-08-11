@@ -1,71 +1,82 @@
-  <!-- ================= NAVBAR ================= -->
-  <header class="bg-white border-b border-gray-200 sticky top-0 z-40">
-    <div class="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
-      <div class="flex items-center justify-between h-16">
-        
-        <!-- Left: Mobile Toggle & Brand Logo -->
-        <div class="flex items-center gap-3">
-          <!-- Mobile Sidebar Toggle Button -->
-          <button 
-            type="button" 
-            (click) = "onToggleSidebar()"
-            class="lg:hidden text-gray-500 hover:text-gray-700 focus:outline-none focus:ring-2 focus:ring-indigo-500 p-1 rounded-md"
-            aria-label="Toggle Sidebar">
-            <svg class="h-6 w-6" fill="none" viewBox="0 0 24 24" stroke="currentColor">
-              <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M4 6h16M4 12h16M4 18h16" />
-            </svg>
-          </button>
+<!-- ================= NAVBAR ================= -->
+<header class="bg-white border-b border-gray-200 sticky top-0 z-40">
+  <div class="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
+    <div class="flex items-center justify-between h-16">
 
-          <!-- Brand Logo -->
-          <a href="#" class="flex items-center gap-2">
-            <div class="bg-indigo-600 text-white font-bold h-9 w-9 flex items-center justify-center rounded-lg shadow-sm">
-              E
-            </div>
-            <span class="text-xl font-bold tracking-tight text-gray-900">ShopSphere</span>
-          </a>
-        </div>
+      <!-- Left: Mobile Toggle & Brand Logo -->
+      <div class="flex items-center gap-3">
+        <!-- Mobile Sidebar Toggle Button -->
+        <button type="button" (click)="onToggleSidebar()"
+          class="lg:hidden text-gray-500 hover:text-gray-700 focus:outline-none focus:ring-2 focus:ring-indigo-500 p-1 rounded-md"
+          aria-label="Toggle Sidebar">
+          <svg class="h-6 w-6" fill="none" viewBox="0 0 24 24" stroke="currentColor">
+            <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M4 6h16M4 12h16M4 18h16" />
+          </svg>
+        </button>
 
-        <!-- Center: Search Bar (Desktop) -->
-        <div class="hidden md:flex flex-1 max-w-md mx-8">
-          <div class="relative w-full">
-            <span class="absolute inset-y-0 left-0 pl-3 flex items-center pointer-events-none text-gray-400">
-              <svg class="h-4 w-4" fill="none" viewBox="0 0 24 24" stroke="currentColor">
-                <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M21 21l-6-6m2-5a7 7 0 11-14 0 7 7 0 0114 0z" />
-              </svg>
-            </span>
-            <input 
-              type="text" 
-              placeholder="Search products, brands, categories..." 
-              class="w-full pl-10 pr-4 py-2 bg-gray-100 border border-transparent rounded-lg text-sm text-gray-900 placeholder-gray-500 focus:bg-white focus:border-indigo-500 focus:outline-none focus:ring-2 focus:ring-indigo-200 transition-all">
+        <!-- Brand Logo -->
+        <a href="#" class="flex items-center gap-2">
+          <div class="bg-indigo-600 text-white font-bold h-9 w-9 flex items-center justify-center rounded-lg shadow-sm">
+            E
           </div>
-        </div>
-
-        <!-- Right: Actions (Wishlist, Cart, Profile) -->
-        <div class="flex items-center gap-4">
-          <!-- Wishlist -->
-          <a href="#" class="relative p-2 text-gray-600 hover:text-indigo-600 transition-colors" title="Wishlist">
-            <svg class="h-6 w-6" fill="none" viewBox="0 0 24 24" stroke="currentColor">
-              <path stroke-linecap="round" stroke-linejoin="round" stroke-width="1.8" d="M4.318 6.318a4.5 4.5 0 000 6.364L12 20.364l7.682-7.682a4.5 4.5 0 00-6.364-6.364L12 7.636l-1.318-1.318a4.5 4.5 0 00-6.364 0z" />
-            </svg>
-            <span class="absolute top-1 right-1 bg-indigo-600 text-white text-[10px] font-bold h-4 w-4 rounded-full flex items-center justify-center">2</span>
-          </a>
-
-          <!-- Cart Drawer / Page Trigger -->
-          <a href="#" class="relative p-2 text-gray-600 hover:text-indigo-600 transition-colors" title="Cart">
-            <svg class="h-6 w-6" fill="none" viewBox="0 0 24 24" stroke="currentColor">
-              <path stroke-linecap="round" stroke-linejoin="round" stroke-width="1.8" d="M16 11V7a4 4 0 00-8 0v4M5 9h14l1 12H4L5 9z" />
-            </svg>
-            <span class="absolute top-1 right-1 bg-indigo-600 text-white text-[10px] font-bold h-4 w-4 rounded-full flex items-center justify-center">4</span>
-          </a>
-
-          <!-- User Profile Dropdown Placeholder -->
-          <div class="relative ml-2">
-            <button class="flex items-center gap-2 focus:outline-none">
-              <img class="h-8 w-8 rounded-full object-cover ring-2 ring-indigo-500/20" src="https://images.unsplash.com/photo-1534528741775-53994a69daeb?auto=format&fit=crop&w=100&q=80" alt="User avatar">
-            </button>
-          </div>
-        </div>
-
+          <span class="text-xl font-bold tracking-tight text-gray-900">ShopSphere</span>
+        </a>
       </div>
+
+      <!-- Center: Search Bar (Desktop) -->
+      <div class="hidden md:flex flex-1 max-w-md mx-8">
+        <div class="relative w-full">
+          <span (click)="onSearch(searchInput.value)"
+            class="absolute inset-y-0 left-0 pl-3 flex items-center cursor-pointer text-gray-400 hover:text-indigo-600 transition-colors">
+            <svg class="h-4 w-4" fill="none" viewBox="0 0 24 24" stroke="currentColor">
+              <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2"
+                d="M21 21l-6-6m2-5a7 7 0 11-14 0 7 7 0 0114 0z" />
+            </svg>
+          </span>
+          <input type="text" #searchInput (keyup.enter)="onSearch(searchInput.value)"
+            placeholder="Search products, brands, categories..."
+            class="w-full pl-10 pr-4 py-2 bg-gray-100 border border-transparent rounded-lg text-sm text-gray-900 placeholder-gray-500 focus:bg-white focus:border-indigo-500 focus:outline-none focus:ring-2 focus:ring-indigo-200 transition-all">
+        </div>
+      </div>
+
+      <!-- Right: Actions (Wishlist, Cart, Profile) -->
+      <div class="flex items-center gap-4">
+        <!-- Wishlist -->
+        <RouterLink routerLink="/favorite"
+          class="cursor-pointer relative p-2 text-gray-600 hover:text-indigo-600 transition-colors" title="Wishlist">
+          <svg class="h-6 w-6" fill="none" viewBox="0 0 24 24" stroke="currentColor">
+            <path stroke-linecap="round" stroke-linejoin="round" stroke-width="1.8"
+              d="M4.318 6.318a4.5 4.5 0 000 6.364L12 20.364l7.682-7.682a4.5 4.5 0 00-6.364-6.364L12 7.636l-1.318-1.318a4.5 4.5 0 00-6.364 0z" />
+          </svg>
+          <span *ngIf="favoriteCount > 0"
+            class="absolute top-1 right-1 bg-indigo-600 text-white text-[10px] font-bold h-4 w-4 rounded-full flex items-center justify-center animate-pulse">
+            {{ favoriteCount }}
+          </span>
+        </RouterLink>
+
+        <!-- Cart Drawer / Page Trigger -->
+        <RouterLink routerLink="order/list" class="relative p-2 text-gray-600 hover:text-indigo-600 transition-colors"
+          title="Cart">
+          <svg class="h-6 w-6" fill="none" viewBox="0 0 24 24" stroke="currentColor">
+            <path stroke-linecap="round" stroke-linejoin="round" stroke-width="1.8"
+              d="M16 11V7a4 4 0 00-8 0v4M5 9h14l1 12H4L5 9z" />
+          </svg>
+          <span *ngIf="cartCount > 0"
+            class="absolute top-1 right-1 bg-indigo-600 text-white text-[10px] font-bold h-4 w-4 rounded-full flex items-center justify-center animate-bounce">
+            {{ cartCount }}
+          </span>
+        </RouterLink>
+
+        <!-- User Profile Dropdown Placeholder -->
+        <div class="relative ml-2">
+          <button class="flex items-center gap-2 focus:outline-none">
+            <img class="h-8 w-8 rounded-full object-cover ring-2 ring-indigo-500/20"
+              src="https://images.unsplash.com/photo-1534528741775-53994a69daeb?auto=format&fit=crop&w=100&q=80"
+              alt="User avatar">
+          </button>
+        </div>
+      </div>
+
     </div>
-  </header>
+  </div>
+</header>

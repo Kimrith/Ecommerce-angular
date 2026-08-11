@@ -1,39 +1,56 @@
 <div class="bg-white rounded-2xl border border-slate-200 shadow-sm overflow-hidden">
+  <table class="w-full">
+    <thead class="bg-slate-100">
+      <tr>
+        <th class="text-left px-6 py-4">ID</th>
+        <th class="text-left px-6 py-4">Image</th>
+        <th class="text-left px-6 py-4">Category</th>
+        <th class="text-left px-6 py-4">Products</th>
+        <th class="text-left px-6 py-4">Status</th>
+        <th class="text-center px-6 py-4">Actions</th>
+      </tr>
+    </thead>
 
-    <table class="w-full">
-
-      <thead class="bg-slate-100">
-        <tr>
-          <th class="text-left px-6 py-4">ID</th>
-          <th class="text-left px-6 py-4">Category</th>
-          <th class="text-left px-6 py-4">Products</th>
-          <th class="text-left px-6 py-4">Status</th>
-          <th class="text-center px-6 py-4">Actions</th>
-        </tr>
-      </thead>
-
-      <tbody>
-
-        <tr class="border-t hover:bg-slate-50">
-          <td class="px-6 py-4">1</td>
-          <td class="px-6 py-4 font-semibold">Electronics</td>
-          <td class="px-6 py-4">120</td>
-          <td class="px-6 py-4">
-            <span class="bg-green-100 text-green-700 px-3 py-1 rounded-full text-sm">
-              Active
-            </span>
-          </td>
-          <td class="px-6 py-4 text-center space-x-2">
-            <button class="px-3 py-1 bg-blue-500 text-white rounded-lg hover:bg-blue-600">
-              Edit
-            </button>
-
-            <button class="px-3 py-1 bg-red-500 text-white rounded-lg hover:bg-red-600">
-              Delete
-            </button>
-          </td>
-        </tr>
-
-      </tbody>
-    </table>
+    <tbody>
+      @for (category of filteredCategories; track category.id) {
+      <tr class="border-t hover:bg-slate-50">
+        <td class="px-6 py-4">{{ category.id }}</td>
+        <td class="px-6 py-4">
+          <img [src]="imgBaseUrl + category.imageUrl" alt="category image" class="w-10 h-10 rounded-lg object-cover">
+        </td>
+        <td class="px-6 py-4 font-semibold">{{ category.name }}</td>
+        <td class="px-6 py-4">{{ category.productCount || 0 }}</td>
+        <td class="px-6 py-4">
+          @if (category.status === 0 || category.status === 'Draft') {
+          <span class="bg-slate-100 text-slate-700 px-3 py-1 rounded-full text-sm">Draft</span>
+          } @else if (category.status === 1 || category.status === 'Pending') {
+          <span class="bg-yellow-100 text-yellow-700 px-3 py-1 rounded-full text-sm">Pending</span>
+          } @else if (category.status === 2 || category.status === 'Approved') {
+          <span class="bg-green-100 text-green-700 px-3 py-1 rounded-full text-sm">Approved</span>
+          } @else if (category.status === 3 || category.status === 'Rejected') {
+          <span class="bg-red-100 text-red-700 px-3 py-1 rounded-full text-sm">Rejected</span>
+          } @else if (category.status === 4 || category.status === 'Archived') {
+          <span class="bg-gray-100 text-gray-700 px-3 py-1 rounded-full text-sm">Archived</span>
+          } @else if (category.status === 5 || category.status === 'Suspended') {
+          <span class="bg-orange-100 text-orange-700 px-3 py-1 rounded-full text-sm">Suspended</span>
+          }
+        </td>
+        <td class="px-6 py-4 text-center space-x-2">
+          <button (click)="edit.emit(category)" class="px-3 py-1 bg-blue-500 text-white rounded-lg hover:bg-blue-600">
+            Edit
+          </button>
+          <button (click)="delete.emit(category)" class="px-3 py-1 bg-red-500 text-white rounded-lg hover:bg-red-600">
+            Delete
+          </button>
+        </td>
+      </tr>
+      } @empty {
+      <tr>
+        <td colspan="6" class="px-6 py-6 text-center text-slate-500">
+          No categories found.
+        </td>
+      </tr>
+      }
+    </tbody>
+  </table>
 </div>

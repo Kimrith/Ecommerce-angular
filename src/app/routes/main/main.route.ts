@@ -14,6 +14,8 @@ import { ProductDetail } from '../../../components/main/product-detail/product-d
 import { Register } from '../../../shared/auth/register/register';
 import { Login } from '../../../shared/auth/login/login';
 import { Error } from '../../../shared/components/error/error';
+import { OrderList } from '../../../components/main/order-list/order-list';
+import { Favorite } from '../../../components/main/favorite/favorite';
 
 
 export const mainRoutes: Routes = [
@@ -66,19 +68,28 @@ export const mainRoutes: Routes = [
       {
         path: 'products',
         component: Products
-      }
+      },
 
+      {
+        path: 'order/list',
+        component: OrderList
+      },
+
+      {
+        path: 'favorite',
+        component: Favorite
+      }
     ]
   },
 
 
   {
-    path: 'auth/register',
+    path: 'register',
     component: Register
   },
 
   {
-    path: 'auth/login',
+    path: 'login',
     component: Login
   },
 

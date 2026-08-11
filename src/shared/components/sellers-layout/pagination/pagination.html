@@ -4,37 +4,38 @@
   <!-- Showing Results -->
   <div class="text-sm text-gray-500 text-center sm:text-left whitespace-nowrap">
     Showing
-    <span class="font-semibold text-gray-900">1–12</span>
+    <span class="font-semibold text-gray-900">{{ getStartIndex() }}–{{ getEndIndex() }}</span>
     of
-    <span class="font-semibold text-gray-900">128</span>
-    products
+    <span class="font-semibold text-gray-900">{{ totalItems }}</span>
+    {{ itemLabel }}
   </div>
 
 
   <!-- Pagination Buttons -->
   <nav class="flex items-center justify-center gap-2 overflow-x-auto max-w-full">
 
-    <button class="shrink-0 px-3 sm:px-4 py-2 rounded-xl border border-gray-200 text-gray-600 hover:bg-gray-100 transition text-sm">
+    <!-- Previous Button -->
+    <button (click)="onPageChange(pageNumber - 1)" [disabled]="pageNumber === 1"
+      [class.opacity-55]="pageNumber === 1" [class.cursor-not-allowed]="pageNumber === 1"
+      class="shrink-0 px-3 sm:px-4 py-2 rounded-xl border border-gray-200 text-gray-600 hover:bg-gray-100 transition text-sm">
       ← <span class="hidden sm:inline">Previous</span>
     </button>
 
-    <button class="shrink-0 w-10 h-10 rounded-xl bg-orange-500 text-white font-semibold shadow">
-      1
+    <!-- Dynamic Page Numbers -->
+    @for (page of pageArray; track page) {
+    <button (click)="onPageChange(page)" [class.bg-orange-500]="page === pageNumber"
+      [class.text-white]="page === pageNumber" [class.font-semibold]="page === pageNumber"
+      [class.shadow]="page === pageNumber" [class.border]="page !== pageNumber"
+      [class.border-gray-200]="page !== pageNumber" [class.hover:bg-gray-100]="page !== pageNumber"
+      class="shrink-0 w-10 h-10 rounded-xl transition flex items-center justify-center">
+      {{ page }}
     </button>
+    }
 
-    <button class="shrink-0 w-10 h-10 rounded-xl border border-gray-200 hover:bg-gray-100 transition">
-      2
-    </button>
-
-    <button class="shrink-0 w-10 h-10 rounded-xl border border-gray-200 hover:bg-gray-100 transition">
-      3
-    </button>
-
-    <button class="shrink-0 w-10 h-10 rounded-xl border border-gray-200 hover:bg-gray-100 transition">
-      4
-    </button>
-
-    <button class="shrink-0 px-3 sm:px-4 py-2 rounded-xl border border-gray-200 text-gray-600 hover:bg-gray-100 transition text-sm">
+    <!-- Next Button -->
+    <button (click)="onPageChange(pageNumber + 1)" [disabled]="pageNumber === totalPages"
+      [class.opacity-55]="pageNumber === totalPages" [class.cursor-not-allowed]="pageNumber === totalPages"
+      class="shrink-0 px-3 sm:px-4 py-2 rounded-xl border border-gray-200 text-gray-600 hover:bg-gray-100 transition text-sm">
       <span class="hidden sm:inline">Next</span> →
     </button>
 

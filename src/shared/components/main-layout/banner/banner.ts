@@ -1,40 +1,65 @@
 import { Component, OnInit, OnDestroy, ChangeDetectorRef, inject } from '@angular/core';
+import { BannerService } from '../../../../Service/Banner/banner';
+import { Banner as BannerType } from '../../../../type/banner'; // Adjust path if needed
+import { CommonModule } from '@angular/common';
+import { environment } from '../../../../environments/environment.development';
 
 @Component({
   selector: 'app-banner',
   standalone: true,
+  imports: [CommonModule],
   templateUrl: './banner.html',
   styleUrl: './banner.css',
 })
 export class Banner implements OnInit, OnDestroy {
   currentIndex = 0;
+  imageUrl = environment.apiUrl
+
   private intervalId!: ReturnType<typeof setInterval>;
-  
-  // Inject ChangeDetectorRef
+  private bannerService = inject(BannerService);
   private cdr = inject(ChangeDetectorRef);
 
-  banners = [
-    { img: 'https://encrypted-tbn0.gstatic.com/images?q=tbn:ANd9GcQ9NJEj1HPey8XaXxIORTaJZMC1O_JtzzqRFrlDz1-_BpL7cznYObKcbp0&s=10' },
-    { img: 'https://encrypted-tbn0.gstatic.com/images?q=tbn:ANd9GcTIFYEZ8GBsaxPL6u_2SPvDvXQJU0SuwL3DOOeKuFub-g&s=10' },
-    { img: 'https://encrypted-tbn0.gstatic.com/images?q=tbn:ANd9GcThkWIJle1hOqQTSqdxqTsXPQ5oZ3caSNhCa1u9uCw9RFct53STdQQv2Ss&s=10' }
-  ];
+  banners: BannerType[] = [];
 
   ngOnInit(): void {
+    this.loadBanners();
+  }
+
+  loadBanners(): void {
+    this.bannerService.getBanners().subscribe({
+      next: (data) => {
+        this.banners = data || [];
+        if (this.banners.length > 0) {
+          this.startSlider();
+        }
+        this.cdr.markForCheck();
+      },
+      error: (err) => {
+        console.error('Failed to fetch banners:', err);
+      }
+    });
+  }
+
+  startSlider(): void {
     this.intervalId = setInterval(() => {
       this.next();
-      this.cdr.markForCheck(); // Tells Angular to update the view
+      this.cdr.markForCheck();
     }, 3000);
   }
 
   ngOnDestroy(): void {
-    clearInterval(this.intervalId);
+    if (this.intervalId) {
+      clearInterval(this.intervalId);
+    }
   }
 
   next(): void {
+    if (this.banners.length === 0) return;
     this.currentIndex = (this.currentIndex + 1) % this.banners.length;
   }
 
   previous(): void {
+    if (this.banners.length === 0) return;
     this.currentIndex = (this.currentIndex - 1 + this.banners.length) % this.banners.length;
   }
 

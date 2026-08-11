@@ -1,42 +1,56 @@
-  <div
-    class="group bg-white rounded-2xl border border-gray-100 overflow-hidden hover:shadow-xl transition duration-300">
+<div class="group bg-white rounded-2xl border border-gray-100 overflow-hidden hover:shadow-xl transition duration-300">
 
-    <div class="bg-gray-100 h-64 flex items-center justify-center">
-      Product Image
-    </div>
+  <!-- Product Image Container (Must have 'relative') -->
+  <div class="bg-gray-100 h-64 flex items-center justify-center overflow-hidden relative">
 
-    <div class="p-5">
-
-      <span
-        class="text-xs font-semibold uppercase tracking-wider text-orange-500">
-        Electronics
+    <!-- Wishlist Heart Icon Button -->
+    <button (click)="toggleFavorite()" [class.text-red-500]="product.isFavorite"
+      [class.text-gray-500]="!product.isFavorite"
+      class="absolute top-3 right-3 z-10 p-2 bg-white/80 backdrop-blur-sm rounded-full hover:text-red-500 hover:bg-white transition-all duration-300 focus:outline-none shadow-sm">
+      <span class="material-symbols-outlined text-xl leading-none">
+        {{ product.isFavorite ? 'favorite' : 'favorite_border' }}
       </span>
+    </button>
 
-      <h3 class="mt-2 text-lg font-bold text-gray-900">
-        Wireless Headphones
-      </h3>
-
-      <p class="text-sm text-gray-500 mt-2">
-        Premium noise-cancelling wireless headphones.
-      </p>
-
-      <div class="flex justify-between items-center mt-5">
-
-        <span class="text-2xl font-bold text-gray-900">
-          $299
-        </span>
-
-          <!-- Add Cart Button -->
-          <button
-            (click)="addToCart()"
-            class="bg-orange-500 hover:bg-orange-600 text-white px-5 py-2 rounded-xl transition">
-
-            Add Cart
-
-          </button>
-
-      </div>
-
-    </div>
-
+    @if (product.imageUrl) {
+    <img [src]="imageUrl + product.imageUrl" #imgElement (error)="
+        imgElement.src =
+          'https://encrypted-tbn0.gstatic.com/images?q=tbn:ANd9GcR-YKwoMPIgLj0eGd4fimf49IclMWAIbMJQRe_r21HTcJ0TCmDfQk9CJSU&s=10'
+      " [alt]="product.name" class="w-full h-full object-cover" />
+    } @else {
+    <span class="text-gray-400">No Image</span>
+    }
   </div>
+
+  <div class="p-5">
+    <!-- Slug / Category -->
+    <span class="text-xs font-semibold uppercase tracking-wider text-orange-500">
+      {{ product.slug }}
+    </span>
+
+    <!-- Product Name -->
+    <h3 class="mt-2 text-lg font-bold text-gray-900 truncate">
+      {{ product.name }}
+    </h3>
+
+    <!-- Optional Sales & Revenue Info -->
+    <p class="text-xs text-gray-400 mt-1">
+      Sales: {{ product.salesCount }} | Revenue: ${{ product.revenue }}
+    </p>
+
+    <!-- Price and Action -->
+    <div class="flex justify-between items-center mt-5">
+      <span class="text-2xl font-bold text-gray-900"> ${{ product.price }} </span>
+
+      <!-- View Details / Navigate Button -->
+      <button (click)="viewProductDetails(product.productId)"
+        class="bg-orange-500 hover:bg-orange-600 text-white px-5 py-2 rounded-xl transition whitespace-nowrap text-sm">
+        View Details
+      </button>
+    </div>
+  </div>
+</div>
+
+@if (showToast) {
+<app-toast [message]="toastMessage" (dismissed)="showToast = false"></app-toast>
+}

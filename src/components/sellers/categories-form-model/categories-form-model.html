@@ -1,102 +1,85 @@
 <div class="fixed inset-0 z-50 flex items-center justify-center bg-black/50 p-4">
   <!-- Modal -->
   <div class="w-full max-w-lg rounded-2xl bg-white shadow-xl">
-    <!-- Header -->
-    <div class="flex items-center justify-between border-b border-slate-200 px-6 py-4">
-
-      <div>
-        <h2 class="text-xl font-bold text-slate-900">
-          Add Category
-        </h2>
-
-        <p class="text-sm text-slate-500">
-          Create a new product category.
-        </p>
-      </div>
-        <button
-            (click)="closeModal()"
-            class="text-2xl text-slate-400 hover:text-slate-700">
-            &times;
+    <form (ngSubmit)="postCategoriesSeller()" #categoryForm="ngForm">
+      <!-- Header -->
+      <div class="flex items-center justify-between border-b border-slate-200 px-6 py-4">
+        <div>
+          <h2 class="text-xl font-bold text-slate-900">
+            {{ categoryData ? 'Edit Category' : 'Add Category' }}
+          </h2>
+          <p class="text-sm text-slate-500">
+            {{ categoryData ? 'Update category details.' : 'Create a new product category.' }}
+          </p>
+        </div>
+        <button type="button" (click)="closeModal()" class="text-2xl text-slate-400 hover:text-slate-700">
+          &times;
         </button>
-    </div>
-    <!-- Form -->
-    <div class="space-y-5 p-6">
-      <!-- Category Image -->
-      <div>
+      </div>
 
-        <label class="mb-2 block text-sm font-medium text-slate-700">
-          Category Image
-        </label>
-        <div
-          class="flex h-32 items-center justify-center rounded-xl border-2 border-dashed border-slate-300 bg-slate-50">
-
-          <button
-            class="rounded-lg bg-blue-600 px-4 py-2 text-white hover:bg-blue-700">
-            Upload Image
-          </button>
+      <!-- Form Body -->
+      <div class="space-y-5 p-6">
+        <!-- Category Image -->
+        <div>
+          <label class="mb-2 block text-sm font-medium text-slate-700">
+            Category Image
+          </label>
+          <div
+            class="flex h-32 items-center justify-center rounded-xl border-2 border-dashed border-slate-300 bg-slate-50 relative overflow-hidden">
+            @if (imagePreview) {
+            <img [src]="imagePreview" class="absolute inset-0 w-full h-full object-cover" alt="Category preview" />
+            <button type="button" (click)="removeImage()"
+              class="absolute top-2 right-2 rounded-full bg-red-600 p-1.5 text-white hover:bg-red-700 shadow-md">
+              &times;
+            </button>
+            } @else {
+            <div class="text-center">
+              <p class="text-xs text-slate-500 mb-2">Select an image</p>
+              <button type="button" (click)="fileInput.click()"
+                class="rounded-lg bg-blue-600 px-4 py-2 text-white hover:bg-blue-700 text-sm">
+                Upload Image
+              </button>
+            </div>
+            }
+            <input type="file" #fileInput (change)="onFileSelected($event)" accept="image/*" class="hidden" />
+          </div>
         </div>
 
+        <!-- Category Name -->
+        <div>
+          <label class="mb-2 block text-sm font-medium text-slate-700">
+            Category Name *
+          </label>
+          <input type="text" [(ngModel)]="category.name" name="name" required placeholder="Enter category name"
+            class="w-full rounded-lg border border-slate-300 px-4 py-2 focus:border-blue-500 focus:outline-none">
+        </div>
+
+        <!-- Description -->
+        <div>
+          <label class="mb-2 block text-sm font-medium text-slate-700">
+            Description
+          </label>
+          <textarea rows="3" [(ngModel)]="category.description" name="description" placeholder="Category description..."
+            class="w-full rounded-lg border border-slate-300 px-4 py-2 focus:border-blue-500 focus:outline-none"></textarea>
+        </div>
       </div>
-      <!-- Category Name -->
-      <div>
-        <label class="mb-2 block text-sm font-medium text-slate-700">
-          Category Name
-        </label>
-        <input
-          type="text"
-          placeholder="Enter category name"
-          class="w-full rounded-lg border border-slate-300 px-4 py-2 focus:border-blue-500 focus:outline-none">
-      </div>
 
-      <!-- Slug -->
-      <div>
-        <label class="mb-2 block text-sm font-medium text-slate-700">
-          Slug
-        </label>
-        <input
-          type="text"
-          placeholder="example: smartphones"
-          class="w-full rounded-lg border border-slate-300 px-4 py-2 focus:border-blue-500 focus:outline-none">
-
-      </div>
-      <!-- Description -->
-      <div>
-
-        <label class="mb-2 block text-sm font-medium text-slate-700">
-          Description
-        </label>
-
-        <textarea
-          rows="3"
-          placeholder="Category description..."
-          class="w-full rounded-lg border border-slate-300 px-4 py-2 focus:border-blue-500 focus:outline-none">
-        </textarea>
-      </div>
-      <!-- Status -->
-      <div class="flex items-center gap-3">
-
-        <input
-          type="checkbox"
-          checked
-          class="h-4 w-4 rounded border-slate-300">
-
-        <label class="text-sm text-slate-700">
-          Active Category
-        </label>
-      </div>
-    </div>
-    <!-- Footer -->
-    <div class="flex justify-end gap-3 border-t border-slate-200 px-6 py-4">
-        <button
-            (click)="closeModal()"
-            class="rounded-lg border border-slate-300 px-5 py-2 text-slate-700 hover:bg-slate-100">
-            Cancel
+      <!-- Footer -->
+      <div class="flex justify-end gap-3 border-t border-slate-200 px-6 py-4">
+        <button type="button" (click)="closeModal()"
+          class="rounded-lg border border-slate-300 px-5 py-2 text-slate-700 hover:bg-slate-100">
+          Cancel
         </button>
 
-        <button
-            class="rounded-lg bg-blue-600 px-5 py-2 text-white hover:bg-blue-700">
-            Save Category
+        <button type="submit" [disabled]="!categoryForm.valid"
+          class="rounded-lg bg-blue-600 px-5 py-2 text-white hover:bg-blue-700 disabled:opacity-50 disabled:cursor-not-allowed">
+          Save Category
         </button>
-    </div>
+      </div>
+    </form>
   </div>
+
+  @if (showSuccessToast) {
+    <app-toast [message]="toastMessage" (dismissed)="showSuccessToast = false"></app-toast>
+  }
 </div>

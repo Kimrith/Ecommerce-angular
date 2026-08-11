@@ -1,5 +1,114 @@
 <div class="space-y-6">
-  <!-- Header -->
+
+  <!-- Statistics -->
+  <div class="grid gap-4 sm:grid-cols-2 md:grid-cols-3 lg:grid-cols-4 xl:grid-cols-7">
+
+    <!-- Total Orders -->
+    <div (click)="filterByStatus('')"
+      class="rounded-2xl border p-5 shadow-sm hover:shadow-md transition duration-200 cursor-pointer"
+      [ngClass]="selectedStatus === '' ? 'border-orange-500 bg-orange-50/10 shadow-md ring-1 ring-orange-500/20' : 'border-slate-200/80 bg-white hover:border-slate-300'">
+      <div class="flex items-center justify-between">
+        <p class="text-xs font-medium uppercase tracking-wider text-slate-500">Total Orders</p>
+        <span class="p-2 rounded-xl bg-slate-100 text-slate-600">
+          <svg class="w-4 h-4" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+            <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M16 11V7a4 4 0 00-8 0v4M5 9h14l1 12H4L5 9z" />
+          </svg>
+        </span>
+      </div>
+      <h2 class="mt-3 text-2xl font-bold text-slate-900">{{ stats.totalOrders }}</h2>
+    </div>
+
+    <!-- Pending -->
+    <div (click)="filterByStatus('Pending')"
+      class="rounded-2xl border p-5 shadow-sm hover:shadow-md transition duration-200 cursor-pointer"
+      [ngClass]="selectedStatus === 'Pending' ? 'border-amber-500 bg-amber-50/10 shadow-md ring-1 ring-amber-500/20' : 'border-slate-200/80 bg-white hover:border-slate-300'">
+      <div class="flex items-center justify-between">
+        <p class="text-xs font-medium uppercase tracking-wider text-slate-500">Pending</p>
+        <span class="p-2 rounded-xl bg-amber-50 text-amber-600">
+          <svg class="w-4 h-4" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+            <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M12 8v4l3 3m6-3a9 9 0 11-18 0 9 9 0 0118 0z" />
+          </svg>
+        </span>
+      </div>
+      <h2 class="mt-3 text-2xl font-bold text-amber-600">{{ stats.pending }}</h2>
+    </div>
+
+    <!-- Processing -->
+    <div (click)="filterByStatus('Processing')"
+      class="rounded-2xl border p-5 shadow-sm hover:shadow-md transition duration-200 cursor-pointer"
+      [ngClass]="selectedStatus === 'Processing' ? 'border-blue-500 bg-blue-50/10 shadow-md ring-1 ring-blue-500/20' : 'border-slate-200/80 bg-white hover:border-slate-300'">
+      <div class="flex items-center justify-between">
+        <p class="text-xs font-medium uppercase tracking-wider text-slate-500">Processing</p>
+        <span class="p-2 rounded-xl bg-blue-50 text-blue-600">
+          <svg class="w-4 h-4" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+            <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M10.325 4.317c.426-1.756 2.924-1.756 3.35 0a1.724 1.724 0 002.573 1.066c1.543-.94 3.31.826 2.37 2.37a1.724 1.724 0 001.065 2.572c1.756.426 1.756 2.924 0 3.35a1.724 1.724 0 00-1.066 2.573c.94 1.543-.826 3.31-2.37 2.37a1.724 1.724 0 00-2.572 1.065c-.426 1.756-2.924 1.756-3.35 0a1.724 1.724 0 00-2.573-1.066c-1.543.94-3.31-.826-2.37-2.37a1.724 1.724 0 00-1.065-2.572c-1.756-.426-1.756-2.924 0-3.35a1.724 1.724 0 001.066-2.573c-.94-1.543.826-3.31 2.37-2.37.996.608 2.296.07 2.572-1.065z" /><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M15 12a3 3 0 11-6 0 3 3 0 016 0z" />
+          </svg>
+        </span>
+      </div>
+      <h2 class="mt-3 text-2xl font-bold text-blue-600">{{ stats.processing }}</h2>
+    </div>
+
+    <!-- Shipped -->
+    <div (click)="filterByStatus('Shipped')"
+      class="rounded-2xl border p-5 shadow-sm hover:shadow-md transition duration-200 cursor-pointer"
+      [ngClass]="selectedStatus === 'Shipped' ? 'border-indigo-500 bg-indigo-50/10 shadow-md ring-1 ring-indigo-500/20' : 'border-slate-200/80 bg-white hover:border-slate-300'">
+      <div class="flex items-center justify-between">
+        <p class="text-xs font-medium uppercase tracking-wider text-slate-500">Shipped</p>
+        <span class="p-2 rounded-xl bg-indigo-50 text-indigo-600">
+          <svg class="w-4 h-4" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+            <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M9 17a2 2 0 11-4 0 2 2 0 014 0zM19 17a2 2 0 11-4 0 2 2 0 014 0z" /><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M13 16V6a1 1 0 00-1-1H4a1 1 0 00-1 1v10a1 1 0 001 1h1m8-1a1 1 0 01-1 1H9m4-1V8a1 1 0 011-1h2.586a1 1 0 01.707.293l3.414 3.414a1 1 0 01.293.707V16a1 1 0 01-1 1h-1m-6-1a1 1 0 001 1h1M5 17a2 2 0 104 0m-4 0a2 2 0 114 0m6 0a2 2 0 104 0m-4 0a2 2 0 114 0" />
+          </svg>
+        </span>
+      </div>
+      <h2 class="mt-3 text-2xl font-bold text-indigo-600">{{ stats.shipped }}</h2>
+    </div>
+
+    <!-- Delivered -->
+    <div (click)="filterByStatus('Delivered')"
+      class="rounded-2xl border p-5 shadow-sm hover:shadow-md transition duration-200 cursor-pointer"
+      [ngClass]="selectedStatus === 'Delivered' ? 'border-emerald-500 bg-emerald-50/10 shadow-md ring-1 ring-emerald-500/20' : 'border-slate-200/80 bg-white hover:border-slate-300'">
+      <div class="flex items-center justify-between">
+        <p class="text-xs font-medium uppercase tracking-wider text-slate-500">Delivered</p>
+        <span class="p-2 rounded-xl bg-emerald-50 text-emerald-600">
+          <svg class="w-4 h-4" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+            <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M5 13l4 4L19 7" />
+          </svg>
+        </span>
+      </div>
+      <h2 class="mt-3 text-2xl font-bold text-emerald-600">{{ stats.delivered }}</h2>
+    </div>
+
+    <!-- Cancelled -->
+    <div (click)="filterByStatus('Cancelled')"
+      class="rounded-2xl border p-5 shadow-sm hover:shadow-md transition duration-200 cursor-pointer"
+      [ngClass]="selectedStatus === 'Cancelled' ? 'border-rose-500 bg-rose-50/10 shadow-md ring-1 ring-rose-500/20' : 'border-slate-200/80 bg-white hover:border-slate-300'">
+      <div class="flex items-center justify-between">
+        <p class="text-xs font-medium uppercase tracking-wider text-slate-500">Cancelled</p>
+        <span class="p-2 rounded-xl bg-rose-50 text-rose-600">
+          <svg class="w-4 h-4" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+            <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M6 18L18 6M6 6l12 12" />
+          </svg>
+        </span>
+      </div>
+      <h2 class="mt-3 text-2xl font-bold text-rose-600">{{ stats.cancelled }}</h2>
+    </div>
+
+    <!-- Refunded -->
+    <div (click)="filterByStatus('Refunded')"
+      class="rounded-2xl border p-5 shadow-sm hover:shadow-md transition duration-200 cursor-pointer"
+      [ngClass]="selectedStatus === 'Refunded' ? 'border-red-500 bg-red-50/10 shadow-md ring-1 ring-red-500/20' : 'border-slate-200/80 bg-white hover:border-slate-300'">
+      <div class="flex items-center justify-between">
+        <p class="text-xs font-medium uppercase tracking-wider text-slate-500">Refunded</p>
+        <span class="p-2 rounded-xl bg-red-50 text-red-600">
+          <svg class="w-4 h-4" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+            <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M16 15v-6a4 4 0 00-4-4H4m12 0l-4 4m4-4l-4-4" />
+          </svg>
+        </span>
+      </div>
+      <h2 class="mt-3 text-2xl font-bold text-red-600">{{ stats.refunded }}</h2>
+    </div>
+
+  </div>
   <div class="flex flex-col md:flex-row md:items-center md:justify-between gap-4">
     <div>
       <h1 class="text-3xl font-bold text-slate-900">
@@ -13,5 +122,10 @@
   </div>
 
   <!-- Order Table -->
-  <app-order-tables></app-order-tables>
+  <app-order-tables #orderTable [selectedStatus]="selectedStatus" [pageNumber]="pageNumber" [pageSize]="pageSize"
+    (totalItemsChange)="totalItems = $event" (totalPagesChange)="totalPages = $event"
+    (statusChanged)="loadStatistics()"></app-order-tables>
+
+  <app-pagination [pageNumber]="pageNumber" [pageSize]="pageSize" [totalItems]="totalItems"
+    [totalPages]="totalPages" (pageChange)="onPageChanged($event)" [itemLabel]="'orders'"></app-pagination>
 </div>

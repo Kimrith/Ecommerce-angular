@@ -1,156 +1,181 @@
 <div class="space-y-6">
   <!-- Header -->
   <div class="flex flex-col gap-4 md:flex-row md:items-center md:justify-between">
-
     <div>
-      <h1 class="text-3xl font-bold text-slate-900">
-        Customers
-      </h1>
-
-      <p class="mt-1 text-slate-500">
-        Manage customer accounts and activity.
-      </p>
+      <h1 class="text-3xl font-bold text-slate-900">Customers</h1>
+      <p class="mt-1 text-slate-500">Manage customer accounts and activity.</p>
     </div>
-
   </div>
 
-  <!-- Stats -->
-  <div class="grid gap-6 md:grid-cols-3">
-
-    <div class="rounded-2xl border border-slate-200 bg-white p-6 shadow-sm">
-      <p class="text-sm text-slate-500">
-        Total Customers
-      </p>
-
-      <h2 class="mt-2 text-3xl font-bold text-slate-900">
-        12,540
-      </h2>
+  <!-- Statistics -->
+  <div class="grid gap-4 sm:grid-cols-2 lg:grid-cols-3">
+    <!-- Total Customers -->
+    <div (click)="filterByStatus('')"
+      class="rounded-2xl border p-5 shadow-sm hover:shadow-md transition duration-200 cursor-pointer"
+      [ngClass]="selectedStatus === '' ? 'border-orange-500 bg-orange-50/10 shadow-md ring-1 ring-orange-500/20' : 'border-slate-200/80 bg-white hover:border-slate-300'">
+      <div class="flex items-center justify-between">
+        <p class="text-xs font-medium uppercase tracking-wider text-slate-500">Total Customers</p>
+        <span class="p-2 rounded-xl bg-slate-100 text-slate-600">
+          <svg class="w-4 h-4" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+            <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2"
+              d="M17 20h5v-2a3 3 0 00-5.356-1.857M17 20H7m10 0v-2c0-.656-.126-1.283-.356-1.857M7 20H2v-2a3 3 0 015.356-1.857M7 20v-2c0-.656.126-1.283.356-1.857m0 0a5.002 5.002 0 019.288 0M15 7a3 3 0 11-6 0 3 3 0 016 0zm6 3a2 2 0 11-4 0 2 2 0 014 0zM7 10a2 2 0 11-4 0 2 2 0 014 0z" />
+          </svg>
+        </span>
+      </div>
+      <h2 class="mt-3 text-2xl font-bold text-slate-900">{{ stats.totalCustomers }}</h2>
     </div>
 
-
-    <div class="rounded-2xl border border-slate-200 bg-white p-6 shadow-sm">
-      <p class="text-sm text-slate-500">
-        Active Customers
-      </p>
-
-      <h2 class="mt-2 text-3xl font-bold text-green-600">
-        11,820
-      </h2>
+    <!-- Active Customers -->
+    <div (click)="filterByStatus('Active')"
+      class="rounded-2xl border p-5 shadow-sm hover:shadow-md transition duration-200 cursor-pointer"
+      [ngClass]="selectedStatus === 'Active' ? 'border-emerald-500 bg-emerald-50/10 shadow-md ring-1 ring-emerald-500/20' : 'border-slate-200/80 bg-white hover:border-slate-300'">
+      <div class="flex items-center justify-between">
+        <p class="text-xs font-medium uppercase tracking-wider text-slate-500">Active Customers</p>
+        <span class="p-2 rounded-xl bg-emerald-50 text-emerald-600">
+          <svg class="w-4 h-4" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+            <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2"
+              d="M9 12l2 2 4-4m5.618-4.016A11.955 11.955 0 0112 2.944a11.955 11.955 0 01-8.618 3.04A12.02 12.02 0 003 9c0 5.591 3.824 10.29 9 11.622 5.176-1.332 9-6.03 9-11.622 0-1.042-.133-2.052-.382-3.016z" />
+          </svg>
+        </span>
+      </div>
+      <h2 class="mt-3 text-2xl font-bold text-emerald-600">{{ stats.activeCustomers }}</h2>
     </div>
 
-
-    <div class="rounded-2xl border border-slate-200 bg-white p-6 shadow-sm">
-      <p class="text-sm text-slate-500">
-        Blocked Customers
-      </p>
-
-      <h2 class="mt-2 text-3xl font-bold text-red-600">
-        45
-      </h2>
+    <!-- Suspended Customers -->
+    <div (click)="filterByStatus('Suspended')"
+      class="rounded-2xl border p-5 shadow-sm hover:shadow-md transition duration-200 cursor-pointer"
+      [ngClass]="selectedStatus === 'Suspended' ? 'border-red-500 bg-red-50/10 shadow-md ring-1 ring-red-500/20' : 'border-slate-200/80 bg-white hover:border-slate-300'">
+      <div class="flex items-center justify-between">
+        <p class="text-xs font-medium uppercase tracking-wider text-slate-500">Suspended</p>
+        <span class="p-2 rounded-xl bg-red-50 text-red-700">
+          <svg class="w-4 h-4" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+            <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2"
+              d="M18.364 18.364A9 9 0 005.636 5.636m12.728 12.728A9 9 0 015.636 5.636m12.728 12.728L5.636 5.636" />
+          </svg>
+        </span>
+      </div>
+      <h2 class="mt-3 text-2xl font-bold text-red-700">{{ stats.suspendedCustomers }}</h2>
     </div>
-
   </div>
 
-  <!-- Search -->
-  <div class="rounded-2xl border border-slate-200 bg-white p-4 shadow-sm">
+  <!-- Search Filter -->
+  <div class="bg-white rounded-2xl border border-slate-200 shadow-sm p-4">
+    <div class="flex flex-col md:flex-row gap-4">
+      <input type="text" [(ngModel)]="searchTerm" (ngModelChange)="applyFilters()" (keyup.enter)="searchCustomers()"
+        placeholder="Search customer by name or email..."
+        class="flex-1 px-4 py-3 rounded-xl border border-slate-200 outline-none focus:ring-2 focus:ring-orange-500" />
 
-    <div class="flex flex-col gap-4 md:flex-row">
-
-      <input
-        type="text"
-        placeholder="Search customer..."
-        class="flex-1 rounded-xl border border-slate-200 px-4 py-3 outline-none focus:border-orange-500">
-
-      <button
-        class="rounded-xl bg-orange-500 px-6 py-3 font-semibold text-white hover:bg-orange-600">
-        Search
-      </button>
-
+      <select [(ngModel)]="selectedStatus" (change)="searchCustomers()"
+        class="px-4 py-3 rounded-xl border border-slate-200 outline-none focus:ring-2 focus:ring-orange-500 cursor-pointer bg-white">
+        <option value="">All Statuses</option>
+        <option value="Active">Active</option>
+        <option value="Suspended">Suspended</option>
+      </select>
     </div>
-
   </div>
 
   <!-- Customer Table -->
   <div class="overflow-hidden rounded-2xl border border-slate-200 bg-white shadow-sm">
-
-    <table class="min-w-full">
-
-      <thead class="bg-slate-50">
-
+    <table class="w-full text-left border-collapse">
+      <thead class="bg-slate-50 border-b border-slate-100 text-xs font-semibold uppercase text-slate-500">
         <tr>
-
-          <th class="px-6 py-3 text-left text-sm font-semibold text-slate-500">
-            Customer
-          </th>
-
-          <th class="px-6 py-3 text-left text-sm font-semibold text-slate-500">
-            Email
-          </th>
-
-          <th class="px-6 py-3 text-left text-sm font-semibold text-slate-500">
-            Orders
-          </th>
-
-          <th class="px-6 py-3 text-left text-sm font-semibold text-slate-500">
-            Status
-          </th>
-
-          <th class="px-6 py-3 text-left text-sm font-semibold text-slate-500">
-            Action
-          </th>
-
+          <th class="px-6 py-4">ID</th>
+          <th class="px-6 py-4">Customer / Email</th>
+          <th class="px-6 py-4">Role</th>
+          <th class="px-6 py-4">Status</th>
+          <th class="px-6 py-4">Actions</th>
         </tr>
-
       </thead>
-
-
       <tbody class="divide-y divide-slate-100">
-        <tr>
+        @for (user of paginatedUsers; track user.userId) {
+        <tr class="hover:bg-slate-50/50 transition-colors">
+          <!-- Customer & Email Column -->
+          <!-- ID Column -->
+          <td class="px-6 py-4 text-slate-600 font-medium">
+            {{ user.userId }}
+          </td>
 
           <td class="px-6 py-4">
-
             <div class="flex items-center gap-3">
-
-              <div class="flex h-10 w-10 items-center justify-center rounded-full bg-orange-100 font-bold text-orange-600">
-                JD
+              <div
+                class="flex h-12 w-12 items-center justify-center rounded-xl bg-orange-100 font-bold text-orange-600 overflow-hidden">
+                @if (user.profileImageUrl) {
+                <img [src]="getImageUrl(user.profileImageUrl)" alt="Profile" class="h-full w-full object-cover"> } @else
+                {
+                <span>{{ getUserInitials(user.fullName) }}</span>
+                }
               </div>
-
-              <span class="font-medium text-slate-900">
-                John Doe
-              </span>
-
+              <div>
+                <p class="font-semibold text-slate-900">{{ user.fullName }}</p>
+                <p class="text-sm text-slate-500">{{ user.email }}</p>
+              </div>
             </div>
-
           </td>
 
-
-          <td class="px-6 py-4 text-slate-600">
-            john@example.com
-          </td>
-
-
-          <td class="px-6 py-4 text-slate-600">
-            24
-          </td>
-
-
+          <!-- Role Column -->
           <td class="px-6 py-4">
-
-            <span class="rounded-full bg-green-100 px-3 py-1 text-xs font-semibold text-green-700">
-              Active
+            <span class="rounded-full bg-slate-100 px-3 py-1 text-xs font-semibold text-slate-700">
+              {{ user.role }}
             </span>
-
           </td>
+
+          <!-- Status Column -->
           <td class="px-6 py-4">
+            <span [ngClass]="{
+                  'bg-green-100 text-green-700': getStatusValue(user.status) === 'Active',
+                  'bg-red-100 text-red-700': getStatusValue(user.status) === 'Suspended'
+                }" class="rounded-full px-3 py-1 text-xs font-semibold">
+              {{ user.status }}
+            </span>
+          </td>
 
-            <button
-              class="rounded-lg bg-slate-900 px-4 py-2 text-sm text-white hover:bg-slate-800">
-              View
-            </button>
+          <!-- Actions Column -->
+          <td class="px-6 py-4">
+            <div class="flex gap-2">
+              <button (click)="viewUser(user.userId)"
+                class="rounded-lg bg-blue-600 px-3 py-2 text-sm text-white hover:bg-blue-700 cursor-pointer">
+                View
+              </button>
 
+              @if (getStatusValue(user.status) === 'Active') {
+              <button (click)="Suspended(user.userId)"
+                class="rounded-lg bg-red-600 px-3 py-2 text-sm text-white hover:bg-red-700 cursor-pointer">
+                Suspend
+              </button>
+              }
+              @else {
+              <button (click)="reactivateUser(user.userId)"
+                class="rounded-lg bg-green-600 px-3 py-2 text-sm text-white hover:bg-green-700 cursor-pointer">
+                Reactivate
+              </button>
+              }
+            </div>
           </td>
         </tr>
+        } @empty {
+        <tr>
+          <td colspan="4" class="px-6 py-8 text-center text-slate-500">
+            No customers found matching the criteria.
+          </td>
+        </tr>
+        }
       </tbody>
     </table>
   </div>
+
+  <app-pagination [pageNumber]="pageNumber" [pageSize]="pageSize" [totalItems]="totalItems" [totalPages]="totalPages"
+    [itemLabel]="'customers'" (pageChange)="onPageChange($event)">
+  </app-pagination>
 </div>
+
+<!-- Customer Details Modal -->
+@if(showViewDetail) {
+<app-customer-view-detail [user]="selectedUser" (close)="showViewDetail = false">
+</app-customer-view-detail>
+}
+
+<!-- Toast Notification Component -->
+@if(showToast) {
+<app-toast [message]="toastMessage" (dismissed)="showToast = false">
+</app-toast>
+}
