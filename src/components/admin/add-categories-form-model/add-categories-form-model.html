@@ -3,8 +3,8 @@
     <!-- Header -->
     <div class="flex items-center justify-between border-b px-6 py-5">
       <div>
-        <h2 class="text-2xl font-bold text-gray-800">Add New Category</h2>
-        <p class="mt-1 text-sm text-gray-500">Create a new product category.</p>
+        <h2 class="text-2xl font-bold text-gray-800">{{ editCategory ? 'Edit Category' : 'Add New Category' }}</h2>
+        <p class="mt-1 text-sm text-gray-500">{{ editCategory ? 'Modify category details.' : 'Create a new product category.' }}</p>
       </div>
 
       <button type="button" (click)="closeModal()"
@@ -61,8 +61,16 @@
         <div>
           <label class="mb-2 block text-sm font-medium text-gray-700"> Category Image </label>
 
-          <input type="file" (change)="onFileSelected($event)"
-            class="block w-full cursor-pointer rounded-xl border border-gray-300 p-3 file:mr-4 file:rounded-lg file:border-0 file:bg-orange-500 file:px-4 file:py-2 file:text-white" />
+          <div class="flex items-center gap-4">
+            <!-- Existing Image Preview -->
+            <div *ngIf="existingImageUrl && !category.image" class="relative w-16 h-16 rounded-xl overflow-hidden border border-gray-200 shadow-sm shrink-0">
+              <img [src]="imageUrl + existingImageUrl" alt="Current Image" class="w-full h-full object-cover">
+              <span class="absolute bottom-0 left-0 right-0 bg-black/50 text-[8px] text-white text-center py-0.5 font-medium">Current</span>
+            </div>
+
+            <input type="file" (change)="onFileSelected($event)"
+              class="block w-full cursor-pointer rounded-xl border border-gray-300 p-3 file:mr-4 file:rounded-lg file:border-0 file:bg-orange-500 file:px-4 file:py-2 file:text-white" />
+          </div>
         </div>
       </div>
 
@@ -75,7 +83,7 @@
 
         <button type="submit"
           class="cursor-pointer rounded-xl bg-orange-500 px-6 py-3 font-semibold text-white hover:bg-orange-600">
-          Save Category
+          {{ editCategory ? 'Update Category' : 'Save Category' }}
         </button>
       </div>
     </form>

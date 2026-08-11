@@ -11,92 +11,56 @@
 
       <!-- Home -->
       <li>
-        <a
-          routerLink="/"
-          routerLinkActive="bg-orange-50 text-orange-600 font-semibold"
+        <a routerLink="/" routerLinkActive="bg-orange-50 text-orange-600 font-semibold"
           [routerLinkActiveOptions]="{ exact: true }"
-          class="flex items-center justify-between py-2 px-3 rounded-xl transition-all hover:bg-slate-100 hover:text-slate-900">
-
-          Home
-
+          class="flex items-center gap-3 py-2 px-3 rounded-xl transition-all hover:bg-slate-100 hover:text-slate-900">
+          <span class="material-symbols-outlined text-lg">home</span>
+          <span>Home</span>
         </a>
       </li>
-
 
       <!-- About -->
       <li>
-        <a
-          routerLink="/about"
-          routerLinkActive="bg-orange-50 text-orange-600 font-semibold"
-          class="flex items-center justify-between py-2 px-3 rounded-xl transition-all hover:bg-slate-100 hover:text-slate-900">
-
-          About
-
+        <a routerLink="/about" routerLinkActive="bg-orange-50 text-orange-600 font-semibold"
+          class="flex items-center gap-3 py-2 px-3 rounded-xl transition-all hover:bg-slate-100 hover:text-slate-900">
+          <span class="material-symbols-outlined text-lg">info</span>
+          <span>About</span>
         </a>
       </li>
-
 
       <!-- Contact -->
       <li>
-        <a
-          routerLink="/contact"
-          routerLinkActive="bg-orange-50 text-orange-600 font-semibold"
-          class="flex items-center justify-between py-2 px-3 rounded-xl transition-all hover:bg-slate-100 hover:text-slate-900">
-
-          Contact
-
+        <a routerLink="/contact" routerLinkActive="bg-orange-50 text-orange-600 font-semibold"
+          class="flex items-center gap-3 py-2 px-3 rounded-xl transition-all hover:bg-slate-100 hover:text-slate-900">
+          <span class="material-symbols-outlined text-lg">mail</span>
+          <span>Contact</span>
         </a>
       </li>
-
 
       <!-- Setting -->
       <li>
-        <a
-          routerLink="/setting"
-          routerLinkActive="bg-orange-50 text-orange-600 font-semibold"
-          class="flex items-center justify-between py-2 px-3 rounded-xl transition-all hover:bg-slate-100 hover:text-slate-900">
-
-          Setting
-
+        <a routerLink="/setting" routerLinkActive="bg-orange-50 text-orange-600 font-semibold"
+          class="flex items-center gap-3 py-2 px-3 rounded-xl transition-all hover:bg-slate-100 hover:text-slate-900">
+          <span class="material-symbols-outlined text-lg">settings</span>
+          <span>Setting</span>
         </a>
       </li>
-
 
       <!-- Payment Method -->
       <li>
-        <a
-          routerLink="/paymentmethod"
-          routerLinkActive="bg-orange-50 text-orange-600 font-semibold"
-          class="flex items-center justify-between py-2 px-3 rounded-xl transition-all hover:bg-slate-100 hover:text-slate-900">
-
-          Payment Method
-
+        <a routerLink="/paymentmethod" routerLinkActive="bg-orange-50 text-orange-600 font-semibold"
+          class="flex items-center gap-3 py-2 px-3 rounded-xl transition-all hover:bg-slate-100 hover:text-slate-900">
+          <span class="material-symbols-outlined text-lg">payments</span>
+          <span>Payment Method</span>
         </a>
       </li>
-
 
       <!-- Orders -->
       <li>
-        <a
-          routerLink="/orders"
-          routerLinkActive="bg-orange-50 text-orange-600 font-semibold"
-          class="flex items-center justify-between py-2 px-3 rounded-xl transition-all hover:bg-slate-100 hover:text-slate-900">
-
-          Orders
-
-        </a>
-      </li>
-
-
-      <!-- Register -->
-      <li>
-        <a
-          routerLink="/auth/register"
-          routerLinkActive="bg-orange-50 text-orange-600 font-semibold"
-          class="flex items-center justify-between py-2 px-3 rounded-xl transition-all hover:bg-slate-100 hover:text-slate-900">
-
-          Register
-
+        <a routerLink="/orders" routerLinkActive="bg-orange-50 text-orange-600 font-semibold"
+          class="flex items-center gap-3 py-2 px-3 rounded-xl transition-all hover:bg-slate-100 hover:text-slate-900">
+          <span class="material-symbols-outlined text-lg">receipt_long</span>
+          <span>Orders</span>
         </a>
       </li>
 
@@ -104,6 +68,7 @@
 
   </div>
 
+  <!-- Categories -->
   <div class="bg-white p-5 rounded-2xl border border-slate-200 shadow-xl shadow-slate-200/50">
     <h3 class="text-xs font-bold text-slate-400 uppercase tracking-widest mb-3 px-2">
       Categories
@@ -113,81 +78,25 @@
 
       <!-- All Products -->
       <li>
-        <a
-          routerLink="/products"
-          routerLinkActive="bg-orange-50 text-orange-600 font-semibold"
+        <a routerLink="/products" routerLinkActive="bg-orange-50 text-orange-600 font-semibold"
           [routerLinkActiveOptions]="{ exact: true }"
-          class="flex items-center justify-between py-2 px-3 rounded-xl transition-all hover:bg-slate-100 hover:text-slate-900">
-
-          All Products
-
+          class="flex items-center gap-3 py-2 px-3 rounded-xl transition-all hover:bg-slate-100 hover:text-slate-900">
+          <span class="material-symbols-outlined text-lg">shopping_bag</span>
+          <span>All Products</span>
         </a>
       </li>
 
-
-      <!-- Electronics -->
+      @for(category of categories; track category.id) {
+      @if(category.status === "Approved") {
       <li>
-        <a
-          [routerLink]="['/categories', 1]"
-          routerLinkActive="bg-orange-50 text-orange-600 font-semibold"
-          class="flex items-center justify-between py-2 px-3 rounded-xl transition-all hover:bg-slate-100 hover:text-slate-900">
-
-          Electronics & Gadgets
-
+        <a [routerLink]="['/categories', category.id]" routerLinkActive="bg-orange-50 text-orange-600 font-semibold"
+          class="flex items-center gap-3 py-2 px-3 rounded-xl transition-all hover:bg-slate-100 hover:text-slate-900">
+          <span class="material-symbols-outlined text-lg">category</span>
+          <span class="flex-1">{{ category.name }}</span>
         </a>
       </li>
-
-
-      <!-- Fashion -->
-      <li>
-        <a
-          [routerLink]="['/categories', 2]"
-          routerLinkActive="bg-orange-50 text-orange-600 font-semibold"
-          class="flex items-center justify-between py-2 px-3 rounded-xl transition-all hover:bg-slate-100 hover:text-slate-900">
-
-          Apparel & Fashion
-
-        </a>
-      </li>
-
-
-      <!-- Home -->
-      <li>
-        <a
-          [routerLink]="['/categories', 3]"
-          routerLinkActive="bg-orange-50 text-orange-600 font-semibold"
-          class="flex items-center justify-between py-2 px-3 rounded-xl transition-all hover:bg-slate-100 hover:text-slate-900">
-
-          Home & Kitchen
-
-        </a>
-      </li>
-
-
-      <!-- Sports -->
-      <li>
-        <a
-          [routerLink]="['/categories', 4]"
-          routerLinkActive="bg-orange-50 text-orange-600 font-semibold"
-          class="flex items-center justify-between py-2 px-3 rounded-xl transition-all hover:bg-slate-100 hover:text-slate-900">
-
-          Sports & Outdoors
-
-        </a>
-      </li>
-
-
-      <!-- Beauty -->
-      <li>
-        <a
-          [routerLink]="['/categories', 5]"
-          routerLinkActive="bg-orange-50 text-orange-600 font-semibold"
-          class="flex items-center justify-between py-2 px-3 rounded-xl transition-all hover:bg-slate-100 hover:text-slate-900">
-
-          Beauty & Health
-
-        </a>
-      </li>
+      }
+      }
 
     </ul>
   </div>
@@ -196,11 +105,53 @@
   <div class="bg-white p-5 rounded-2xl border border-slate-200 shadow-xl shadow-slate-200/50">
     <h3 class="text-xs font-bold text-slate-400 uppercase tracking-widest mb-4 px-2">Price Range</h3>
     <div class="space-y-4 px-2">
-      <input type="range" min="0" max="1000" class="w-full accent-orange-500 bg-slate-100 cursor-pointer h-2 rounded-lg">
+      <input type="range" min="0" max="1000" step="10" [(ngModel)]="maxPrice" (change)="onPriceChange()"
+        class="w-full accent-orange-500 bg-slate-100 cursor-pointer h-2 rounded-lg">
       <div class="flex items-center justify-between text-xs text-slate-500 font-semibold">
         <span class="px-2 py-1 rounded bg-slate-100 border border-slate-200">$0</span>
-        <span class="px-2 py-1 rounded bg-slate-100 border border-slate-200">$1,000+</span>
+        <span class="px-2 py-1 rounded bg-slate-100 border border-slate-200">
+          ${{ maxPrice === 1000 ? '1,000+' : maxPrice }}
+        </span>
       </div>
     </div>
   </div>
+
+  <!-- Account Navigation -->
+  <div class="bg-white p-5 rounded-2xl border border-slate-200 shadow-xl shadow-slate-200/50">
+    <h3 class="text-xs font-bold text-slate-400 uppercase tracking-widest mb-3 px-2">
+      Account
+    </h3>
+
+    <ul class="space-y-1 text-sm text-slate-600">
+      @if (isLoggedIn) {
+      <li class="px-3 py-2 rounded-xl bg-slate-50 border border-slate-100 mb-2">
+        <p class="text-xs text-slate-400">Logged in as</p>
+        <p class="font-semibold text-slate-800 truncate" [title]="userName">{{ userName }}</p>
+      </li>
+      <li>
+        <button (click)="logout()"
+          class="flex items-center gap-3 w-full text-left py-2 px-3 rounded-xl transition-all hover:bg-red-50 hover:text-red-600">
+          <span class="material-symbols-outlined text-lg text-red-500">logout</span>
+          <span class="text-red-600 font-medium">Logout</span>
+        </button>
+      </li>
+      } @else {
+      <li>
+        <a routerLink="/login" routerLinkActive="bg-orange-50 text-orange-600 font-semibold"
+          class="flex items-center gap-3 py-2 px-3 rounded-xl transition-all hover:bg-slate-100 hover:text-slate-900">
+          <span class="material-symbols-outlined text-lg">login</span>
+          <span>Login</span>
+        </a>
+      </li>
+      <li>
+        <a routerLink="/register" routerLinkActive="bg-orange-50 text-orange-600 font-semibold"
+          class="flex items-center gap-3 py-2 px-3 rounded-xl transition-all hover:bg-slate-100 hover:text-slate-900">
+          <span class="material-symbols-outlined text-lg">person_add</span>
+          <span>Register</span>
+        </a>
+      </li>
+      }
+    </ul>
+  </div>
+
 </aside>

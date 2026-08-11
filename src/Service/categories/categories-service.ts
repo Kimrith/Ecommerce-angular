@@ -1,26 +1,15 @@
 import { Injectable } from '@angular/core';
-import { HttpClient, HttpHeaders } from '@angular/common/http';
+import { HttpClient, HttpHeaders, HttpParams } from '@angular/common/http';
 import { Observable, map } from 'rxjs';
-
-export interface Category {
-  id: number;
-  name: string;
-  slug: string;
-  status: string;
-  description: string;
-  imageUrl: string | null;
-  productCount: number;
-  userId: number;
-  createdBy: string;
-  createdAt: string;
-  updatedAt: string | null;
-}
+import { environment } from '../../environments/environment.development';
+import { Category, CategoryStatistics } from '../../type/categories';
+export type { Category, CategoryStatistics };
 
 @Injectable({
   providedIn: 'root',
 })
 export class CategoriesService {
-  private apiUrl = 'http://localhost:5117/api/Categories';
+  private apiUrl = `${environment.apiUrl}/api/Categories`;
 
   constructor(private http: HttpClient) { }
 
@@ -56,5 +45,31 @@ export class CategoriesService {
   createCategory(categoryData: FormData): Observable<any> {
     const headers = this.getAuthHeaders();
     return this.http.post<any>(this.apiUrl, categoryData, { headers });
+  }
+
+  updateCategory(categoryId: number, categoryData: FormData): Observable<any> {
+    const headers = this.getAuthHeaders();
+    return this.http.put<any>(`${this.apiUrl}/${categoryId}`, categoryData, { headers });
+  }
+
+  deleteCategory(categoryId: number): Observable<any> {
+    const headers = this.getAuthHeaders();
+    return this.http.delete<any>(`${this.apiUrl}/${categoryId}`, { headers });
+  }
+
+  CategoriesStatistics(sellerId?: number): Observable<CategoryStatistics> {
+    const headers = this.getAuthHeaders();
+    let params = new HttpParams();
+    if (sellerId !== undefined && sellerId !== null) {
+      params = params.set('sellerId', sellerId.toString());
+    }
+    return this.http.get<CategoryStatistics>(`${this.apiUrl}/statistics`, { headers, params });
+  }
+
+  // seller 
+
+  getAllCategoriesSeller(sellerId: number) {
+    const headers = this.getAuthHeaders();
+    return this.http.get<Category[]>(`${this.apiUrl}/seller/${sellerId}`, { headers });
   }
 }

@@ -3,9 +3,9 @@
     <!-- Header -->
     <div class="flex items-center justify-between border-b px-6 py-5">
       <div>
-        <h2 class="text-2xl font-bold text-gray-800">Add New Product</h2>
+        <h2 class="text-2xl font-bold text-gray-800">{{ editProduct ? 'Edit Product' : 'Add New Product' }}</h2>
         <p class="mt-1 text-sm text-gray-500">
-          Fill in the information below to create a new product.
+          {{ editProduct ? 'Update the information below to modify the product.' : 'Fill in the information below to create a new product.' }}
         </p>
       </div>
 
@@ -70,7 +70,7 @@
 
         <!-- Discount -->
         <div>
-          <label class="mb-2 block text-sm font-medium text-gray-700"> Discount (%) </label>
+          <label class="mb-2 block text-sm font-medium text-gray-700"> Discount ($) </label>
 
           <input [(ngModel)]="product.discount" name="discount" type="number" placeholder="10"
             class="w-full rounded-xl border border-gray-300 px-4 py-3 outline-none focus:border-orange-500 focus:ring-2 focus:ring-orange-200" />
@@ -98,6 +98,22 @@
             <option [ngValue]="5">Suspended</option>
           </select>
         </div>
+
+        <!-- Color -->
+        <div>
+          <label class="mb-2 block text-sm font-medium text-gray-700"> Color </label>
+
+          <input [(ngModel)]="product.color" name="color" type="text" placeholder="e.g. Black, White"
+            class="w-full rounded-xl border border-gray-300 px-4 py-3 outline-none focus:border-orange-500 focus:ring-2 focus:ring-orange-200" />
+        </div>
+
+        <!-- Size -->
+        <div>
+          <label class="mb-2 block text-sm font-medium text-gray-700"> Size </label>
+
+          <input [(ngModel)]="product.size" name="size" type="text" placeholder="e.g. S, M, L, XL"
+            class="w-full rounded-xl border border-gray-300 px-4 py-3 outline-none focus:border-orange-500 focus:ring-2 focus:ring-orange-200" />
+        </div>
       </div>
 
       <!-- Description -->
@@ -113,6 +129,13 @@
       <!-- Product Images -->
       <div class="mt-5">
         <label class="mb-2 block text-sm font-medium text-gray-700"> Product Images </label>
+        
+        <div class="flex items-center gap-4 mb-3" *ngIf="existingImageUrl && !product.images.length">
+          <div class="relative w-20 h-20 rounded-xl overflow-hidden border border-gray-200 shadow-sm flex items-center justify-center bg-gray-50 shrink-0">
+            <img [src]="'http://localhost:5117' + existingImageUrl" alt="Current Image" class="w-full h-full object-cover">
+            <span class="absolute bottom-0 left-0 right-0 bg-black/60 text-[9px] text-white text-center py-0.5 font-medium">Current Image</span>
+          </div>
+        </div>
 
         <input type="file" multiple (change)="onFilesSelected($event)"
           class="block w-full cursor-pointer rounded-xl border border-gray-300 p-3 file:mr-4 file:rounded-lg file:border-0 file:bg-orange-500 file:px-4 file:py-2 file:text-white" />
@@ -127,7 +150,7 @@
 
         <button type="submit"
           class="cursor-pointer rounded-xl bg-orange-500 px-6 py-3 font-semibold text-white hover:bg-orange-600">
-          Save Product
+          {{ editProduct ? 'Update Product' : 'Save Product' }}
         </button>
       </div>
     </form>

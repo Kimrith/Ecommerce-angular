@@ -6,52 +6,64 @@
     </div>
   </div>
 
+  <!-- Stats Cards -->
   <div class="grid gap-6 md:grid-cols-4">
-    <div class="bg-white rounded-2xl border border-slate-200 shadow-sm p-6">
+    <div (click)="filterByStatus('')"
+      class="bg-white rounded-2xl border p-6 shadow-sm hover:shadow-md transition duration-200 cursor-pointer"
+      [ngClass]="selectedStatus === '' ? 'border-orange-500 bg-orange-50/10 ring-1 ring-orange-500/20' : 'border-slate-200'">
       <p class="text-sm text-slate-500">Total Revenue</p>
-      <h2 class="text-3xl font-bold text-slate-900 mt-2">$245,800</h2>
+      <h2 class="text-3xl font-bold text-slate-900 mt-2">{{ stats.totalRevenue | currency:'USD' }}</h2>
     </div>
 
-    <div class="bg-white rounded-2xl border border-slate-200 shadow-sm p-6">
+    <div (click)="filterByStatus('Completed')"
+      class="bg-white rounded-2xl border p-6 shadow-sm hover:shadow-md transition duration-200 cursor-pointer"
+      [ngClass]="selectedStatus === 'Completed' ? 'border-emerald-500 bg-emerald-50/10 ring-1 ring-emerald-500/20' : 'border-slate-200'">
       <p class="text-sm text-slate-500">Completed Payments</p>
-      <h2 class="text-3xl font-bold text-green-600 mt-2">11,250</h2>
+      <h2 class="text-3xl font-bold text-green-600 mt-2">{{ stats.completedPayments }}</h2>
     </div>
 
-    <div class="bg-white rounded-2xl border border-slate-200 shadow-sm p-6">
+    <div (click)="filterByStatus('Pending')"
+      class="bg-white rounded-2xl border p-6 shadow-sm hover:shadow-md transition duration-200 cursor-pointer"
+      [ngClass]="selectedStatus === 'Pending' ? 'border-amber-500 bg-amber-50/10 ring-1 ring-amber-500/20' : 'border-slate-200'">
       <p class="text-sm text-slate-500">Pending Payments</p>
-      <h2 class="text-3xl font-bold text-orange-500 mt-2">120</h2>
+      <h2 class="text-3xl font-bold text-orange-500 mt-2">{{ stats.pendingPayments }}</h2>
     </div>
 
-    <div class="bg-white rounded-2xl border border-slate-200 shadow-sm p-6">
+    <div (click)="filterByStatus('Refunded')"
+      class="bg-white rounded-2xl border p-6 shadow-sm hover:shadow-md transition duration-200 cursor-pointer"
+      [ngClass]="selectedStatus === 'Refunded' ? 'border-purple-500 bg-purple-50/10 ring-1 ring-purple-500/20' : 'border-slate-200'">
       <p class="text-sm text-slate-500">Refunds</p>
-      <h2 class="text-3xl font-bold text-red-600 mt-2">$4,500</h2>
+      <h2 class="text-3xl font-bold text-purple-600 mt-2">{{ stats.refunds | currency:'USD' }}</h2>
     </div>
   </div>
 
+  <!-- Search & Filter Controls -->
   <div class="bg-white rounded-2xl border border-slate-200 shadow-sm p-4">
     <div class="flex flex-col md:flex-row gap-4">
-      <input type="text" placeholder="Search transaction ID..." class="flex-1 px-4 py-3 rounded-xl border border-slate-200 outline-none focus:ring-2 focus:ring-orange-500">
+      <input type="text" [(ngModel)]="searchTerm" (ngModelChange)="applyFilters()"
+        placeholder="Search transaction by ID, Customer Name or Email..."
+        class="flex-1 px-4 py-3 rounded-xl border border-slate-200 outline-none focus:ring-2 focus:ring-orange-500">
 
-      <select class="px-4 py-3 rounded-xl border border-slate-200">
-        <option>All Payment Status</option>
-        <option>Completed</option>
-        <option>Pending</option>
-        <option>Failed</option>
-        <option>Refunded</option>
+      <select [(ngModel)]="selectedStatus" (ngModelChange)="applyFilters()"
+        class="px-4 py-3 rounded-xl border border-slate-200 outline-none focus:ring-2 focus:ring-orange-500 cursor-pointer bg-white">
+        <option value="">All Payment Status</option>
+        <option value="Completed">Completed</option>
+        <option value="Pending">Pending</option>
+        <option value="Failed">Failed</option>
+        <option value="Refunded">Refunded</option>
+        <option value="Cancelled">Cancelled</option>
       </select>
-
-      <button class="px-5 py-3 bg-slate-900 text-white rounded-xl">
-        Search
-      </button>
     </div>
   </div>
 
+  <!-- Payments List Table -->
   <div class="bg-white rounded-2xl border border-slate-200 shadow-sm overflow-hidden">
     <div class="overflow-x-auto">
       <table class="w-full">
         <thead class="bg-slate-50 border-b border-slate-200">
           <tr>
             <th class="px-6 py-4 text-left text-sm text-slate-600">Transaction ID</th>
+            <th class="px-6 py-4 text-left text-sm text-slate-600">Order #</th>
             <th class="px-6 py-4 text-left text-sm text-slate-600">Customer</th>
             <th class="px-6 py-4 text-left text-sm text-slate-600">Payment Method</th>
             <th class="px-6 py-4 text-left text-sm text-slate-600">Amount</th>
@@ -61,37 +73,70 @@
         </thead>
 
         <tbody class="divide-y divide-slate-100">
-          <tr>
+          @for (payment of paginatedPayments; track payment.Id) {
+          <tr class="hover:bg-slate-50/50 transition">
+            <!-- Transaction ID -->
             <td class="px-6 py-4 font-semibold text-slate-900">
-              TXN-10001
+              TXN-{{ payment.Id }}
             </td>
 
-            <td class="px-6 py-4 text-slate-700">
-              John Doe
+            <!-- Order Number -->
+            <td class="px-6 py-4 text-slate-700 font-medium">
+              {{ payment.OrderNumber }}
             </td>
 
-            <td class="px-6 py-4 text-slate-700">
-              KHQR
-            </td>
-
-            <td class="px-6 py-4 font-semibold">
-              $150
-            </td>
-
+            <!-- Customer Info -->
             <td class="px-6 py-4">
-              <span class="px-3 py-1 rounded-full text-xs bg-green-100 text-green-700">
-                Completed
+              <div class="flex flex-col">
+                <span class="font-semibold text-slate-900 text-sm">{{ payment.CustomerName }}</span>
+                <span class="text-xs text-slate-500">{{ payment.CustomerEmail }}</span>
+              </div>
+            </td>
+
+            <!-- Payment Method -->
+            <td class="px-6 py-4 text-slate-700 text-sm">
+              {{ payment.PaymentMethod }}
+            </td>
+
+            <!-- Amount -->
+            <td class="px-6 py-4 font-bold text-slate-900">
+              {{ payment.Amount | currency: payment.Currency || 'USD' }}
+            </td>
+
+            <!-- Status -->
+            <td class="px-6 py-4">
+              <span [ngClass]="{
+                'bg-green-100 text-green-700': payment.StatusText === 'Completed',
+                'bg-amber-100 text-amber-700': payment.StatusText === 'Pending',
+                'bg-red-100 text-red-700': payment.StatusText === 'Failed',
+                'bg-purple-100 text-purple-700': payment.StatusText === 'Refunded',
+                'bg-slate-100 text-slate-700': payment.StatusText === 'Cancelled'
+              }" class="px-3 py-1 rounded-full text-xs font-semibold tracking-wide uppercase">
+                {{ payment.StatusText }}
               </span>
             </td>
 
+            <!-- Action -->
             <td class="px-6 py-4">
-              <button class="px-3 py-2 bg-blue-600 text-white rounded-lg text-sm">
+              <button (click)="viewPayment(payment)"
+                class="px-3 py-2 bg-blue-600 hover:bg-blue-700 text-white rounded-lg text-sm transition">
                 View
               </button>
             </td>
           </tr>
+          } @empty {
+          <tr>
+            <td colspan="7" class="px-6 py-8 text-center text-slate-500">
+              No transaction records found matching the criteria.
+            </td>
+          </tr>
+          }
         </tbody>
       </table>
     </div>
   </div>
+
+  <app-pagination [pageNumber]="pageNumber" [pageSize]="pageSize" [totalItems]="totalItems" [totalPages]="totalPages"
+    [itemLabel]="'payments'" (pageChange)="onPageChange($event)">
+  </app-pagination>
 </div>

@@ -1,62 +1,98 @@
 <div class="bg-white rounded-2xl border border-slate-200 shadow-sm overflow-hidden">
+  <table class="w-full">
+    <thead class="bg-slate-100">
+      <tr>
+        <th class="text-left px-6 py-4">ID</th>
+        <th class="text-left px-6 py-4">Image</th>
+        <th class="text-left px-6 py-4">Product</th>
+        <th class="text-left px-6 py-4">Category</th>
+        <th class="text-left px-6 py-4">Price</th>
+        <th class="text-left px-6 py-4">Stock</th>
+        <th *ngIf="showSizeColor" class="text-left px-6 py-4">Size</th>
+        <th *ngIf="showSizeColor" class="text-left px-6 py-4">Color</th>
+        <th class="text-left px-6 py-4">Status</th>
+        <th class="text-center px-6 py-4">Actions</th>
+      </tr>
+    </thead>
 
-    <table class="w-full">
+    <tbody>
+      @for (product of filteredProducts; track product.id) {
+      <tr class="border-t">
+        <td class="px-6 py-4">
+          {{ product.id }}
+        </td>
 
-      <thead class="bg-slate-100">
-        <tr>
-          <th class="text-left px-6 py-4">Image</th>
-          <th class="text-left px-6 py-4">Product</th>
-          <th class="text-left px-6 py-4">Category</th>
-          <th class="text-left px-6 py-4">Price</th>
-          <th class="text-left px-6 py-4">Stock</th>
-          <th class="text-left px-6 py-4">Status</th>
-          <th class="text-center px-6 py-4">Actions</th>
-        </tr>
-      </thead>
+        <td class="px-6 py-4">
+          <img [src]="imgBaseUrl + product.imageUrl" class="w-14 h-14 rounded-lg object-cover">
+        </td>
 
-      <tbody>
+        <td class="px-6 py-4 font-semibold">
+          {{ product.name }}
+        </td>
 
-        <tr class="border-t">
-          <td class="px-6 py-4">
-            <img
-              src="https://placehold.co/60x60"
-              class="w-14 h-14 rounded-lg object-cover">
-          </td>
+        <td class="px-6 py-4">
+          {{ product.categoryName }}
+        </td>
 
-          <td class="px-6 py-4 font-semibold">
-            iPhone 16 Pro
-          </td>
+        <td class="px-6 py-4">
+          {{ product.price }}
+        </td>
 
-          <td class="px-6 py-4">
-            Electronics
-          </td>
+        <td class="px-6 py-4">
+          {{ product.stockQuantity }}
+        </td>
+        <td *ngIf="showSizeColor" class="px-6 py-4">
+          {{ product.size || '-' }}
+        </td>
+        <td *ngIf="showSizeColor" class="px-6 py-4">
+          {{ product.color || '-' }}
+        </td>
 
-          <td class="px-6 py-4">
-            $1,299
-          </td>
+        <td class="px-6 py-4">
+          @if (product.status === 0 || product.status === 'Draft') {
+          <span class="bg-slate-100 text-slate-700 px-3 py-1 rounded-full text-sm">Draft</span>
+          } @else if (product.status === 1 || product.status === 'Pending') {
+          <span class="bg-yellow-100 text-yellow-700 px-3 py-1 rounded-full text-sm">Pending</span>
+          } @else if (product.status === 2 || product.status === 'Approved') {
+          <span class="bg-green-100 text-green-700 px-3 py-1 rounded-full text-sm">Approved</span>
+          } @else if (product.status === 3 || product.status === 'Rejected') {
+          <span class="bg-red-100 text-red-700 px-3 py-1 rounded-full text-sm">Rejected</span>
+          } @else if (product.status === 4 || product.status === 'Archived') {
+          <span class="bg-gray-100 text-gray-700 px-3 py-1 rounded-full text-sm">Archived</span>
+          } @else if (product.status === 5 || product.status === 'Suspended') {
+          <span class="bg-orange-100 text-orange-700 px-3 py-1 rounded-full text-sm">Suspended</span>
+          }
+        </td>
 
-          <td class="px-6 py-4">
-            35
-          </td>
+        <td class="px-6 py-4 text-center space-x-2">
+          <button (click)="editProduct.emit(product)"
+            class="px-3 py-1 bg-blue-500 hover:bg-blue-600 text-white rounded-lg transition cursor-pointer">
+            <svg class="w-4 h-4" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+              <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2"
+                d="M11 5H6a2 2 0 00-2 2v11a2 2 0 002 2h11a2 2 0 002-2v-5m-1.414-9.414a2 2 0 112.828 2.828L11.828 15H9v-2.828l8.586-8.586z" />
+            </svg>
+          </button>
 
-          <td class="px-6 py-4">
-            <span class="bg-green-100 text-green-700 px-3 py-1 rounded-full text-sm">
-              Active
-            </span>
-          </td>
+          <button (click)="deleteProduct(product)"
+            class="px-3 py-1 bg-red-500 hover:bg-red-600 text-white rounded-lg transition cursor-pointer">
+            <svg class="w-4 h-4" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+              <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2"
+                d="M19 7l-.867 12.142A2 2 0 0116.138 21H7.862a2 2 0 01-1.995-1.858L5 7m5 4v6m4-6v6m1-10V4a1 1 0 00-1-1h-4a1 1 0 00-1 1v3M4 7h16" />
+            </svg>
+          </button>
+        </td>
+      </tr>
+      } @empty {
+      <tr>
+        <td [attr.colspan]="showSizeColor ? 10 : 8" class="px-6 py-6 text-center text-slate-500">
+          No products found.
+        </td>
+      </tr>
+      }
+    </tbody>
+  </table>
 
-          <td class="px-6 py-4 text-center space-x-2">
-            <button class="px-3 py-1 bg-blue-500 text-white rounded-lg">
-              Edit
-            </button>
-
-            <button class="px-3 py-1 bg-red-500 text-white rounded-lg">
-              Delete
-            </button>
-          </td>
-        </tr>
-      </tbody>
-
-    </table>
-
+  @if (showSuccessToast) {
+  <app-toast [message]="toastMessage" (dismissed)="showSuccessToast = false"></app-toast>
+  }
 </div>

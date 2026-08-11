@@ -1,0 +1,333 @@
+<div class="space-y-6">
+  <!-- Header -->
+  <div class="flex flex-col md:flex-row md:items-center md:justify-between gap-4">
+    <div>
+      <h1 class="text-3xl font-bold text-slate-900">Coupons</h1>
+      <p class="text-slate-500 mt-1">Create, update, and manage coupon discount codes across the store.</p>
+    </div>
+    <button (click)="openAddModal()"
+      class="px-5 py-3 bg-orange-500 hover:bg-orange-600 text-white rounded-xl font-semibold transition cursor-pointer">
+      + Add Coupon
+    </button>
+  </div>
+
+  <!-- Statistics -->
+  <div class="grid gap-4 sm:grid-cols-2 md:grid-cols-3">
+    <!-- Total Coupons -->
+    <div class="rounded-2xl border border-slate-200 bg-white p-5 shadow-sm hover:border-slate-300 transition duration-200">
+      <div class="flex items-center justify-between">
+        <p class="text-xs font-medium uppercase tracking-wider text-slate-500">Total Coupons</p>
+        <span class="p-2 rounded-xl bg-slate-100 text-slate-600">
+          <svg class="w-4 h-4" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+            <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M15 5v2m0 4v2m0 4v2M5 5a2 2 0 00-2 2v3a2 2 0 110 4v3a2 2 0 002 2h14a2 2 0 002-2v-3a2 2 0 110-4V7a2 2 0 00-2-2H5z" />
+          </svg>
+        </span>
+      </div>
+      <h2 class="mt-3 text-2xl font-bold text-slate-900">{{ stats.total }}</h2>
+    </div>
+
+    <!-- Active Coupons -->
+    <div class="rounded-2xl border border-slate-200 bg-white p-5 shadow-sm hover:border-slate-300 transition duration-200">
+      <div class="flex items-center justify-between">
+        <p class="text-xs font-medium uppercase tracking-wider text-slate-500">Active Coupons</p>
+        <span class="p-2 rounded-xl bg-emerald-50 text-emerald-600">
+          <svg class="w-4 h-4" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+            <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M9 12l2 2 4-4m6 2a9 9 0 11-18 0 9 9 0 0118 0z" />
+          </svg>
+        </span>
+      </div>
+      <h2 class="mt-3 text-2xl font-bold text-emerald-600">{{ stats.active }}</h2>
+    </div>
+
+    <!-- Expired or Inactive Coupons -->
+    <div class="rounded-2xl border border-slate-200 bg-white p-5 shadow-sm hover:border-slate-300 transition duration-200">
+      <div class="flex items-center justify-between">
+        <p class="text-xs font-medium uppercase tracking-wider text-slate-500">Expired / Inactive</p>
+        <span class="p-2 rounded-xl bg-rose-50 text-rose-600">
+          <svg class="w-4 h-4" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+            <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M10 14l2-2m0 0l2-2m-2 2l-2-2m2 2l2 2m7-2a9 9 0 11-18 0 9 9 0 0118 0z" />
+          </svg>
+        </span>
+      </div>
+      <h2 class="mt-3 text-2xl font-bold text-rose-600">{{ stats.expiredOrInactive }}</h2>
+    </div>
+  </div>
+
+  <!-- Search & Filter Panel -->
+  <div class="bg-white rounded-2xl border border-slate-200 shadow-sm p-4">
+    <div class="flex flex-col md:flex-row gap-4">
+      <input type="text" [(ngModel)]="searchTerm" (ngModelChange)="applyFilters()"
+        placeholder="Search coupons by code or description..."
+        class="flex-1 px-4 py-3 rounded-xl border border-slate-200 outline-none focus:ring-2 focus:ring-orange-500" />
+
+      <select [(ngModel)]="selectedType" (change)="applyFilters()"
+        class="px-4 py-3 rounded-xl border border-slate-200 outline-none focus:ring-2 focus:ring-orange-500 cursor-pointer bg-white">
+        <option value="">All Discount Types</option>
+        <option value="Percentage">Percentage Off</option>
+        <option value="FixedAmount">Fixed Amount Off</option>
+        <option value="FreeShipping">Free Shipping</option>
+      </select>
+
+      <select [(ngModel)]="selectedStatus" (change)="applyFilters()"
+        class="px-4 py-3 rounded-xl border border-slate-200 outline-none focus:ring-2 focus:ring-orange-500 cursor-pointer bg-white">
+        <option value="">All Statuses</option>
+        <option value="active">Active Only</option>
+        <option value="inactive">Inactive / Expired</option>
+      </select>
+    </div>
+  </div>
+
+  <!-- Coupons Table -->
+  <div class="bg-white rounded-2xl border border-slate-200 shadow-sm overflow-hidden">
+    <div class="overflow-x-auto">
+      <table class="w-full">
+        <thead class="bg-slate-50 border-b border-slate-200">
+          <tr>
+            <th class="px-6 py-4 text-left text-sm font-semibold text-slate-600">ID</th>
+            <th class="px-6 py-4 text-left text-sm font-semibold text-slate-600">Code</th>
+            <th class="px-6 py-4 text-left text-sm font-semibold text-slate-600">Discount</th>
+            <th class="px-6 py-4 text-left text-sm font-semibold text-slate-600">Rules</th>
+            <th class="px-6 py-4 text-left text-sm font-semibold text-slate-600">Usage</th>
+            <th class="px-6 py-4 text-left text-sm font-semibold text-slate-600">Validity</th>
+            <th class="px-6 py-4 text-left text-sm font-semibold text-slate-600">Status</th>
+            <th class="px-6 py-4 text-left text-sm font-semibold text-slate-600">Action</th>
+          </tr>
+        </thead>
+        <tbody class="divide-y divide-slate-100">
+          @for (coupon of paginatedCoupons; track coupon.id) {
+          <tr>
+            <td class="px-6 py-4 text-sm font-medium text-slate-700">
+              #{{ coupon.id }}
+            </td>
+            <td class="px-6 py-4">
+              <div>
+                <span class="inline-block px-3 py-1 bg-orange-100 text-orange-700 font-bold font-mono rounded-lg text-sm border border-orange-200/50 uppercase">
+                  {{ coupon.code }}
+                </span>
+                @if (coupon.description) {
+                  <p class="text-xs text-slate-500 mt-1 max-w-xs truncate">{{ coupon.description }}</p>
+                }
+              </div>
+            </td>
+            <td class="px-6 py-4">
+              <div>
+                <span class="text-sm font-semibold text-slate-900">
+                  @if (coupon.discountType === 'Percentage') {
+                    {{ coupon.discountValue }}% Off
+                  } @else if (coupon.discountType === 'FixedAmount') {
+                    ${{ coupon.discountValue }} Off
+                  } @else if (coupon.discountType === 'FreeShipping') {
+                    Free Shipping
+                  }
+                </span>
+                <p class="text-xs text-slate-500 mt-0.5">{{ getCouponTypeLabel(coupon.discountType) }}</p>
+              </div>
+            </td>
+            <td class="px-6 py-4 text-xs text-slate-600">
+              <div>
+                @if (coupon.minimumAmount) {
+                  <p><span class="font-medium text-slate-500">Min Spend:</span> ${{ coupon.minimumAmount }}</p>
+                }
+                @if (coupon.maximumDiscountAmount && coupon.discountType === 'Percentage') {
+                  <p class="mt-0.5"><span class="font-medium text-slate-500">Max Discount:</span> ${{ coupon.maximumDiscountAmount }}</p>
+                }
+                @if (!coupon.minimumAmount && !coupon.maximumDiscountAmount) {
+                  <span class="text-slate-400 italic">No rules</span>
+                }
+              </div>
+            </td>
+            <td class="px-6 py-4 text-xs text-slate-600">
+              <div>
+                <p><span class="font-medium text-slate-500">Used:</span> <span class="font-semibold text-slate-800">{{ coupon.timesUsed }}</span> times</p>
+                @if (coupon.usageLimit) {
+                  <p class="mt-0.5"><span class="font-medium text-slate-500">Total Limit:</span> {{ coupon.usageLimit }}</p>
+                }
+                @if (coupon.usageLimitPerUser) {
+                  <p class="mt-0.5"><span class="font-medium text-slate-500">Per User:</span> {{ coupon.usageLimitPerUser }}</p>
+                }
+              </div>
+            </td>
+            <td class="px-6 py-4 text-xs text-slate-600">
+              @if (coupon.startsAt || coupon.expiresAt) {
+                <div>
+                  @if (coupon.startsAt) {
+                    <p><span class="font-medium text-slate-500">Starts:</span> {{ coupon.startsAt | date:'short' }}</p>
+                  }
+                  @if (coupon.expiresAt) {
+                    <p class="mt-0.5"><span class="font-medium text-slate-500">Expires:</span> {{ coupon.expiresAt | date:'short' }}</p>
+                  }
+                </div>
+              } @else {
+                <span class="text-slate-400 italic">Always valid</span>
+              }
+            </td>
+            <td class="px-6 py-4">
+              <span class="px-3 py-1 rounded-full text-xs font-semibold" [ngClass]="{
+                    'bg-green-100 text-green-700': getCouponStatusLabel(coupon) === 'Active',
+                    'bg-amber-100 text-amber-700': getCouponStatusLabel(coupon) === 'Upcoming',
+                    'bg-red-100 text-red-700': getCouponStatusLabel(coupon) === 'Expired' || getCouponStatusLabel(coupon) === 'Limit Exceeded',
+                    'bg-slate-100 text-slate-600': getCouponStatusLabel(coupon) === 'Inactive'
+                  }">
+                {{ getCouponStatusLabel(coupon) }}
+              </span>
+            </td>
+            <td class="px-6 py-4">
+              <div class="flex gap-2">
+                <button (click)="openEditModal(coupon)"
+                  class="px-3 py-2 rounded-lg bg-blue-600 text-white text-sm hover:bg-blue-700 cursor-pointer font-medium transition">
+                  Edit
+                </button>
+                <button (click)="deleteCoupon(coupon)"
+                  class="px-3 py-2 rounded-lg bg-red-600 text-white text-sm hover:bg-red-700 cursor-pointer font-medium transition">
+                  Delete
+                </button>
+              </div>
+            </td>
+          </tr>
+          } @empty {
+          <tr>
+            <td colspan="8" class="px-6 py-12 text-center text-slate-500">
+              <div class="flex flex-col items-center justify-center gap-2">
+                <svg class="w-12 h-12 text-slate-300" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                  <path stroke-linecap="round" stroke-linejoin="round" stroke-width="1.5" d="M15 5v2m0 4v2m0 4v2M5 5a2 2 0 00-2 2v3a2 2 0 110 4v3a2 2 0 002 2h14a2 2 0 002-2v-3a2 2 0 110-4V7a2 2 0 00-2-2H5z" />
+                </svg>
+                <p class="font-medium text-slate-600">No coupons found</p>
+                <p class="text-sm text-slate-400">Click "+ Add Coupon" to create a new one.</p>
+              </div>
+            </td>
+          </tr>
+          }
+        </tbody>
+      </table>
+    </div>
+  </div>
+
+  <!-- Pagination -->
+  <app-pagination [pageNumber]="pageNumber" [pageSize]="pageSize" [totalItems]="totalItems" [totalPages]="totalPages"
+    [itemLabel]="'coupons'" (pageChange)="onPageChange($event)">
+  </app-pagination>
+</div>
+
+<!-- Add/Edit Coupon Modal -->
+@if (showAddCouponModal) {
+<div class="fixed inset-0 z-50 flex items-center justify-center bg-black/40 backdrop-blur-sm" (click)="closeModal()">
+  <div class="w-full max-w-2xl rounded-2xl bg-white shadow-2xl overflow-y-auto max-h-[90vh] mx-4" (click)="$event.stopPropagation()">
+    <!-- Header -->
+    <div class="flex items-center justify-between border-b px-6 py-5">
+      <div>
+        <h2 class="text-2xl font-bold text-gray-800">{{ selectedCouponToEdit ? 'Edit Coupon' : 'Add New Coupon' }}</h2>
+        <p class="mt-1 text-sm text-gray-500">{{ selectedCouponToEdit ? 'Modify coupon discount details.' : 'Create a new coupon code.' }}</p>
+      </div>
+      <button type="button" (click)="closeModal()"
+        class="cursor-pointer rounded-lg p-2 text-gray-500 hover:bg-gray-100 hover:text-red-500">
+        ✕
+      </button>
+    </div>
+
+    <!-- Form -->
+    <form class="p-6" (ngSubmit)="saveCoupon()">
+      <div class="grid grid-cols-1 md:grid-cols-2 gap-5">
+        <!-- Code -->
+        <div>
+          <label class="mb-2 block text-sm font-medium text-gray-700">Coupon Code *</label>
+          <input [(ngModel)]="couponForm.code" name="code" type="text" placeholder="e.g. SUMMER50" required
+            class="w-full rounded-xl border border-gray-300 px-4 py-3 outline-none focus:border-orange-500 focus:ring-2 focus:ring-orange-200 uppercase" />
+        </div>
+
+        <!-- Description -->
+        <div>
+          <label class="mb-2 block text-sm font-medium text-gray-700">Description</label>
+          <input [(ngModel)]="couponForm.description" name="description" type="text" placeholder="e.g. 50% discount on summer sales"
+            class="w-full rounded-xl border border-gray-300 px-4 py-3 outline-none focus:border-orange-500 focus:ring-2 focus:ring-orange-200" />
+        </div>
+
+        <!-- Discount Type -->
+        <div>
+          <label class="mb-2 block text-sm font-medium text-gray-700">Discount Type</label>
+          <select [(ngModel)]="couponForm.discountType" name="discountType"
+            class="w-full rounded-xl border border-gray-300 px-4 py-3 focus:border-orange-500 outline-none bg-white">
+            <option value="Percentage">Percentage Off</option>
+            <option value="FixedAmount">Fixed Amount Off</option>
+            <option value="FreeShipping">Free Shipping</option>
+          </select>
+        </div>
+
+        <!-- Discount Value -->
+        <div>
+          <label class="mb-2 block text-sm font-medium text-gray-700">
+            Discount Value {{ couponForm.discountType === 'Percentage' ? '(%)' : couponForm.discountType === 'FixedAmount' ? '($)' : '(Shipping)' }}
+          </label>
+          <input [(ngModel)]="couponForm.discountValue" name="discountValue" type="number" min="0" [disabled]="couponForm.discountType === 'FreeShipping'"
+            class="w-full rounded-xl border border-gray-300 px-4 py-3 outline-none focus:border-orange-500 focus:ring-2 focus:ring-orange-200" />
+        </div>
+
+        <!-- Minimum Amount -->
+        <div>
+          <label class="mb-2 block text-sm font-medium text-gray-700">Minimum Purchase Amount ($)</label>
+          <input [(ngModel)]="couponForm.minimumAmount" name="minimumAmount" type="number" min="0" placeholder="e.g. 50 (optional)"
+            class="w-full rounded-xl border border-gray-300 px-4 py-3 outline-none focus:border-orange-500 focus:ring-2 focus:ring-orange-200" />
+        </div>
+
+        <!-- Maximum Discount Amount -->
+        <div>
+          <label class="mb-2 block text-sm font-medium text-gray-700">Maximum Discount ($)</label>
+          <input [(ngModel)]="couponForm.maximumDiscountAmount" name="maximumDiscountAmount" type="number" min="0" placeholder="e.g. 20 (optional)"
+            class="w-full rounded-xl border border-gray-300 px-4 py-3 outline-none focus:border-orange-500 focus:ring-2 focus:ring-orange-200" [disabled]="couponForm.discountType !== 'Percentage'" />
+        </div>
+
+        <!-- Usage Limit -->
+        <div>
+          <label class="mb-2 block text-sm font-medium text-gray-700">Usage Limit (Total)</label>
+          <input [(ngModel)]="couponForm.usageLimit" name="usageLimit" type="number" min="0" placeholder="e.g. 100 (optional)"
+            class="w-full rounded-xl border border-gray-300 px-4 py-3 outline-none focus:border-orange-500 focus:ring-2 focus:ring-orange-200" />
+        </div>
+
+        <!-- Usage Limit Per User -->
+        <div>
+          <label class="mb-2 block text-sm font-medium text-gray-700">Usage Limit Per User</label>
+          <input [(ngModel)]="couponForm.usageLimitPerUser" name="usageLimitPerUser" type="number" min="0" placeholder="e.g. 1 (optional)"
+            class="w-full rounded-xl border border-gray-300 px-4 py-3 outline-none focus:border-orange-500 focus:ring-2 focus:ring-orange-200" />
+        </div>
+
+        <!-- Starts At -->
+        <div>
+          <label class="mb-2 block text-sm font-medium text-gray-700">Starts At (Optional)</label>
+          <input [(ngModel)]="couponForm.startsAt" name="startsAt" type="datetime-local"
+            class="w-full rounded-xl border border-gray-300 px-4 py-3 outline-none focus:border-orange-500 focus:ring-2 focus:ring-orange-200" />
+        </div>
+
+        <!-- Expires At -->
+        <div>
+          <label class="mb-2 block text-sm font-medium text-gray-700">Expires At (Optional)</label>
+          <input [(ngModel)]="couponForm.expiresAt" name="expiresAt" type="datetime-local"
+            class="w-full rounded-xl border border-gray-300 px-4 py-3 outline-none focus:border-orange-500 focus:ring-2 focus:ring-orange-200" />
+        </div>
+
+        <!-- Status -->
+        <div class="md:col-span-2 flex items-center gap-3 py-2">
+          <input [(ngModel)]="couponForm.isActive" name="isActive" type="checkbox" id="isActive"
+            class="w-5 h-5 rounded text-orange-500 focus:ring-orange-500 border-gray-300 cursor-pointer" />
+          <label for="isActive" class="text-sm font-medium text-gray-700 cursor-pointer">Set Coupon Status to Active</label>
+        </div>
+      </div>
+
+      <!-- Footer -->
+      <div class="mt-8 flex justify-end gap-3 border-t pt-5">
+        <button type="button" (click)="closeModal()"
+          class="cursor-pointer rounded-xl border border-gray-300 px-6 py-3 hover:bg-gray-100 font-medium transition">
+          Cancel
+        </button>
+        <button type="submit"
+          class="cursor-pointer rounded-xl bg-orange-500 px-6 py-3 font-semibold text-white hover:bg-orange-600 transition">
+          {{ selectedCouponToEdit ? 'Update Coupon' : 'Save Coupon' }}
+        </button>
+      </div>
+    </form>
+  </div>
+</div>
+}
+
+@if (showSuccessToast) {
+<app-toast [message]="toastMessage" (dismissed)="showSuccessToast = false">
+</app-toast>
+}

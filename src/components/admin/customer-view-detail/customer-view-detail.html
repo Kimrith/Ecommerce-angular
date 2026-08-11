@@ -1,0 +1,150 @@
+<div
+    class="fixed inset-0 z-50 flex items-center justify-center bg-slate-950/60 backdrop-blur-md p-4 animate-in fade-in duration-200">
+    <div
+        class="relative w-full max-w-2xl max-h-[90vh] overflow-y-auto rounded-3xl bg-white shadow-2xl ring-1 ring-slate-900/5 flex flex-col">
+
+        <!-- Modal Header -->
+        <div
+            class="sticky top-0 z-10 flex items-center justify-between border-b border-slate-100 bg-white/90 backdrop-blur-md px-6 py-4">
+            <div class="flex items-center gap-3">
+                <div
+                    class="flex h-10 w-10 items-center justify-center rounded-xl bg-orange-50 text-orange-600 ring-1 ring-orange-500/10">
+                    <span class="material-symbols-outlined text-xl">person</span>
+                </div>
+                <div>
+                    <h2 class="text-base font-bold text-slate-900">Customer Details</h2>
+                    <p class="text-xs text-slate-500">Full profile information and addresses</p>
+                </div>
+            </div>
+            <button (click)="closeModal()"
+                class="rounded-full p-2 text-slate-400 hover:bg-slate-100 hover:text-slate-700 transition-colors">
+                <span class="material-symbols-outlined text-xl">close</span>
+            </button>
+        </div>
+
+        <!-- Modal Body -->
+        <div class="space-y-6 p-6">
+
+            <!-- User Profile Card Summary -->
+            <div
+                class="flex flex-col sm:flex-row items-start sm:items-center gap-4 rounded-2xl border border-slate-100 bg-slate-50/50 p-5">
+                @if (user?.profileImageUrl) {
+                <img [src]="imageUrl + '/' + user.profileImageUrl" alt="Avatar"
+                    class="w-16 h-16 rounded-2xl object-cover shadow-sm ring-1 ring-slate-900/5" />
+                } @else {
+                <div
+                    class="flex w-16 h-16 shrink-0 items-center justify-center rounded-2xl bg-orange-100 text-xl font-bold text-orange-600 shadow-sm ring-1 ring-orange-500/10">
+                    {{ getUserInitials(user?.fullName) }}
+                </div>
+                }
+
+                <div class="flex-1 min-w-0">
+                    <div class="flex flex-wrap items-center justify-between gap-2">
+                        <h3 class="text-lg font-bold text-slate-900 truncate">{{ user?.fullName }}</h3>
+                        <!-- Status Badge -->
+                        <span [ngClass]="{
+                            'bg-emerald-50 text-emerald-700 ring-emerald-600/20': user?.status === 'Active',
+                            'bg-rose-50 text-rose-700 ring-rose-600/20': user?.status === 'Suspended',
+                            'bg-amber-50 text-amber-700 ring-amber-600/20': user?.status === 'Pending'
+                        }"
+                            class="inline-flex items-center rounded-full px-3 py-1 text-xs font-semibold ring-1 ring-inset">
+                            {{ user?.status }}
+                        </span>
+                    </div>
+                    <p class="text-sm text-slate-500 truncate">{{ user?.email }}</p>
+                    <div class="mt-2 flex flex-wrap items-center gap-3 text-xs">
+                        <span class="inline-flex items-center gap-1 font-medium text-slate-500">
+                            <span class="material-symbols-outlined text-sm text-slate-400">badge</span>
+                            Role: <span class="text-slate-700 font-semibold">{{ user?.role }}</span>
+                        </span>
+                    </div>
+                </div>
+            </div>
+
+            <!-- Grid Information Section -->
+            <div class="grid grid-cols-1 sm:grid-cols-2 gap-4">
+                <div class="rounded-2xl border border-slate-100 p-4 bg-white shadow-xs flex items-center gap-3.5">
+                    <div
+                        class="flex h-10 w-10 shrink-0 items-center justify-center rounded-xl bg-slate-50 text-slate-500">
+                        <span class="material-symbols-outlined text-lg">fingerprint</span>
+                    </div>
+                    <div class="min-w-0">
+                        <span class="text-[11px] font-bold text-slate-400 uppercase tracking-wider block">User ID</span>
+                        <p class="font-semibold text-slate-800 text-sm truncate">#{{ user?.userId }}</p>
+                    </div>
+                </div>
+
+                <div class="rounded-2xl border border-slate-100 p-4 bg-white shadow-xs flex items-center gap-3.5">
+                    <div
+                        class="flex h-10 w-10 shrink-0 items-center justify-center rounded-xl bg-slate-50 text-slate-500">
+                        <span class="material-symbols-outlined text-lg">call</span>
+                    </div>
+                    <div class="min-w-0">
+                        <span class="text-[11px] font-bold text-slate-400 uppercase tracking-wider block">Phone
+                            Number</span>
+                        <p class="font-semibold text-slate-800 text-sm truncate">{{ user?.phoneNumber || 'Not provided'
+                            }}</p>
+                    </div>
+                </div>
+            </div>
+
+            <!-- Addresses Section -->
+            <div>
+                <div class="flex items-center justify-between mb-3">
+                    <h4 class="text-sm font-bold text-slate-900">Saved Addresses</h4>
+                    @if (user?.addresses?.length) {
+                    <span class="text-xs font-medium text-slate-400">{{ user.addresses.length }} registered</span>
+                    }
+                </div>
+
+                @if (user?.addresses && user.addresses.length > 0) {
+                <div class="space-y-3">
+                    @for (addr of user.addresses; track addr.id) {
+                    <div
+                        class="relative rounded-2xl border border-slate-200/80 p-4 bg-white shadow-xs hover:border-orange-300 hover:shadow-sm transition-all">
+                        <div class="flex items-center justify-between mb-2.5">
+                            <span
+                                class="rounded-lg bg-orange-50 px-2.5 py-1 text-xs font-bold text-orange-600 capitalize">
+                                {{ addr.addressType }}
+                            </span>
+                            @if (addr.isDefault) {
+                            <span
+                                class="rounded-full bg-slate-100 px-2.5 py-0.5 text-[10px] font-semibold text-slate-600 uppercase tracking-wider">Default</span>
+                            }
+                        </div>
+
+                        <div class="flex items-start gap-2 text-slate-800">
+                            <span
+                                class="material-symbols-outlined text-base text-slate-400 shrink-0 mt-0.5">location_on</span>
+                            <div class="text-sm leading-relaxed">
+                                <p class="font-medium text-slate-900">{{ addr.streetAddress }}</p>
+                                <p class="text-xs text-slate-500 mt-0.5">
+                                    {{ addr.city }}{{ addr.state ? ', ' + addr.state : '' }} — {{ addr.postalCode }}
+                                </p>
+                                <p class="text-xs text-slate-400 mt-0.5 font-medium">{{ addr.country }}</p>
+                            </div>
+                        </div>
+                    </div>
+                    }
+                </div>
+                } @else {
+                <div class="rounded-2xl border border-dashed border-slate-200 p-8 text-center bg-slate-50/50">
+                    <span class="material-symbols-outlined text-3xl text-slate-300 mb-1">home_work</span>
+                    <p class="text-sm font-medium text-slate-500">No addresses registered for this user.</p>
+                </div>
+                }
+            </div>
+
+        </div>
+
+        <!-- Modal Footer -->
+        <div
+            class="sticky bottom-0 flex items-center justify-end gap-3 border-t border-slate-100 bg-slate-50/90 backdrop-blur-md px-6 py-4">
+            <button (click)="closeModal()"
+                class="rounded-xl bg-slate-900 px-5 py-2 text-sm font-semibold text-white hover:bg-slate-800 active:scale-95 transition-all shadow-xs cursor-pointer">
+                Close
+            </button>
+        </div>
+
+    </div>
+</div>

@@ -1,30 +1,27 @@
 <div class="min-h-screen bg-gray-50">
-
   <!-- Hero -->
   <section class="bg-white rounded-3xl border border-gray-100 shadow-sm p-6 md:p-8 mb-8">
-
     <!-- Breadcrumb -->
     <div class="flex items-center gap-2 text-sm text-gray-500 mb-4">
-      <a routerLink="/" class="hover:text-indigo-600 transition">
-        Home
-      </a>
+      <a routerLink="/" class="hover:text-indigo-600 transition"> Home </a>
 
       <span>/</span>
 
-      <span class="font-medium text-gray-900">
-        Products
-      </span>
+      <span class="font-medium text-gray-900"> Products </span>
     </div>
 
     <div class="flex flex-col lg:flex-row lg:items-center lg:justify-between gap-6">
-
       <div>
         <h1 class="text-3xl md:text-4xl font-bold text-gray-900">
-          All Products
+          {{ searchTerm ? 'Search Results' : 'All Products' }}
         </h1>
 
         <p class="mt-2 text-gray-500">
-          Discover our complete collection of high-quality products.
+          @if (searchTerm) {
+            Showing results for "<span class="font-semibold text-gray-900 text-indigo-600">{{ searchTerm }}</span>"
+          } @else {
+            Discover our complete collection of high-quality products.
+          }
         </p>
       </div>
 
@@ -32,46 +29,42 @@
       <div class="w-full sm:w-64">
         <select
           class="w-full px-4 py-3 rounded-xl border border-gray-200 bg-white focus:ring-2 focus:ring-indigo-500 focus:outline-none">
-
           <option>Newest</option>
           <option>Best Selling</option>
           <option>Most Popular</option>
           <option>Price: Low to High</option>
           <option>Price: High to Low</option>
-
         </select>
       </div>
-
     </div>
-
   </section>
 
   <!-- Product Info -->
-  <div class="flex flex-col sm:flex-row sm:items-center sm:justify-between gap-3 mb-6">
-
+  <div class="flex flex-col sm:flex-row sm:items-center sm:justify-between gap-3 mb-6 animate-fade-in">
     <p class="text-gray-600">
       Showing
-      <span class="font-semibold text-gray-900">1–12</span>
+      <span class="font-semibold text-gray-900">{{ products.length }}</span>
       of
-      <span class="font-semibold text-gray-900">120</span>
+      <span class="font-semibold text-gray-900">{{ totalCount }}</span>
       products
     </p>
-
   </div>
 
   <!-- Product Grid -->
   <section class="grid grid-cols-2 md:grid-cols-3 xl:grid-cols-4 gap-6">
-
-    <app-product-cart></app-product-cart>
-    <app-product-cart></app-product-cart>
-    <app-product-cart></app-product-cart>
-    <app-product-cart></app-product-cart>
-
+    @for (product of products; track product.productId) {
+    @if(product.status === "Approved") {
+    <app-product-cart [product]="product"></app-product-cart>
+    }
+    } @empty {
+    <p class="text-gray-500 col-span-full text-center py-10">No products found.</p>
+    }
   </section>
 
   <!-- Pagination -->
   <div class="mt-10 flex justify-center">
-    <app-pagination></app-pagination>
+    <app-pagination [pageNumber]="pageNumber" [pageSize]="pageSize" [totalCount]="totalCount"
+      (pageChange)="onPageChange($event)">
+    </app-pagination>
   </div>
-
 </div>

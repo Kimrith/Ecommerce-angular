@@ -1,0 +1,110 @@
+@if (hasCartData && cartItems.length > 0) {
+<div class="max-w-2xl mx-auto p-6 bg-white shadow-md rounded-lg animate-fade-in">
+    <div class="flex justify-between items-center mb-4">
+        <h2 class="text-2xl font-bold">Review Your Order</h2>
+
+        <!-- Clear Cart Button with Bin Icon -->
+        <button (click)="clearCart()"
+            class="flex items-center gap-2 px-3 py-1.5 bg-red-100 text-red-600 hover:bg-red-200 rounded-md text-sm font-medium transition">
+            <svg xmlns="http://www.w3.org/2000/svg" class="h-4 w-4" fill="none" viewBox="0 0 24 24"
+                stroke="currentColor">
+                <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2"
+                    d="M19 7l-.867 12.142A2 2 0 0116.138 21H7.862a2 2 0 01-1.995-1.858L5 7m5 4v6m4-6v6m1-10V4a1 1 0 00-1-1h-4a1 1 0 00-1 1v3M4 7h16" />
+            </svg>
+            Clear Cart
+        </button>
+    </div>
+
+    <div class="divide-y divide-gray-200">
+        @for (item of cartItems; track item.productId + (item.variantId || '')) {
+        <div class="flex gap-4 py-4">
+            <img [src]="imageUrl + item.imageUrl" [alt]="item.name" class="w-20 h-20 object-cover rounded-md border" />
+            <div class="flex-1">
+                <h4 class="font-semibold text-lg">{{ item.name }}</h4>
+                @if (item.variantTitle) {
+                <p class="text-sm text-gray-500"><strong>Variant:</strong> {{ item.variantTitle }}</p>
+                }
+                <p class="text-sm text-gray-600">Price: ${{ item.price }}</p>
+                <p class="text-sm text-gray-600">Quantity: {{ item.quantity }}</p>
+                <p class="font-bold text-gray-900 mt-1">Total: ${{ item.price * item.quantity }}</p>
+            </div>
+        </div>
+        }
+    </div>
+
+    <div class="mt-6 border-t pt-4 flex justify-between items-center">
+        <h3 class="text-xl font-bold">Subtotal: ${{ subtotal }}</h3>
+        <button (click)="reqOrder()" [disabled]="isPlacingOrder"
+            class="px-6 py-2 bg-blue-600 text-white font-medium rounded-lg hover:bg-blue-700 disabled:bg-blue-400 transition flex items-center gap-2">
+            <span *ngIf="isPlacingOrder"
+                class="animate-spin rounded-full h-4 w-4 border-2 border-white border-t-transparent"></span>
+            {{ isPlacingOrder ? 'Processing...' : 'Proceed to Payment' }}
+        </button>
+    </div>
+</div>
+} @else {
+<div class="text-center py-12">
+    <p class="text-gray-500 text-lg">Buy products to get payment</p>
+</div>
+}
+
+<!-- Premium Bakong Payment Modal Overlay -->
+<div *ngIf="showPaymentModal"
+    class="fixed inset-0 z-50 flex items-center justify-center bg-black/60 backdrop-blur-sm p-4 animate-fade-in">
+    <div
+        class="bg-white rounded-3xl shadow-2xl max-w-md w-full border border-gray-100 overflow-hidden transform transition-all scale-100">
+        <!-- Modal Header -->
+        <div class="bg-gradient-to-r from-red-600 to-red-500 p-6 text-white text-center relative">
+            <h3 class="text-xl font-bold tracking-wide">Bakong KHQR Payment</h3>
+            <p class="text-xs text-red-100 mt-1">Scan the QR code to complete your order</p>
+
+            <button (click)="closeModal()"
+                class="absolute top-4 right-4 text-white/80 hover:text-white transition focus:outline-none">
+                <svg class="h-6 w-6" fill="none" viewBox="0 0 24 24" stroke="currentColor">
+                    <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M6 18L18 6M6 6l12 12" />
+                </svg>
+            </button>
+        </div>
+
+        <!-- Modal Body -->
+        <div class="p-8 flex flex-col items-center">
+            <!-- Order Info Summary -->
+            <div class="text-center mb-6 w-full">
+                <div class="text-sm text-gray-500 font-medium">Order Number</div>
+                <div class="font-mono font-bold text-gray-800 text-base mt-0.5">{{ orderNumber }}</div>
+
+                <div class="mt-4 bg-gray-50 rounded-2xl py-3 px-6 border border-gray-100 inline-block">
+                    <span class="text-xs text-gray-400 uppercase block tracking-wider font-bold">Amount to Pay</span>
+                    <span class="text-3xl font-extrabold text-gray-900">${{ totalAmount }}</span>
+                </div>
+            </div>
+
+            <!-- KHQR QR Code Frame -->
+            <div class="relative bg-white border border-gray-200 rounded-3xl p-4 shadow-sm mb-6">
+                <img [src]="qrImageBase64" class="w-64 h-64 object-contain rounded-2xl"
+                    alt="Bakong KHQR Code" />
+
+
+                <!-- Real-time payment verification status indicator -->
+                <div
+                    class="flex items-center gap-3 bg-red-50 text-red-700 px-5 py-3 rounded-2xl text-sm font-semibold tracking-wide w-full justify-center border border-red-100">
+                    <div class="relative flex h-3 w-3">
+                        <span
+                            class="animate-ping absolute inline-flex h-full w-full rounded-full bg-red-400 opacity-75"></span>
+                        <span class="relative inline-flex rounded-full h-3 w-3 bg-red-500"></span>
+                    </div>
+                    <span>{{ paymentStatusMessage }}</span>
+                </div>
+            </div>
+
+            <!-- Modal Footer -->
+            <div class="bg-gray-50 px-6 py-4 flex justify-between gap-3 border-t border-gray-100">
+                <button (click)="closeModal()"
+                    class="w-full bg-gray-200 hover:bg-gray-300 text-gray-700 py-3 rounded-xl font-bold transition text-sm">
+                    Cancel & Close
+                </button>
+            </div>
+        </div>
+    </div>
+
+    <app-toast *ngIf="showToast" [message]="toastMessage" (dismissed)="showToast = false"></app-toast>

@@ -7,134 +7,190 @@
     Track your orders, payment status, and delivery information.
   </p>
 </div>
+
 <!-- Order Filter -->
 <div class="flex flex-wrap gap-3 mb-8">
-  <button
-    class="px-5 py-2 rounded-xl bg-orange-500 text-white">
+  <button (click)="filterOrders('all')"
+    [class]="selectedFilter === 'all' ? 'px-5 py-2 rounded-xl bg-orange-500 text-white' : 'px-5 py-2 rounded-xl bg-gray-100 text-gray-700 hover:bg-gray-200 transition'">
     All Orders
   </button>
-  <button
-    class="px-5 py-2 rounded-xl bg-gray-100 text-gray-700 hover:bg-gray-200">
+  <button (click)="filterOrders('pending')"
+    [class]="selectedFilter === 'pending' ? 'px-5 py-2 rounded-xl bg-orange-500 text-white' : 'px-5 py-2 rounded-xl bg-gray-100 text-gray-700 hover:bg-gray-200 transition'">
     Pending
   </button>
-  <button
-    class="px-5 py-2 rounded-xl bg-gray-100 text-gray-700 hover:bg-gray-200">
+  <button (click)="filterOrders('shipping')"
+    [class]="selectedFilter === 'shipping' ? 'px-5 py-2 rounded-xl bg-orange-500 text-white' : 'px-5 py-2 rounded-xl bg-gray-100 text-gray-700 hover:bg-gray-200 transition'">
     Shipping
   </button>
-  <button
-    class="px-5 py-2 rounded-xl bg-gray-100 text-gray-700 hover:bg-gray-200">
+  <button (click)="filterOrders('completed')"
+    [class]="selectedFilter === 'completed' ? 'px-5 py-2 rounded-xl bg-orange-500 text-white' : 'px-5 py-2 rounded-xl bg-gray-100 text-gray-700 hover:bg-gray-200 transition'">
     Completed
   </button>
 </div>
-<!-- Order Card -->
-<section class="space-y-6">
-  <!-- Order 1 -->
-  <div
-    class="bg-white border border-gray-200 rounded-2xl p-6">
+
+<!-- Loading State -->
+<div *ngIf="isLoading" class="flex flex-col items-center justify-center py-20">
+  <div class="animate-spin rounded-full h-10 w-10 border-4 border-orange-500 border-t-transparent mb-3"></div>
+  <p class="text-gray-500">Loading your orders...</p>
+</div>
+
+<!-- Empty State -->
+<div *ngIf="!isLoading && filteredOrders.length === 0"
+  class="text-center py-20 bg-white border border-gray-200 rounded-3xl p-8 shadow-sm">
+  <div class="text-gray-400 mb-3">
+    <svg class="mx-auto h-12 w-12" fill="none" viewBox="0 0 24 24" stroke="currentColor">
+      <path stroke-linecap="round" stroke-linejoin="round" stroke-width="1.5"
+        d="M19 11H5m14 0a2 2 0 012 2v6a2 2 0 01-2 2H5a2 2 0 01-2-2v-6a2 2 0 012-2m14 0V9a2 2 0 00-2-2M5 11V9a2 2 0 012-2m0 0V5a2 2 0 012-2h6a2 2 0 012 2v2M7 7h10" />
+    </svg>
+  </div>
+  <h3 class="text-lg font-bold text-gray-900">No Orders Found</h3>
+  <p class="text-gray-500 mt-1">You don't have any orders in this status yet.</p>
+</div>
+
+<!-- Dynamic Order Card List -->
+<section *ngIf="!isLoading && filteredOrders.length > 0" class="space-y-6">
+  <div *ngFor="let order of filteredOrders"
+    class="bg-white border border-gray-200 rounded-2xl p-6 shadow-sm hover:shadow-md transition">
     <!-- Order Header -->
     <div class="flex flex-col sm:flex-row sm:justify-between gap-4 mb-6">
       <div>
         <h3 class="font-bold text-gray-900">
-          Order #ORD-10001
+          Order #{{ order.orderNumber }}
         </h3>
         <p class="text-sm text-gray-500 mt-1">
-          Placed on July 21, 2026
+          Placed on {{ order.createdAt | date:'mediumDate' }}
         </p>
       </div>
-      <span
-        class="px-4 py-2 rounded-xl bg-yellow-100 text-yellow-700 text-sm font-semibold">
-        Pending
-      </span>
     </div>
 
-    <!-- Product -->
-    <app-order-cart></app-order-cart>
-    <app-order-cart></app-order-cart>
-    <app-order-cart></app-order-cart>
-    <app-order-cart></app-order-cart>
-    
     <!-- Order Information -->
-    <div
-      class="grid grid-cols-1 md:grid-cols-3 gap-5 mt-6">
+    <div class="grid grid-cols-1 md:grid-cols-3 gap-5 mt-6 border-t border-gray-100 pt-5">
       <div>
-        <h4 class="text-sm text-gray-500">
-          Payment
-        </h4>
+        <h4 class="text-sm text-gray-500">Payment</h4>
+        <p class="font-semibold text-gray-900 mt-1">KHQR (Bakong)</p>
+      </div>
+      <div>
+        <h4 class="text-sm text-gray-500">Delivery Address</h4>
         <p class="font-semibold text-gray-900 mt-1">
-          KHQR
+          {{ order.shippingAddress?.streetAddress ? (order.shippingAddress.streetAddress + ', ' +
+          order.shippingAddress.city) : 'Phnom Penh' }}
         </p>
       </div>
       <div>
-        <h4 class="text-sm text-gray-500">
-          Delivery
-        </h4>
-        <p class="font-semibold text-gray-900 mt-1">
-          Phnom Penh
-        </p>
-      </div>
-      <div>
-        <h4 class="text-sm text-gray-500">
-          Total
-        </h4>
-        <p class="font-semibold text-gray-900 mt-1">
-          $299
-        </p>
+        <h4 class="text-sm text-gray-500">Total</h4>
+        <p class="font-semibold text-gray-900 mt-1">${{ order.totalAmount }}</p>
       </div>
     </div>
+
+    <!-- Notes if any -->
+    <div *ngIf="order.notes" class="mt-4 bg-gray-50 rounded-xl p-3 border border-gray-100 text-sm text-gray-600">
+      <span class="font-bold block text-xs uppercase tracking-wider text-gray-400 mb-1">Notes</span>
+      {{ order.notes }}
+    </div>
+
     <!-- Action -->
-    <div
-      class="flex justify-end gap-3 mt-6">
-      <button
-        class="px-5 py-2 rounded-xl border border-gray-200 hover:bg-gray-50">
+    <div class="flex justify-between items-center mt-6 border-t border-gray-100 pt-4">
+      <span class="text-xs text-gray-400 font-medium">Order Reference ID: {{ order.id }}</span>
+      <button (click)="viewOrderDetails(order)"
+        class="px-5 py-2 rounded-xl border border-gray-200 hover:bg-gray-50 font-semibold text-sm transition cursor-pointer">
         View Details
       </button>
-      <button
-        class="px-5 py-2 rounded-xl bg-orange-500 text-white hover:bg-orange-600">
-        Track Order
+    </div>
+  </div>
+</section>
+
+<!-- Order Details Modal -->
+<div *ngIf="selectedOrder"
+  class="fixed inset-0 z-50 flex items-center justify-center bg-black/50 backdrop-blur-sm p-4 animate-fade-in">
+  <div
+    class="bg-white rounded-3xl border border-gray-100 shadow-2xl w-full max-w-2xl overflow-hidden flex flex-col max-h-[90vh]">
+    <!-- Modal Header -->
+    <div class="px-6 py-5 border-b border-gray-100 flex items-center justify-between bg-gray-50/50">
+      <div>
+        <h3 class="text-xl font-bold text-gray-900">Order Details</h3>
+        <p class="text-sm text-gray-500 mt-0.5">Order #{{ selectedOrder.orderNumber }}</p>
+      </div>
+      <button (click)="closeOrderDetails()"
+        class="p-2 rounded-full hover:bg-gray-200 text-gray-400 hover:text-gray-700 transition cursor-pointer text-lg leading-none">
+        &times;
       </button>
     </div>
-  </div>
 
+    <!-- Modal Body -->
+    <div class="p-6 overflow-y-auto space-y-6 flex-1">
+      <!-- Status, Placed date, Address, notes -->
+      <div class="grid grid-cols-1 md:grid-cols-2 gap-4">
+        <div class="p-4 rounded-2xl bg-slate-50 border border-slate-100">
+          <h4 class="text-xs font-bold uppercase tracking-wider text-slate-400 mb-1">Status Info</h4>
+          <p class="text-sm font-semibold text-slate-700">
+            Status: <span class="capitalize">{{ getOrderStatusLower(selectedOrder) }}</span>
+          </p>
+          <p class="text-xs text-slate-500 mt-1">Placed on: {{ selectedOrder.createdAt | date:'medium' }}</p>
+        </div>
 
-
-
-
-  <!-- Order 2 -->
-  <div
-    class="bg-white border border-gray-200 rounded-2xl p-6">
-
-
-    <div class="flex justify-between">
-
-      <div>
-
-        <h3 class="font-bold text-gray-900">
-          Order #ORD-10002
-        </h3>
-
-        <p class="text-sm text-gray-500 mt-1">
-          Placed on July 18, 2026
-        </p>
-
+        <div class="p-4 rounded-2xl bg-slate-50 border border-slate-100">
+          <h4 class="text-xs font-bold uppercase tracking-wider text-slate-400 mb-1">Shipping Address</h4>
+          <p class="text-sm font-semibold text-slate-700">
+            {{ selectedOrder.shippingAddress?.streetAddress ? (selectedOrder.shippingAddress.streetAddress + ', ' +
+            selectedOrder.shippingAddress.city) : 'Phnom Penh' }}
+          </p>
+          <p class="text-xs text-slate-500 mt-1" *ngIf="selectedOrder.shippingAddress?.country">
+            Country: {{ selectedOrder.shippingAddress?.country }}
+          </p>
+        </div>
       </div>
 
+      <!-- Notes if any -->
+      <div *ngIf="selectedOrder.notes"
+        class="p-4 rounded-2xl bg-orange-50/30 border border-orange-100/50 text-sm text-gray-700">
+        <h4 class="text-xs font-bold uppercase tracking-wider text-orange-500/80 mb-1">Order Notes</h4>
+        {{ selectedOrder.notes }}
+      </div>
 
-      <span
-        class="px-4 py-2 rounded-xl bg-green-100 text-green-700 text-sm font-semibold">
-        Completed
-      </span>
+      <!-- Items section -->
+      <div>
+        <h4 class="text-sm font-bold text-gray-900 mb-3">Order Items</h4>
 
+        <div *ngIf="isLoadingItems" class="flex justify-center py-8">
+          <div class="animate-spin rounded-full h-8 w-8 border-4 border-orange-500 border-t-transparent"></div>
+        </div>
 
+        <div *ngIf="!isLoadingItems && orderItems.length === 0" class="text-center py-6 text-gray-500">
+          No items found in this order.
+        </div>
+
+        <div *ngIf="!isLoadingItems && orderItems.length > 0"
+          class="divide-y divide-gray-100 border border-gray-100 rounded-2xl overflow-hidden bg-white shadow-sm">
+          <div *ngFor="let item of orderItems"
+            class="p-4 flex justify-between items-center gap-4 hover:bg-gray-50/50 transition">
+            <div class="flex-1">
+              <p class="font-bold text-gray-900 text-sm">{{ item.productName }}</p>
+              <p class="text-xs text-gray-500 mt-0.5">${{ item.unitPrice }} &times; {{ item.quantity }}</p>
+            </div>
+            <div class="text-right">
+              <p class="font-bold text-gray-900 text-sm">${{ item.totalPrice }}</p>
+            </div>
+          </div>
+        </div>
+      </div>
     </div>
 
-
-    <div class="mt-5 text-gray-500">
-      Product delivered successfully.
+    <!-- Modal Footer -->
+    <div class="px-6 py-4 border-t border-gray-100 bg-gray-50/50 flex justify-end">
+      <div class="w-full sm:w-72 space-y-2 text-sm">
+        <div class="flex justify-between text-gray-500">
+          <span>Subtotal:</span>
+          <span>${{ selectedOrder.totalAmount }}</span>
+        </div>
+        <div class="flex justify-between text-gray-500">
+          <span>Shipping:</span>
+          <span class="text-emerald-600 font-semibold">Free</span>
+        </div>
+        <div class="flex justify-between font-bold text-gray-900 text-base pt-2 border-t border-gray-200">
+          <span>Total:</span>
+          <span>${{ selectedOrder.totalAmount }}</span>
+        </div>
+      </div>
     </div>
-
-
   </div>
-
-
-
-</section>
+</div>

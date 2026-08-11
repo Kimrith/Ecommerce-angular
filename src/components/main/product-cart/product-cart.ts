@@ -1,18 +1,130 @@
-import { Component } from '@angular/core';
-import { Router, RouterLink } from '@angular/router';
+import { Component, Input, inject, ChangeDetectorRef, OnInit } from '@angular/core';
+import { CommonModule } from '@angular/common';
+import { Router } from '@angular/router';
+import { environment } from '../../../environments/environment.development';
+import { FavoriteService } from '../../../Service/Favorite/favorite';
+import { ToastComponent } from '../../../shared/components/toast';
 
 @Component({
   selector: 'app-product-cart',
-  imports: [],
+  standalone: true,
+  imports: [CommonModule, ToastComponent],
   templateUrl: './product-cart.html',
   styleUrl: './product-cart.css',
 })
-export class ProductCart {
+export class ProductCart implements OnInit {
+  imageUrl = environment.apiUrl;
 
-  constructor(private router: Router) {}
-  
-  addToCart() {
-    this.router.navigate(['/products', 1]);
+  @Input() product: any = {
+    productId: 4,
+    name: 'BOOK',
+    imageUrl: '/uploads/products/f631bcd6-a6e1-4fff-be24-52153e1dbaff_study1.jpg',
+    slug: 'book',
+    price: 0.02,
+    salesCount: 2,
+    revenue: 0.04,
+    isFavorite: false
+  };
+
+  showToast = false;
+  toastMessage = '';
+
+  private router = inject(Router);
+  private favoriteService = inject(FavoriteService);
+  private cdr = inject(ChangeDetectorRef);
+
+  ngOnInit(): void {
+    this.checkIfFavorite();
   }
 
+  checkIfFavorite() {
+    const userDataStr = localStorage.getItem('userData');
+    if (!userDataStr) return;
+
+    try {
+      const userData = JSON.parse(userDataStr);
+      const userId = userData.userId || userData.id;
+      if (!userId) return;
+
+      const pId = this.product.productId ?? this.product.id;
+      if (!pId) return;
+
+      this.favoriteService.getAllFavorite(userId).subscribe({
+        next: (favorites: any[]) => {
+          const isFav = favorites.some((fav: any) => {
+            const favProductId = fav.productId ?? fav.product?.id ?? fav.product?.productId;
+            return favProductId === pId;
+          });
+          
+          this.product.isFavorite = isFav;
+          this.cdr.detectChanges();
+        },
+        error: (err) => {
+          console.error('Error fetching favorites for card:', err);
+        }
+      });
+    } catch (e) {
+      console.error('Error parsing user data for favorites check', e);
+    }
+  }
+
+  triggerToast(message: string) {
+    this.toastMessage = message;
+    this.showToast = false;
+    this.cdr.detectChanges();
+    setTimeout(() => {
+      this.showToast = true;
+      this.cdr.detectChanges();
+    }, 10);
+  }
+
+  viewProductDetails(productId: any) {
+    const id = productId ?? this.product?.id;
+    if (id !== undefined && id !== null) {
+      this.router.navigate(['/products', id]);
+    } else {
+      console.error('Product ID is undefined, cannot navigate.');
+    }
+  }
+
+  toggleFavorite() {
+    const id = this.product.productId ?? this.product.id;
+
+    if (!id) {
+      console.error('Product ID is missing, cannot toggle favorite.');
+      return;
+    }
+
+    if (this.product.isFavorite) {
+      // Remove from favorite
+      this.favoriteService.deleteFavoriteByProduct(id).subscribe({
+        next: () => {
+          this.product.isFavorite = false;
+          this.triggerToast('Removed from favorites');
+        },
+        error: (err) => {
+          console.error('Error removing from favorites:', err);
+          this.triggerToast('Failed to remove from favorites');
+        }
+      });
+    } else {
+      // Add to favorite
+      const payload = { productId: id };
+      this.favoriteService.postFavorite(payload).subscribe({
+        next: () => {
+          this.product.isFavorite = true;
+          this.triggerToast('Added to favorites!');
+        },
+        error: (err) => {
+          if (err.error?.includes('already in your favorites') || err.status === 400) {
+            this.product.isFavorite = true;
+            this.triggerToast('Already in your favorites');
+          } else {
+            console.error('Error adding to favorites:', err);
+            this.triggerToast('Failed to add to favorites');
+          }
+        }
+      });
+    }
+  }
 }

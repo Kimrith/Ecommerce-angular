@@ -1,6 +1,11 @@
 <section class="relative mb-10 overflow-hidden rounded-3xl">
-  <img
-    [src]="banners[currentIndex].img"
-    class="w-full h-48 sm:h-64 md:h-80 lg:h-[420px] object-cover rounded-3xl transition duration-700"
-    alt="Banner">
+  @if (banners.length > 0) {
+  <img [src]="imageUrl + banners[currentIndex].imageUrl"
+    class="w-full h-48 sm:h-64 md:h-80 lg:h-[420px] object-cover rounded-3xl transition duration-700" alt="Banner">
+  } @else {
+  <div
+    class="w-full h-48 sm:h-64 md:h-80 lg:h-[420px] bg-gray-200 rounded-3xl flex items-center justify-center text-gray-400">
+    Loading Banners...
+  </div>
+  }
 </section>
