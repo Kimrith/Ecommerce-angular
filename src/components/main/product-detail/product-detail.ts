@@ -1,11 +1,9 @@
 import { Location, CommonModule } from '@angular/common';
-import { Component, OnInit, OnDestroy, ChangeDetectorRef } from '@angular/core';
+import { Component, OnInit, ChangeDetectorRef } from '@angular/core';
 import { ActivatedRoute, Router, RouterLink } from '@angular/router';
 import { environment } from '../../../environments/environment.development';
-import { finalize, switchMap } from 'rxjs';
+import { finalize } from 'rxjs';
 import { ProductService } from '../../../Service/products/product-service';
-import { AddressService } from '../../../Service/Address/address-service';
-import { OrderService } from '../../../Service/Order/order';
 import { ToastComponent } from '../../../shared/components/toast';
 
 @Component({
@@ -15,7 +13,7 @@ import { ToastComponent } from '../../../shared/components/toast';
   templateUrl: './product-detail.html',
   styleUrl: './product-detail.css',
 })
-export class ProductDetail implements OnInit, OnDestroy {
+export class ProductDetail implements OnInit {
   imageUrl = environment.apiUrl;
   product: any = null;
   productId: number = 0;
@@ -24,19 +22,8 @@ export class ProductDetail implements OnInit, OnDestroy {
 
   productVariants: any[] = [];
   selectedVariant: any = null;
-
-  // Checkout and Payment state
-  showPaymentModal = false;
-  isPlacingOrder = false;
-  isVerifyingPayment = false;
-  qrImageBase64: string = '';
-  md5: string = '';
-  orderId: number = 0;
-  orderNumber: string = '';
-  totalAmount: number = 0;
-  paymentStatusMessage = 'Waiting for payment scan...';
-
-  private pollingInterval: any = null;
+  imgProductViaraints: any[] = [];
+  selectedSize: string = '';
 
   showToast = false;
   toastMessage = '';
@@ -56,9 +43,7 @@ export class ProductDetail implements OnInit, OnDestroy {
     private route: ActivatedRoute,
     private router: Router,
     private cdr: ChangeDetectorRef,
-    private productService: ProductService,
-    private addressService: AddressService,
-    private orderService: OrderService
+    private productService: ProductService
   ) { }
 
   ngOnInit() {
@@ -71,10 +56,6 @@ export class ProductDetail implements OnInit, OnDestroy {
         this.isLoading = false;
       }
     });
-  }
-
-  ngOnDestroy() {
-    this.stopPolling();
   }
 
   getProductVariants() {
@@ -91,6 +72,23 @@ export class ProductDetail implements OnInit, OnDestroy {
           rawVariants = res.items;
         }
         this.productVariants = rawVariants.filter((v: any) => v.isActive);
+        this.imgProductViaraints = this.productVariants;
+        
+        // Auto-select variant based on selectedSize or default to first variant
+        if (this.selectedSize) {
+          const matching = this.productVariants.find(
+            (v) => v.size && v.size.trim().toLowerCase() === this.selectedSize.trim().toLowerCase()
+          );
+          if (matching) {
+            this.selectedVariant = matching;
+          }
+        } else if (this.productVariants.length > 0) {
+          const firstVariant = this.productVariants[0];
+          if (firstVariant.size) {
+            this.selectedSize = firstVariant.size;
+            this.selectedVariant = firstVariant;
+          }
+        }
         this.cdr.detectChanges();
       },
       error: (err) => {
@@ -115,6 +113,15 @@ export class ProductDetail implements OnInit, OnDestroy {
       .subscribe({
         next: (res) => {
           this.product = res;
+          
+          // Set default size from product.size
+          if (this.product?.size) {
+            const sizes = this.product.size.split(',').map((s: string) => s.trim()).filter((s: string) => s);
+            if (sizes.length > 0) {
+              this.selectedSize = sizes[0];
+            }
+          }
+          
           this.getProductVariants();
         },
         error: (err) => {
@@ -138,12 +145,50 @@ export class ProductDetail implements OnInit, OnDestroy {
   selectVariant(variant: any) {
     if (this.selectedVariant && this.selectedVariant.id === variant.id) {
       this.selectedVariant = null;
+      this.selectedSize = '';
     } else {
       this.selectedVariant = variant;
+      this.selectedSize = variant.size || '';
     }
     const maxQty = this.getMaxQuantity();
     if (this.quantity > maxQty) {
       this.quantity = maxQty;
+    }
+    this.cdr.detectChanges();
+  }
+
+  getCombinedSizes(): string[] {
+    const sizes = new Set<string>();
+    if (this.product?.size) {
+      this.product.size.split(',').forEach((s: string) => {
+        const trimmed = s.trim();
+        if (trimmed) sizes.add(trimmed);
+      });
+    }
+    if (this.productVariants) {
+      this.productVariants.forEach((v: any) => {
+        if (v.size) {
+          const trimmed = v.size.trim();
+          if (trimmed) sizes.add(trimmed);
+        }
+      });
+    }
+    return Array.from(sizes);
+  }
+
+  onSizeChange(event: any) {
+    this.selectedSize = event.target.value;
+    if (this.selectedSize) {
+      const matchingVariant = this.productVariants.find(
+        (v) => v.size && v.size.trim().toLowerCase() === this.selectedSize.trim().toLowerCase()
+      );
+      if (matchingVariant) {
+        this.selectVariant(matchingVariant);
+      } else {
+        this.selectedVariant = null;
+      }
+    } else {
+      this.selectedVariant = null;
     }
     this.cdr.detectChanges();
   }
@@ -225,8 +270,8 @@ export class ProductDetail implements OnInit, OnDestroy {
       }
     }
 
-    const existingIndex = cart.findIndex((item: any) => 
-      item.productId === this.productId && 
+    const existingIndex = cart.findIndex((item: any) =>
+      item.productId === this.productId &&
       item.variantId === (this.selectedVariant ? this.selectedVariant.id : null)
     );
 
@@ -244,102 +289,6 @@ export class ProductDetail implements OnInit, OnDestroy {
     window.dispatchEvent(new Event('cartUpdated'));
 
     this.triggerToast(`Added ${this.product.name}${this.selectedVariant ? ' (' + this.selectedVariant.title + ')' : ''} to cart successfully!`);
-  }
-
-  proceedToCheckout(userId: number, shippingAddressId: number) {
-    const checkoutPayload = {
-      orderDetails: {
-        shippingAddressId: shippingAddressId,
-        billingAddressId: shippingAddressId,
-        notes: `Quick purchase of ${this.product?.name}` + (this.selectedVariant ? ` (${this.selectedVariant.title})` : ''),
-      },
-      cartItems: [
-        {
-          productId: this.productId,
-          variantId: this.selectedVariant ? this.selectedVariant.id : null,
-          price: this.getDisplayPrice(),
-          quantity: this.quantity,
-        },
-      ],
-      currency: 'USD',
-    };
-
-    this.isPlacingOrder = true;
-    this.cdr.detectChanges();
-
-    this.orderService
-      .createOrder(checkoutPayload)
-      .pipe(
-        switchMap((orderResponse: any) => {
-          this.orderId = orderResponse.id;
-          this.orderNumber = orderResponse.orderNumber;
-          this.totalAmount = orderResponse.totalAmount;
-          this.cdr.detectChanges();
-          return this.orderService.generateQrCode(orderResponse.id);
-        }),
-        finalize(() => {
-          this.isPlacingOrder = false;
-          this.cdr.detectChanges();
-        }),
-      )
-      .subscribe({
-        next: (qrResponse: any) => {
-          const qrData = qrResponse.data || qrResponse;
-          this.qrImageBase64 = qrData.qrImageBase64 || qrData.qrCode || qrData.qrCodeImage || '';
-          this.md5 = qrData.md5 || qrData.transactionId || '';
-
-          this.showPaymentModal = true;
-          this.startPollingPayment();
-          this.cdr.detectChanges();
-        },
-        error: (err) => {
-          console.error('Failed to checkout:', err);
-          alert(err.error?.message || 'Failed to place order or generate QR code. Please try again.');
-        },
-      });
-  }
-
-  startPollingPayment() {
-    this.isVerifyingPayment = true;
-    this.paymentStatusMessage = 'Waiting for payment scan...';
-    this.cdr.detectChanges();
-
-    this.stopPolling();
-
-    this.pollingInterval = setInterval(() => {
-      this.orderService
-        .verifyPayment(this.orderId)
-        .subscribe({
-          next: (res) => {
-            if (res.status === 'PAID') {
-              this.stopPolling();
-              this.paymentStatusMessage = 'Payment successful!';
-              this.cdr.detectChanges();
-              setTimeout(() => {
-                this.closeModal();
-                this.router.navigate(['/orders']);
-              }, 1500);
-            }
-          },
-          error: (err) => {
-            console.error('Error verifying payment:', err);
-          },
-        });
-    }, 3000);
-  }
-
-  stopPolling() {
-    if (this.pollingInterval) {
-      clearInterval(this.pollingInterval);
-      this.pollingInterval = null;
-    }
-  }
-
-  closeModal() {
-    this.showPaymentModal = false;
-    this.isVerifyingPayment = false;
-    this.stopPolling();
-    this.cdr.detectChanges();
   }
 
   goBack() {
