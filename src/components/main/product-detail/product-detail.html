@@ -1,5 +1,5 @@
-<div class="min-h-screen bg-gray-50 py-8">
-  <div class="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
+<div class="bg-gray-50 py-8">
+  <div class="mx-auto px-4 sm:px-6 lg:px-8">
     <!-- Main Detail Content -->
     <div *ngIf="product">
       <!-- Breadcrumb -->
@@ -21,6 +21,14 @@
               <img [src]="getDisplayImage()"
                 class="w-full h-full object-cover transform hover:scale-105 transition duration-500"
                 [alt]="selectedVariant ? selectedVariant.title : product.name" />
+            </div>
+
+            <div class="grid grid-cols-3 gap-2 mt-4">
+              @for (imgProductViaraint of imgProductViaraints; track $index) {
+              <img [src]="imageUrl + imgProductViaraint.imageUrl" [alt]="imgProductViaraint.title || 'Product variant'"
+                (click)="selectVariant(imgProductViaraint)"
+                class="h-48 w-full object-cover rounded-xl border border-gray-200 cursor-pointer hover:border-orange-500 transition">
+              }
             </div>
           </div>
 
@@ -61,6 +69,17 @@
             <p class="text-gray-600 mt-6 leading-relaxed">
               {{ product.description || 'No description available for this product.' }}
             </p>
+
+            <div class="py-6 px-4">
+              <span>Size: </span>
+              <select [value]="selectedSize" (change)="onSizeChange($event)"
+                class="border border-gray-300 rounded-md px-2 py-1 text-sm bg-white focus:outline-none focus:ring-2 focus:ring-orange-500/25 focus:border-orange-500 transition">
+                <option value="" disabled>Select Size</option>
+                @for (size of getCombinedSizes(); track size) {
+                <option [value]="size">{{ size }}</option>
+                }
+              </select>
+            </div>
 
             @if (selectedVariant || product.size || product.color) {
             <div class="mt-6 p-4 bg-slate-50 border border-slate-200/60 rounded-2xl animate-fade-in space-y-2.5">
@@ -156,89 +175,6 @@
         </div>
       </section>
 
-      <!-- Product Variants Selection Section -->
-      <section *ngIf="productVariants && productVariants.length > 0"
-        class="mt-8 bg-white/80 backdrop-blur-lg rounded-3xl border border-slate-100 shadow-[0_8px_30px_rgb(0,0,0,0.02)] p-6 md:p-8">
-
-        <!-- Header -->
-        <div class="flex items-center justify-between mb-6 pb-4 border-b border-slate-100">
-          <div>
-            <h3 class="text-xl font-bold text-slate-900 flex items-center gap-2.5">
-              <span class="w-2.5 h-2.5 rounded-full bg-orange-500 shadow-[0_0_10px_#f97316]"></span>
-              Select Product Option
-            </h3>
-            <p class="text-xs text-slate-400 font-medium mt-0.5">Please choose your style, size, or color preference</p>
-          </div>
-          <span *ngIf="selectedVariant"
-            class="text-[10px] font-bold px-3 py-1 bg-orange-100 text-orange-700 rounded-full border border-orange-200 uppercase tracking-wider animate-pulse">
-            Active Option
-          </span>
-        </div>
-
-        <div class="grid grid-cols-1 sm:grid-cols-2 md:grid-cols-3 gap-5">
-          <div *ngFor="let variant of productVariants" (click)="selectVariant(variant)"
-            [ngClass]="selectedVariant?.id === variant.id ? 'selected-variant-card shadow-[0_8px_20px_-4px_rgba(249,115,22,0.15)] scale-[1.01]' : 'border-slate-100 bg-white/70 hover-lift'"
-            class="group cursor-pointer border rounded-2xl p-4 transition-all duration-300 flex gap-4 items-center relative overflow-hidden animate-fade-in">
-            <!-- Select Indicator Badge -->
-            <div *ngIf="selectedVariant?.id === variant.id"
-              class="absolute top-2.5 right-2.5 bg-orange-500 text-white p-1 rounded-full shadow-md scale-100 transition-transform">
-              <svg class="w-3.5 h-3.5" fill="none" stroke="currentColor" viewBox="0 0 24 24">
-                <path stroke-linecap="round" stroke-linejoin="round" stroke-width="3" d="M5 13l4 4L19 7"></path>
-              </svg>
-            </div>
-
-            <!-- Variant Mini Image -->
-            <div
-              class="w-16 h-16 rounded-xl bg-slate-50 overflow-hidden border border-slate-200/80 flex items-center justify-center shrink-0 shadow-xs">
-              <img
-                [src]="variant.imageUrl ? imageUrl + variant.imageUrl : (product.imageUrl ? imageUrl + product.imageUrl : 'https://images.unsplash.com/photo-1505740420928-5e560c06d30e?w=800')"
-                class="w-full h-full object-cover transition duration-500 group-hover:scale-108"
-                [alt]="variant.title" />
-            </div>
-
-            <!-- Variant Details -->
-            <div class="flex-1 min-w-0 pr-2">
-              <h4
-                class="font-bold text-slate-800 truncate text-sm mb-1 group-hover:text-orange-500 transition text-left">
-                {{ variant.title }}
-              </h4>
-
-              <!-- Attributes Pills (Size / Color / SKU) -->
-              <div class="flex flex-wrap gap-1 text-[10px] mb-2">
-                <span *ngIf="variant.color" class="px-2 py-0.5 bg-slate-100 rounded text-slate-500 font-semibold">
-                  Color: {{ variant.color }}
-                </span>
-                <span *ngIf="variant.size" class="px-2 py-0.5 bg-slate-100 rounded text-slate-500 font-semibold">
-                  Size: {{ variant.size }}
-                </span>
-                <span *ngIf="variant.sku" class="px-1.5 py-0.5 bg-slate-50 rounded text-slate-400 font-mono">
-                  Sku: {{ variant.sku }}
-                </span>
-              </div>
-
-              <!-- Price & Stock -->
-              <div class="flex items-center justify-between">
-                <div class="flex items-baseline gap-1">
-                  <span class="text-sm font-extrabold text-slate-800">
-                    ${{ variant.discountPrice && variant.discountPrice > 0 ? variant.discountPrice : variant.price }}
-                  </span>
-                  <span *ngIf="variant.discountPrice && variant.discountPrice > 0"
-                    class="text-[10px] text-slate-400 line-through">
-                    ${{ variant.price }}
-                  </span>
-                </div>
-
-                <span
-                  [ngClass]="variant.availableQuantity > 0 ? 'text-emerald-700 bg-emerald-50' : 'text-rose-700 bg-rose-50'"
-                  class="text-[9px] font-bold px-1.5 py-0.5 rounded uppercase tracking-wider">
-                  {{ variant.availableQuantity > 0 ? variant.availableQuantity + ' left' : 'Sold out' }}
-                </span>
-              </div>
-            </div>
-          </div>
-        </div>
-      </section>
-
       <!-- Additional Information Section -->
       <section class="mt-8 bg-white rounded-3xl border border-gray-100 shadow-sm p-6 md:p-8">
         <h2 class="text-2xl font-bold text-gray-900 mb-4">Product Details</h2>
@@ -264,69 +200,6 @@
       <p class="text-red-500 font-bold text-lg">Product not found!</p>
       <button (click)="goBack()" class="mt-4 px-6 py-2 bg-orange-500 text-white rounded-xl font-semibold">
         Go Back
-      </button>
-    </div>
-  </div>
-</div>
-
-<!-- Premium Bakong Payment Modal Overlay -->
-<div *ngIf="showPaymentModal"
-  class="fixed inset-0 z-50 flex items-center justify-center bg-black/60 backdrop-blur-sm p-4">
-  <div
-    class="bg-white rounded-3xl shadow-2xl max-w-md w-full border border-gray-100 overflow-hidden transform transition-all scale-100">
-    <!-- Modal Header -->
-    <div class="bg-gradient-to-r from-red-600 to-red-500 p-6 text-white text-center relative">
-      <h3 class="text-xl font-bold tracking-wide">Bakong KHQR Payment</h3>
-      <p class="text-xs text-red-100 mt-1">Scan the QR code to complete your order</p>
-
-      <button (click)="closeModal()" class="absolute top-4 right-4 text-white/80 hover:text-white transition">
-        <svg class="h-6 w-6" fill="none" viewBox="0 0 24 24" stroke="currentColor">
-          <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M6 18L18 6M6 6l12 12" />
-        </svg>
-      </button>
-    </div>
-
-    <!-- Modal Body -->
-    <div class="p-8 flex flex-col items-center">
-      <!-- Order Info Summary -->
-      <div class="text-center mb-6 w-full">
-        <div class="text-sm text-gray-500 font-medium">Order Number</div>
-        <div class="font-mono font-bold text-gray-800 text-base mt-0.5">{{ orderNumber }}</div>
-
-        <div class="mt-4 bg-gray-50 rounded-2xl py-3 px-6 border border-gray-100 inline-block">
-          <span class="text-xs text-gray-400 uppercase block tracking-wider font-bold">Amount to Pay</span>
-          <span class="text-3xl font-extrabold text-gray-900">${{ totalAmount }}</span>
-        </div>
-      </div>
-
-      <!-- KHQR QR Code Frame -->
-      <div class="relative bg-white border border-gray-200 rounded-3xl p-4 shadow-sm mb-6">
-        <img [src]="qrImageBase64" class="w-64 h-64 object-contain rounded-2xl" alt="Bakong KHQR Code" />
-
-        <!-- Inner status loading layer if QR not ready -->
-        <div *ngIf="!qrImageBase64"
-          class="absolute inset-0 bg-white/95 flex flex-col items-center justify-center rounded-3xl">
-          <div class="animate-spin rounded-full h-10 w-10 border-4 border-red-500 border-t-transparent mb-2"></div>
-          <span class="text-xs text-gray-500">Generating KHQR...</span>
-        </div>
-      </div>
-
-      <!-- Real-time payment verification status indicator -->
-      <div
-        class="flex items-center gap-3 bg-red-50 text-red-700 px-5 py-3 rounded-2xl text-sm font-semibold tracking-wide w-full justify-center border border-red-100">
-        <div class="relative flex h-3 w-3">
-          <span class="animate-ping absolute inline-flex h-full w-full rounded-full bg-red-400 opacity-75"></span>
-          <span class="relative inline-flex rounded-full h-3 w-3 bg-red-500"></span>
-        </div>
-        <span>{{ paymentStatusMessage }}</span>
-      </div>
-    </div>
-
-    <!-- Modal Footer -->
-    <div class="bg-gray-50 px-6 py-4 flex justify-between gap-3 border-t border-gray-100">
-      <button (click)="closeModal()"
-        class="w-full bg-gray-200 hover:bg-gray-300 text-gray-700 py-3.5 rounded-xl font-bold transition text-sm">
-        Cancel & Close
       </button>
     </div>
   </div>
