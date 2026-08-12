@@ -164,11 +164,9 @@
                 class="flex-1 border border-gray-200 hover:bg-gray-50 text-gray-700 py-3.5 rounded-xl font-bold transition text-center shadow-sm">
                 ← Back
               </button>
-              <button (click)="buyNow()" [disabled]="isPlacingOrder || getMaxQuantity() <= 0"
+              <button (click)="buyNow()" [disabled]="getMaxQuantity() <= 0"
                 class="flex-1 bg-orange-500 hover:bg-orange-600 disabled:bg-orange-300 text-white py-3.5 rounded-xl font-bold transition shadow-md shadow-orange-500/10 flex items-center justify-center gap-2">
-                <span *ngIf="isPlacingOrder"
-                  class="animate-spin rounded-full h-5 w-5 border-2 border-white border-t-transparent"></span>
-                {{ isPlacingOrder ? 'Processing...' : 'Buy Now / Checkout' }}
+                Buy Now / Checkout
               </button>
             </div>
           </div>

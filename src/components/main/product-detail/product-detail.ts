@@ -1,11 +1,9 @@
 import { Location, CommonModule } from '@angular/common';
-import { Component, OnInit, OnDestroy, ChangeDetectorRef } from '@angular/core';
+import { Component, OnInit, ChangeDetectorRef } from '@angular/core';
 import { ActivatedRoute, Router, RouterLink } from '@angular/router';
 import { environment } from '../../../environments/environment.development';
-import { finalize, switchMap } from 'rxjs';
+import { finalize } from 'rxjs';
 import { ProductService } from '../../../Service/products/product-service';
-import { AddressService } from '../../../Service/Address/address-service';
-import { OrderService } from '../../../Service/Order/order';
 import { ToastComponent } from '../../../shared/components/toast';
 
 @Component({
@@ -15,7 +13,7 @@ import { ToastComponent } from '../../../shared/components/toast';
   templateUrl: './product-detail.html',
   styleUrl: './product-detail.css',
 })
-export class ProductDetail implements OnInit, OnDestroy {
+export class ProductDetail implements OnInit {
   imageUrl = environment.apiUrl;
   product: any = null;
   productId: number = 0;
@@ -26,19 +24,6 @@ export class ProductDetail implements OnInit, OnDestroy {
   selectedVariant: any = null;
   imgProductViaraints: any[] = [];
   selectedSize: string = '';
-
-  // Checkout and Payment state
-  showPaymentModal = false;
-  isPlacingOrder = false;
-  isVerifyingPayment = false;
-  qrImageBase64: string = '';
-  md5: string = '';
-  orderId: number = 0;
-  orderNumber: string = '';
-  totalAmount: number = 0;
-  paymentStatusMessage = 'Waiting for payment scan...';
-
-  private pollingInterval: any = null;
 
   showToast = false;
   toastMessage = '';
@@ -58,9 +43,7 @@ export class ProductDetail implements OnInit, OnDestroy {
     private route: ActivatedRoute,
     private router: Router,
     private cdr: ChangeDetectorRef,
-    private productService: ProductService,
-    private addressService: AddressService,
-    private orderService: OrderService
+    private productService: ProductService
   ) { }
 
   ngOnInit() {
@@ -73,10 +56,6 @@ export class ProductDetail implements OnInit, OnDestroy {
         this.isLoading = false;
       }
     });
-  }
-
-  ngOnDestroy() {
-    this.stopPolling();
   }
 
   getProductVariants() {
@@ -310,49 +289,6 @@ export class ProductDetail implements OnInit, OnDestroy {
     window.dispatchEvent(new Event('cartUpdated'));
 
     this.triggerToast(`Added ${this.product.name}${this.selectedVariant ? ' (' + this.selectedVariant.title + ')' : ''} to cart successfully!`);
-  }
-
-  startPollingPayment() {
-    this.isVerifyingPayment = true;
-    this.paymentStatusMessage = 'Waiting for payment scan...';
-    this.cdr.detectChanges();
-
-    this.stopPolling();
-
-    this.pollingInterval = setInterval(() => {
-      this.orderService
-        .verifyPayment(this.orderId)
-        .subscribe({
-          next: (res) => {
-            if (res.status === 'PAID') {
-              this.stopPolling();
-              this.paymentStatusMessage = 'Payment successful!';
-              this.cdr.detectChanges();
-              setTimeout(() => {
-                this.closeModal();
-                this.router.navigate(['/orders']);
-              }, 1500);
-            }
-          },
-          error: (err) => {
-            console.error('Error verifying payment:', err);
-          },
-        });
-    }, 3000);
-  }
-
-  stopPolling() {
-    if (this.pollingInterval) {
-      clearInterval(this.pollingInterval);
-      this.pollingInterval = null;
-    }
-  }
-
-  closeModal() {
-    this.showPaymentModal = false;
-    this.isVerifyingPayment = false;
-    this.stopPolling();
-    this.cdr.detectChanges();
   }
 
   goBack() {
