@@ -8,7 +8,7 @@
       </h1>
 
       <p class="mt-1 text-slate-500">
-        View customer reviews, ratings, and respond to feedback.
+        View customer reviews, ratings, and feedback on your products.
       </p>
     </div>
   </div>
@@ -17,85 +17,74 @@
   <div class="grid gap-6 md:grid-cols-3">
 
     <div class="rounded-2xl border border-slate-200 bg-white p-6 shadow-sm">
-      <p class="text-sm text-slate-500">Average Rating</p>
-      <h2 class="mt-2 text-3xl font-bold text-slate-900">4.8 ⭐</h2>
+      <p class="text-sm text-slate-500 font-medium">Average Rating</p>
+      <h2 class="mt-2 text-3xl font-extrabold text-slate-900 flex items-center gap-2">
+        {{ averageRating }} <span class="text-yellow-400 text-2xl">★</span>
+      </h2>
     </div>
 
     <div class="rounded-2xl border border-slate-200 bg-white p-6 shadow-sm">
-      <p class="text-sm text-slate-500">Total Reviews</p>
-      <h2 class="mt-2 text-3xl font-bold text-slate-900">328</h2>
+      <p class="text-sm text-slate-500 font-medium">Total Reviews</p>
+      <h2 class="mt-2 text-3xl font-extrabold text-slate-900">{{ totalReviews }}</h2>
     </div>
 
     <div class="rounded-2xl border border-slate-200 bg-white p-6 shadow-sm">
-      <p class="text-sm text-slate-500">Pending Replies</p>
-      <h2 class="mt-2 text-3xl font-bold text-orange-500">12</h2>
+      <p class="text-sm text-slate-500 font-medium">5-Star Ratings</p>
+      <h2 class="mt-2 text-3xl font-extrabold text-emerald-600">{{ fiveStarCount }}</h2>
     </div>
 
   </div>
 
-  <!-- Reviews -->
-  <div class="space-y-4">
+  <!-- Loader -->
+  <div *ngIf="isLoading" class="flex flex-col items-center justify-center py-20 bg-white border border-slate-100 rounded-3xl shadow-sm">
+    <div class="animate-spin rounded-full h-10 w-10 border-4 border-blue-600 border-t-transparent mb-3"></div>
+    <p class="text-slate-500 text-sm">Loading customer reviews...</p>
+  </div>
 
-    <div class="rounded-2xl border border-slate-200 bg-white p-6 shadow-sm">
+  <!-- Empty State -->
+  <div *ngIf="!isLoading && reviews.length === 0"
+    class="text-center py-20 bg-white border border-slate-200 rounded-3xl p-8 shadow-sm">
+    <div class="text-slate-400 mb-3">
+      <svg class="mx-auto h-12 w-12" fill="none" viewBox="0 0 24 24" stroke="currentColor">
+        <path stroke-linecap="round" stroke-linejoin="round" stroke-width="1.5"
+          d="M8 12h.01M12 12h.01M16 12h.01M21 12c0 4.418-4.03 8-9 8a9.863 9.863 0 01-4.255-.949L3 20l1.395-3.72C3.512 15.042 3 13.574 3 12c0-4.418 4.03-8 9-8s9 3.582 9 8z" />
+      </svg>
+    </div>
+    <h3 class="text-lg font-bold text-slate-900">No Feedback Yet</h3>
+    <p class="text-slate-500 mt-1 text-sm">Customer reviews for your products will appear here once submitted.</p>
+  </div>
 
-      <div class="flex items-center justify-between">
+  <!-- Reviews List -->
+  <div *ngIf="!isLoading && reviews.length > 0" class="space-y-4">
+    <div *ngFor="let r of reviews" class="rounded-2xl border border-slate-200 bg-white p-6 shadow-sm hover:shadow transition">
+      <div class="flex items-start justify-between gap-4">
         <div>
-          <h3 class="font-semibold text-slate-900">
-            John Doe
+          <h3 class="font-bold text-slate-900 text-base">
+            {{ r.userName || 'Anonymous Buyer' }}
           </h3>
-
-          <p class="text-sm text-slate-500">
-            Wireless Headphones
+          <p class="text-xs text-slate-500 mt-1">
+            Product: <span class="font-semibold text-slate-700">{{ r.productName }}</span>
+          </p>
+          <p class="text-[10px] text-slate-400 mt-0.5">
+            Reviewed on {{ r.createdAt | date:'mediumDate' }}
           </p>
         </div>
 
-        <span class="text-yellow-500 text-lg">
-          ★★★★★
+        <span class="text-yellow-400 text-lg font-bold tracking-wider shrink-0 select-none">
+          {{ getStarString(r.rating) }}
         </span>
       </div>
 
-      <p class="mt-4 text-slate-600">
-        Great quality product! Fast delivery and exactly as described.
-      </p>
-
-      <div class="mt-5 flex justify-end">
-        <button class="rounded-lg bg-blue-600 px-4 py-2 text-white hover:bg-blue-700">
-          Reply
-        </button>
+      <!-- Review Content -->
+      <div class="mt-4 border-t border-slate-50 pt-3">
+        <h4 *ngIf="r.title" class="font-extrabold text-sm text-slate-800 mb-1">
+          {{ r.title }}
+        </h4>
+        <p class="text-slate-600 text-sm leading-relaxed">
+          {{ r.comment || 'No comments provided.' }}
+        </p>
       </div>
-
     </div>
-
-    <div class="rounded-2xl border border-slate-200 bg-white p-6 shadow-sm">
-
-      <div class="flex items-center justify-between">
-        <div>
-          <h3 class="font-semibold text-slate-900">
-            Sarah Smith
-          </h3>
-
-          <p class="text-sm text-slate-500">
-            Gaming Mouse
-          </p>
-        </div>
-
-        <span class="text-yellow-500 text-lg">
-          ★★★★☆
-        </span>
-      </div>
-
-      <p class="mt-4 text-slate-600">
-        Product is good overall. Shipping took a little longer than expected.
-      </p>
-
-      <div class="mt-5 flex justify-end">
-        <button class="rounded-lg bg-blue-600 px-4 py-2 text-white hover:bg-blue-700">
-          Reply
-        </button>
-      </div>
-
-    </div>
-
   </div>
 
 </div>

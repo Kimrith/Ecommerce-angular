@@ -45,6 +45,11 @@ export class CouponService {
     return this.http.get<Coupon>(`${this.apiUrl}/${id}`, { headers });
   }
 
+  getCouponByCode(code: string): Observable<Coupon> {
+    const headers = this.getAuthHeaders();
+    return this.http.get<Coupon>(`${this.apiUrl}/code/${code}`, { headers });
+  }
+
   postCoupon(couponData: any): Observable<any> {
     const headers = this.getAuthHeaders();
     return this.http.post<any>(this.apiUrl, couponData, { headers });
