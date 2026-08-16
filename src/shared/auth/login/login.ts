@@ -47,12 +47,6 @@ export class Login {
         }
 
         if (userRole === 'Seller') {
-          const userStatus = response.status || (response.user && response.user.status);
-          const status = (userStatus || '').toString().trim().toLowerCase();
-          if (status === 'suspended' || status === 'inactive') {
-            this.router.navigate(['/seller-suspended']);
-            return;
-          }
           this.router.navigate(['/sellers']);
           return;
         }
