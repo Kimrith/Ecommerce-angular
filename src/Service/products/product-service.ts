@@ -1,7 +1,7 @@
 import { Injectable } from '@angular/core';
-import { HttpClient, HttpHeaders, HttpParams } from '@angular/common/http';
+import { HttpClient, HttpParams } from '@angular/common/http';
 import { environment } from '../../environments/environment.development';
-import { forkJoin, of, Observable } from 'rxjs';
+import { forkJoin, Observable } from 'rxjs';
 import { switchMap, catchError } from 'rxjs/operators';
 import { ProductStatistics } from '../../type/product';
 
@@ -14,35 +14,23 @@ export class ProductService {
 
   constructor(private http: HttpClient) { }
 
-  private getAuthHeaders(): HttpHeaders {
-    const token = localStorage.getItem('authToken');
-    return new HttpHeaders({
-      'Authorization': `Bearer ${token}`
-    });
-  }
-
   // admin
   createProduct(productData: any): Observable<any> {
-    const headers = this.getAuthHeaders();
-    return this.http.post<any>(this.apiUrl, productData, { headers });
+    return this.http.post<any>(this.apiUrl, productData);
   }
 
   updateProduct(productId: number, productData: any): Observable<any> {
-    const headers = this.getAuthHeaders();
-    return this.http.put<any>(`${this.apiUrl}/${productId}`, productData, { headers });
+    return this.http.put<any>(`${this.apiUrl}/${productId}`, productData);
   }
 
   updateProductStatus(productId: number, status: number): Observable<any> {
-    const headers = this.getAuthHeaders();
-    return this.http.patch<any>(`${this.apiUrl}/${productId}/status`, { status }, { headers });
+    return this.http.patch<any>(`${this.apiUrl}/${productId}/status`, { status });
   }
 
   suspendProduct(productId: number): Observable<any> {
-    const headers = this.getAuthHeaders();
-    return this.http.patch<any>(`${this.apiUrl}/${productId}/suspend`, {}, { headers });
+    return this.http.patch<any>(`${this.apiUrl}/${productId}/suspend`, {});
   }
 
-  // 👇 Updated to accept pageNumber, pageSize, and optional filters
   getAllProduct(
     pageNumber: number = 1,
     pageSize: number = 10,
@@ -50,7 +38,6 @@ export class ProductService {
     categoryId?: number | null,
     status?: number | string | null
   ): Observable<any> {
-    const headers = this.getAuthHeaders();
     let params = new HttpParams()
       .set('pageNumber', pageNumber.toString())
       .set('pageSize', pageSize.toString());
@@ -62,7 +49,6 @@ export class ProductService {
       params = params.set('categoryId', categoryId.toString());
     }
     if (status !== undefined && status !== null) {
-      // Map status number/string representation to string enum name for maximum reliability with ASP.NET Core enum model binding
       const statusNum = Number(status);
       let statusStr = status.toString();
       if (!isNaN(statusNum)) {
@@ -72,26 +58,20 @@ export class ProductService {
       params = params.set('status', statusStr);
     }
 
-    return this.http.get<any>(this.apiUrl, { headers, params });
+    return this.http.get<any>(this.apiUrl, { params });
   }
 
   getProductById(productId: number): Observable<any> {
-    const headers = this.getAuthHeaders();
-    return this.http.get<any>(`${this.apiUrl}/${productId}`, { headers });
+    return this.http.get<any>(`${this.apiUrl}/${productId}`);
   }
 
   getProductVariants(productId: number): Observable<any> {
-    // const headers = this.getAuthHeaders();
-    // return this.http.get<any>(`${this.variantApiUrl}/product/${productId}`, { headers });
     return this.http.get<any>(`${this.variantApiUrl}/product/${productId}`);
   }
 
   deleteProductWithVariants(productId: number): Observable<any> {
-    const headers = this.getAuthHeaders();
-
     return this.getProductVariants(productId).pipe(
       switchMap((variantsResponse) => {
-        // Safely extract variants array matching your backend structure
         let variants: any[] = [];
         if (Array.isArray(variantsResponse)) {
           variants = variantsResponse;
@@ -101,69 +81,54 @@ export class ProductService {
           variants = variantsResponse.data;
         }
 
-        // If there are variants, delete all of them in parallel first using forkJoin
         if (variants.length > 0) {
           const variantDeleteObservables = variants.map(variant =>
-            this.http.delete<any>(`${this.variantApiUrl}/${variant.id}`, { headers })
+            this.http.delete<any>(`${this.variantApiUrl}/${variant.id}`)
           );
 
           return forkJoin(variantDeleteObservables).pipe(
-            // Once all variants are successfully deleted, delete the main product
-            switchMap(() => this.http.delete<any>(`${this.apiUrl}/${productId}`, { headers }))
+            switchMap(() => this.http.delete<any>(`${this.apiUrl}/${productId}`))
           );
         }
 
-        // If no variants exist, just delete the main product directly
-        return this.http.delete<any>(`${this.apiUrl}/${productId}`, { headers });
+        return this.http.delete<any>(`${this.apiUrl}/${productId}`);
       }),
-      catchError((err) => {
-        // Fallback: If fetching variants fails entirely, try deleting the main product directly
-        return this.http.delete<any>(`${this.apiUrl}/${productId}`, { headers });
+      catchError(() => {
+        return this.http.delete<any>(`${this.apiUrl}/${productId}`);
       })
     );
   }
 
   addProductVariant(data: any): Observable<any> {
-    const headers = this.getAuthHeaders();
-
-    return this.http.post<any>(
-      this.variantApiUrl,
-      data,
-      { headers }
-    );
+    return this.http.post<any>(this.variantApiUrl, data);
   }
 
   updateProductVariant(variantId: number, data: any): Observable<any> {
-    const headers = this.getAuthHeaders();
-    return this.http.put<any>(`${this.variantApiUrl}/${variantId}`, data, { headers });
+    return this.http.put<any>(`${this.variantApiUrl}/${variantId}`, data);
   }
 
   deleteProductVariant(variantId: number): Observable<any> {
-    const headers = this.getAuthHeaders();
-    return this.http.delete<any>(`${this.variantApiUrl}/${variantId}`, { headers });
+    return this.http.delete<any>(`${this.variantApiUrl}/${variantId}`);
   }
 
   ProductStatiStics(sellerId?: number): Observable<ProductStatistics> {
-    const headers = this.getAuthHeaders();
     let params = new HttpParams();
     if (sellerId !== undefined && sellerId !== null) {
       params = params.set('sellerId', sellerId.toString());
     }
-    return this.http.get<ProductStatistics>(`${this.apiUrl}/statistics`, { headers, params });
+    return this.http.get<ProductStatistics>(`${this.apiUrl}/statistics`, { params });
   }
 
   getBestSellers(limit: number = 5): Observable<any> {
-    const headers = this.getAuthHeaders();
-    return this.http.get<any>(`${this.apiUrl}/best-sellers?limit=${limit}`, { headers });
+    return this.http.get<any>(`${this.apiUrl}/best-sellers?limit=${limit}`);
   }
 
   // seller
 
   getProductSeller(sellerId: number, pageNumber: number = 1, pageSize: number = 1000) {
-    const headers = this.getAuthHeaders();
     const params = new HttpParams()
       .set('pageNumber', pageNumber.toString())
       .set('pageSize', pageSize.toString());
-    return this.http.get<any>(`${this.apiUrl}/seller/${sellerId}`, { headers, params });
+    return this.http.get<any>(`${this.apiUrl}/seller/${sellerId}`, { params });
   }
 }

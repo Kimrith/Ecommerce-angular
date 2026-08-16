@@ -1,6 +1,6 @@
 import { Injectable } from '@angular/core';
 import { environment } from '../../environments/environment.development';
-import { HttpClient, HttpHeaders, HttpParams } from '@angular/common/http';
+import { HttpClient, HttpParams } from '@angular/common/http';
 import { Observable, map } from 'rxjs';
 
 @Injectable({
@@ -11,20 +11,12 @@ export class ReviewService {
 
   constructor(private http: HttpClient) { }
 
-  private getAuthHeaders(): HttpHeaders {
-    const token = localStorage.getItem('authToken');
-    return new HttpHeaders({
-      'Authorization': `Bearer ${token}`
-    });
-  }
-
   getAllReviews(isApproved?: boolean): Observable<any[]> {
-    const headers = this.getAuthHeaders();
     let params = new HttpParams();
     if (isApproved !== undefined && isApproved !== null) {
       params = params.set('isApproved', isApproved.toString());
     }
-    return this.http.get<any>(this.apiUrl, { headers, params }).pipe(
+    return this.http.get<any>(this.apiUrl, { params }).pipe(
       map(res => {
         if (Array.isArray(res)) return res;
         if (res && Array.isArray(res.$values)) return res.$values;
@@ -35,35 +27,26 @@ export class ReviewService {
   }
 
   getReview(userId: number) {
-    const headers = this.getAuthHeaders();
-    // BUG FIX: Changed from environment.apiUrl to this.apiUrl
-    return this.http.get<any>(`${this.apiUrl}/user/${userId}`, { headers });
+    return this.http.get<any>(`${this.apiUrl}/user/${userId}`);
   }
 
   postReview(reviewData: any) {
-    const headers = this.getAuthHeaders();
-    return this.http.post<any>(`${this.apiUrl}`, reviewData, { headers });
+    return this.http.post<any>(`${this.apiUrl}`, reviewData);
   }
 
   deleteReview(reviewId: number) {
-    const headers = this.getAuthHeaders();
-    return this.http.delete<any>(`${this.apiUrl}/${reviewId}`, { headers });
+    return this.http.delete<any>(`${this.apiUrl}/${reviewId}`);
   }
 
   editReview(reviewId: number, reviewData: any) {
-    const headers = this.getAuthHeaders();
-    return this.http.put<any>(`${this.apiUrl}/${reviewId}`, reviewData, { headers });
+    return this.http.put<any>(`${this.apiUrl}/${reviewId}`, reviewData);
   }
 
   getReviewByOrderId(orderId: number) {
-    const headers = this.getAuthHeaders();
-    // BUG FIX: Changed from environment.apiUrl to this.apiUrl
-    return this.http.get<any>(`${this.apiUrl}/order/${orderId}`, { headers });
+    return this.http.get<any>(`${this.apiUrl}/order/${orderId}`);
   }
 
   getProductReview(productId: number) {
-    const headers = this.getAuthHeaders();
-    // BUG FIX: Changed from environment.apiUrl to this.apiUrl
-    return this.http.get<any>(`${this.apiUrl}/product/${productId}`, { headers });
+    return this.http.get<any>(`${this.apiUrl}/product/${productId}`);
   }
 }
