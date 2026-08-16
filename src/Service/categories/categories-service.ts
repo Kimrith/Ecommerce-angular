@@ -1,7 +1,7 @@
 import { Injectable } from '@angular/core';
-import { HttpClient, HttpHeaders, HttpParams } from '@angular/common/http';
-import { Observable, map } from 'rxjs';
 import { environment } from '../../environments/environment.development';
+import { HttpClient, HttpParams } from '@angular/common/http';
+import { Observable, map } from 'rxjs';
 import { Category, CategoryStatistics } from '../../type/categories';
 export type { Category, CategoryStatistics };
 
@@ -13,21 +13,8 @@ export class CategoriesService {
 
   constructor(private http: HttpClient) { }
 
-  private getAuthHeaders(): HttpHeaders {
-    const token = localStorage.getItem('authToken') || localStorage.getItem('token');
-
-    if (!token) {
-      console.warn('Auth token not found in localStorage!');
-    }
-
-    return new HttpHeaders({
-      'Authorization': `Bearer ${token}`
-    });
-  }
-
   getCategories(): Observable<Category[]> {
-    const headers = this.getAuthHeaders(); // <-- Added headers here
-    return this.http.get<any>(this.apiUrl, { headers }).pipe( // <-- Passed headers into the GET request
+    return this.http.get<any>(this.apiUrl).pipe(
       map(response => {
         // Handles if the response is wrapped in an object or directly an array
         if (Array.isArray(response)) {
@@ -43,33 +30,28 @@ export class CategoriesService {
   }
 
   createCategory(categoryData: FormData): Observable<any> {
-    const headers = this.getAuthHeaders();
-    return this.http.post<any>(this.apiUrl, categoryData, { headers });
+    return this.http.post<any>(this.apiUrl, categoryData);
   }
 
   updateCategory(categoryId: number, categoryData: FormData): Observable<any> {
-    const headers = this.getAuthHeaders();
-    return this.http.put<any>(`${this.apiUrl}/${categoryId}`, categoryData, { headers });
+    return this.http.put<any>(`${this.apiUrl}/${categoryId}`, categoryData);
   }
 
   deleteCategory(categoryId: number): Observable<any> {
-    const headers = this.getAuthHeaders();
-    return this.http.delete<any>(`${this.apiUrl}/${categoryId}`, { headers });
+    return this.http.delete<any>(`${this.apiUrl}/${categoryId}`);
   }
 
   CategoriesStatistics(sellerId?: number): Observable<CategoryStatistics> {
-    const headers = this.getAuthHeaders();
     let params = new HttpParams();
     if (sellerId !== undefined && sellerId !== null) {
       params = params.set('sellerId', sellerId.toString());
     }
-    return this.http.get<CategoryStatistics>(`${this.apiUrl}/statistics`, { headers, params });
+    return this.http.get<CategoryStatistics>(`${this.apiUrl}/statistics`, { params });
   }
 
   // seller 
 
-  getAllCategoriesSeller(sellerId: number) {
-    const headers = this.getAuthHeaders();
-    return this.http.get<Category[]>(`${this.apiUrl}/seller/${sellerId}`, { headers });
+  getAllCategoriesSeller(sellerId: number): Observable<Category[]> {
+    return this.http.get<Category[]>(`${this.apiUrl}/seller/${sellerId}`);
   }
 }

@@ -1,8 +1,8 @@
 import { Injectable } from '@angular/core';
 import { environment } from '../../environments/environment.development';
-import { HttpClient, HttpHeaders } from '@angular/common/http';
+import { HttpClient } from '@angular/common/http';
 import { Observable, map } from 'rxjs';
-import { Banner } from '../../type/banner'; // Import the interface
+import { Banner } from '../../type/banner';
 
 @Injectable({
   providedIn: 'root',
@@ -10,23 +10,10 @@ import { Banner } from '../../type/banner'; // Import the interface
 export class BannerService {
   private apiUrl = `${environment.apiUrl}/api/Banner`;
 
-  constructor(private http: HttpClient) { } // <-- Added HttpClient injection
-
-  private getAuthHeaders(): HttpHeaders {
-    const token = localStorage.getItem('authToken') || localStorage.getItem('token');
-
-    if (!token) {
-      console.warn('Auth token not found in localStorage!');
-    }
-
-    return new HttpHeaders({
-      'Authorization': `Bearer ${token}`
-    });
-  }
+  constructor(private http: HttpClient) { }
 
   getBanners(): Observable<Banner[]> {
-    const headers = this.getAuthHeaders();
-    return this.http.get<any>(this.apiUrl, { headers }).pipe(
+    return this.http.get<any>(this.apiUrl).pipe(
       map(response => {
         if (Array.isArray(response)) {
           return response;
@@ -41,22 +28,18 @@ export class BannerService {
   }
 
   getBannerById(id: number): Observable<Banner> {
-    const headers = this.getAuthHeaders();
-    return this.http.get<Banner>(`${this.apiUrl}/${id}`, { headers });
+    return this.http.get<Banner>(`${this.apiUrl}/${id}`);
   }
 
   postBanners(bannerData: FormData): Observable<any> {
-    const headers = this.getAuthHeaders();
-    return this.http.post<any>(this.apiUrl, bannerData, { headers });
+    return this.http.post<any>(this.apiUrl, bannerData);
   }
 
   updateBanners(id: number, bannerData: FormData): Observable<any> {
-    const headers = this.getAuthHeaders();
-    return this.http.put<any>(`${this.apiUrl}/${id}`, bannerData, { headers });
+    return this.http.put<any>(`${this.apiUrl}/${id}`, bannerData);
   }
 
   deleteBanners(id: number): Observable<any> {
-    const headers = this.getAuthHeaders();
-    return this.http.delete<any>(`${this.apiUrl}/${id}`, { headers });
+    return this.http.delete<any>(`${this.apiUrl}/${id}`);
   }
 }

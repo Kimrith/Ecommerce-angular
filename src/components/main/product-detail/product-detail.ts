@@ -24,6 +24,7 @@ export class ProductDetail implements OnInit {
   selectedVariant: any = null;
   imgProductViaraints: any[] = [];
   selectedSize: string = '';
+  selectedColor: string = '';
 
   showToast = false;
   toastMessage = '';
@@ -74,20 +75,21 @@ export class ProductDetail implements OnInit {
         this.productVariants = rawVariants.filter((v: any) => v.isActive);
         this.imgProductViaraints = this.productVariants;
         
-        // Auto-select variant based on selectedSize or default to first variant
-        if (this.selectedSize) {
+        // Auto-select variant based on selectedSize / selectedColor or default to first variant
+        if (this.selectedSize || this.selectedColor) {
           const matching = this.productVariants.find(
-            (v) => v.size && v.size.trim().toLowerCase() === this.selectedSize.trim().toLowerCase()
+            (v) =>
+              (!this.selectedSize || (v.size && v.size.trim().toLowerCase() === this.selectedSize.trim().toLowerCase())) &&
+              (!this.selectedColor || (v.color && v.color.trim().toLowerCase() === this.selectedColor.trim().toLowerCase()))
           );
           if (matching) {
             this.selectedVariant = matching;
           }
         } else if (this.productVariants.length > 0) {
           const firstVariant = this.productVariants[0];
-          if (firstVariant.size) {
-            this.selectedSize = firstVariant.size;
-            this.selectedVariant = firstVariant;
-          }
+          this.selectedSize = firstVariant.size || '';
+          this.selectedColor = firstVariant.color || '';
+          this.selectedVariant = firstVariant;
         }
         this.cdr.detectChanges();
       },
@@ -121,6 +123,13 @@ export class ProductDetail implements OnInit {
               this.selectedSize = sizes[0];
             }
           }
+          // Set default color from product.color
+          if (this.product?.color) {
+            const colors = this.product.color.split(',').map((c: string) => c.trim()).filter((c: string) => c);
+            if (colors.length > 0) {
+              this.selectedColor = colors[0];
+            }
+          }
           
           this.getProductVariants();
         },
@@ -146,9 +155,11 @@ export class ProductDetail implements OnInit {
     if (this.selectedVariant && this.selectedVariant.id === variant.id) {
       this.selectedVariant = null;
       this.selectedSize = '';
+      this.selectedColor = '';
     } else {
       this.selectedVariant = variant;
       this.selectedSize = variant.size || '';
+      this.selectedColor = variant.color || '';
     }
     const maxQty = this.getMaxQuantity();
     if (this.quantity > maxQty) {
@@ -176,14 +187,78 @@ export class ProductDetail implements OnInit {
     return Array.from(sizes);
   }
 
+  getCombinedColors(): string[] {
+    const colors = new Set<string>();
+    if (this.product?.color) {
+      this.product.color.split(',').forEach((c: string) => {
+        const trimmed = c.trim();
+        if (trimmed) colors.add(trimmed);
+      });
+    }
+    if (this.productVariants) {
+      this.productVariants.forEach((v: any) => {
+        if (v.color) {
+          const trimmed = v.color.trim();
+          if (trimmed) colors.add(trimmed);
+        }
+      });
+    }
+    return Array.from(colors);
+  }
+
   onSizeChange(event: any) {
     this.selectedSize = event.target.value;
+    
     if (this.selectedSize) {
-      const matchingVariant = this.productVariants.find(
-        (v) => v.size && v.size.trim().toLowerCase() === this.selectedSize.trim().toLowerCase()
+      // 1. Try to find a variant matching both size and current color
+      let matching = this.productVariants.find(
+        (v) =>
+          v.size && v.size.trim().toLowerCase() === this.selectedSize.trim().toLowerCase() &&
+          (!this.selectedColor || (v.color && v.color.trim().toLowerCase() === this.selectedColor.trim().toLowerCase()))
       );
-      if (matchingVariant) {
-        this.selectVariant(matchingVariant);
+      
+      // 2. If not found, find any variant matching this size
+      if (!matching) {
+        matching = this.productVariants.find(
+          (v) => v.size && v.size.trim().toLowerCase() === this.selectedSize.trim().toLowerCase()
+        );
+      }
+      
+      if (matching) {
+        this.selectedVariant = matching;
+        this.selectedSize = matching.size || '';
+        this.selectedColor = matching.color || '';
+      } else {
+        this.selectedVariant = null;
+      }
+    } else {
+      this.selectedVariant = null;
+    }
+    this.cdr.detectChanges();
+  }
+
+  onColorChange(event: any) {
+    this.selectedColor = event.target.value;
+    
+    if (this.selectedColor) {
+      // 1. Try to find a variant matching both current size and new color
+      let matching = this.productVariants.find(
+        (v) =>
+          (!this.selectedSize || (v.size && v.size.trim().toLowerCase() === this.selectedSize.trim().toLowerCase())) &&
+          v.color && v.color.trim().toLowerCase() === this.selectedColor.trim().toLowerCase()
+      );
+      
+      // 2. If not found, find any variant matching this color
+      if (!matching) {
+        matching = this.productVariants.find(
+          (v) => v.color && v.color.trim().toLowerCase() === this.selectedColor.trim().toLowerCase()
+        );
+      }
+      
+      if (matching) {
+        this.selectedVariant = matching;
+        this.selectedSize = matching.size || '';
+        this.selectedColor = matching.color || '';
       } else {
         this.selectedVariant = null;
       }

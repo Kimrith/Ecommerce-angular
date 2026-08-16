@@ -1,11 +1,15 @@
 @if (hasCartData && cartItems.length > 0) {
-<div class="max-w-2xl mx-auto p-6 bg-white shadow-md rounded-lg animate-fade-in">
-    <div class="flex justify-between items-center mb-4">
-        <h2 class="text-2xl font-bold">Review Your Order</h2>
+<div class="max-w-4xl mx-auto p-8 bg-white shadow-sm rounded-2xl border border-gray-100 animate-fade-in">
+    <!-- Header Section -->
+    <div class="flex justify-between items-center mb-6 pb-4 border-b border-gray-100">
+        <div>
+            <h2 class="text-2xl font-bold text-gray-900">Review Your Order</h2>
+            <p class="text-sm text-gray-500 mt-0.5">Verify your items before proceeding to secure payment</p>
+        </div>
 
         <!-- Clear Cart Button with Bin Icon -->
         <button (click)="clearCart()"
-            class="flex items-center gap-2 px-3 py-1.5 bg-red-100 text-red-600 hover:bg-red-200 rounded-md text-sm font-medium transition">
+            class="flex items-center gap-2 px-3.5 py-2 bg-red-50 text-red-600 hover:bg-red-100 rounded-xl text-sm font-semibold transition">
             <svg xmlns="http://www.w3.org/2000/svg" class="h-4 w-4" fill="none" viewBox="0 0 24 24"
                 stroke="currentColor">
                 <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2"
@@ -15,27 +19,146 @@
         </button>
     </div>
 
-    <div class="divide-y divide-gray-200">
+    <!-- Cart Items List -->
+    <div class="divide-y divide-gray-100">
         @for (item of cartItems; track item.productId + (item.variantId || '')) {
-        <div class="flex gap-4 py-4">
-            <img [src]="imageUrl + item.imageUrl" [alt]="item.name" class="w-20 h-20 object-cover rounded-md border" />
-            <div class="flex-1">
-                <h4 class="font-semibold text-lg">{{ item.name }}</h4>
-                @if (item.variantTitle) {
-                <p class="text-sm text-gray-500"><strong>Variant:</strong> {{ item.variantTitle }}</p>
-                }
-                <p class="text-sm text-gray-600">Price: ${{ item.price }}</p>
-                <p class="text-sm text-gray-600">Quantity: {{ item.quantity }}</p>
-                <p class="font-bold text-gray-900 mt-1">Total: ${{ item.price * item.quantity }}</p>
+        <div class="flex flex-col sm:flex-row sm:items-center justify-between gap-4 py-4 first:pt-0 last:pb-0">
+            <!-- Left: Product Details -->
+            <div class="flex items-center gap-4">
+                <img [src]="imageUrl + item.imageUrl" [alt]="item.name"
+                    class="w-16 h-16 object-cover rounded-xl border border-gray-200 shadow-sm" />
+                <div>
+                    <h4 class="font-bold text-gray-800 text-base">{{ item.name }}</h4>
+                    @if (item.variantTitle) {
+                    <p class="text-xs text-gray-500 mt-0.5"><strong>Variant:</strong> {{ item.variantTitle }}</p>
+                    }
+                    <div class="flex items-center gap-3 text-sm text-gray-500 mt-1">
+                        <span>Price: <span class="font-medium text-gray-700">${{ item.price }}</span></span>
+                    </div>
+                </div>
+            </div>
+            
+            <!-- Right: Actions & Total Price -->
+            <div class="flex items-center justify-between sm:justify-end gap-6 border-t border-gray-50 pt-3 sm:border-0 sm:pt-0">
+                <!-- Interactive Quantity Controls -->
+                <div class="flex items-center gap-1.5 border border-gray-200 rounded-xl p-1 bg-gray-50/50">
+                    <button (click)="decreaseQuantity(item)" 
+                            class="w-7 h-7 flex items-center justify-center rounded-lg hover:bg-white text-gray-600 hover:text-gray-900 active:scale-95 transition shadow-sm border border-transparent hover:border-gray-100"
+                            title="Decrease quantity">
+                        <span class="material-symbols-outlined text-sm font-bold">remove</span>
+                    </button>
+                    <span class="text-sm font-bold text-gray-800 min-w-6 text-center select-none">{{ item.quantity }}</span>
+                    <button (click)="increaseQuantity(item)" 
+                            class="w-7 h-7 flex items-center justify-center rounded-lg hover:bg-white text-gray-600 hover:text-gray-900 active:scale-95 transition shadow-sm border border-transparent hover:border-gray-100"
+                            title="Increase quantity">
+                        <span class="material-symbols-outlined text-sm font-bold">add</span>
+                    </button>
+                </div>
+
+                <!-- Total Column -->
+                <div class="text-right min-w-[70px]">
+                    <span class="text-[10px] text-gray-400 block font-bold uppercase tracking-wider">Total</span>
+                    <span class="font-extrabold text-gray-900 text-base">${{ item.price * item.quantity }}</span>
+                </div>
+
+                <!-- Remove Button -->
+                <button (click)="removeFromCart(item)" 
+                        class="p-2 text-red-500 hover:text-red-700 hover:bg-red-50 rounded-xl transition active:scale-95 flex items-center justify-center" 
+                        title="Remove item">
+                    <span class="material-symbols-outlined text-lg">delete</span>
+                </button>
             </div>
         </div>
         }
     </div>
 
-    <div class="mt-6 border-t pt-4 flex justify-between items-center">
-        <h3 class="text-xl font-bold">Subtotal: ${{ subtotal }}</h3>
+    <!-- Coupon Section -->
+    <div class="mt-8 pt-6 border-t border-gray-100">
+        <h4 class="text-sm font-semibold text-gray-800 mb-3 flex items-center gap-1.5">
+            <svg xmlns="http://www.w3.org/2000/svg" class="h-4.5 w-4.5 text-blue-600" fill="none" viewBox="0 0 24 24"
+                stroke="currentColor">
+                <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2"
+                    d="M7 7h.01M6 20h12a2 2 0 002-2V6a2 2 0 00-2-2H6a2 2 0 00-2 2v12a2 2 0 002 2z" />
+            </svg>
+            Apply Promo Coupon
+        </h4>
+
+        <div class="flex flex-col sm:flex-row gap-3">
+            <div class="relative flex-grow">
+                <input type="text" [(ngModel)]="couponCode" [disabled]="appliedCoupon !== null"
+                    placeholder="Enter code (e.g., SAVE10)"
+                    class="w-full border border-gray-200 rounded-xl px-4 py-2.5 text-sm outline-none focus:border-blue-500 focus:ring-1 focus:ring-blue-500 disabled:bg-gray-50 disabled:text-gray-400 transition" />
+            </div>
+
+            <button *ngIf="!appliedCoupon" (click)="applyCoupon()" [disabled]="isApplyingCoupon || !couponCode.trim()"
+                class="px-6 py-2.5 bg-blue-600 text-white font-medium rounded-xl hover:bg-blue-700 disabled:bg-blue-300 transition text-sm flex items-center justify-center gap-2">
+                <span *ngIf="isApplyingCoupon"
+                    class="animate-spin rounded-full h-4 w-4 border-2 border-white border-t-transparent"></span>
+                {{ isApplyingCoupon ? 'Applying...' : 'Apply' }}
+            </button>
+
+            <button *ngIf="appliedCoupon" (click)="removeCoupon()"
+                class="px-6 py-2.5 bg-red-50 text-red-600 font-semibold rounded-xl hover:bg-red-100 transition text-sm">
+                Remove
+            </button>
+        </div>
+
+        <!-- Error Message -->
+        <p *ngIf="couponError" class="text-xs text-red-600 mt-2 flex items-center gap-1">
+            <svg xmlns="http://www.w3.org/2000/svg" class="h-3.5 w-3.5" viewBox="0 0 20 20" fill="currentColor">
+                <path fill-rule="evenodd"
+                    d="M18 10a8 8 0 11-16 0 8 8 0 0116 0zm-7 4a1 1 0 11-2 0 1 1 0 012 0zm-1-9a1 1 0 00-1 1v4a1 1 0 102 0V6a1 1 0 00-1-1z"
+                    clip-rule="evenodd" />
+            </svg>
+            {{ couponError }}
+        </p>
+
+        <!-- Applied Coupon Details -->
+        <div *ngIf="appliedCoupon"
+            class="mt-3 flex items-center gap-2 bg-green-50 text-green-700 border border-green-100 rounded-xl px-4 py-2.5 text-sm">
+            <svg xmlns="http://www.w3.org/2000/svg" class="h-4.5 w-4.5 text-green-600 shrink-0" fill="none"
+                viewBox="0 0 24 24" stroke="currentColor">
+                <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2"
+                    d="M9 12l2 2 4-4m6 2a9 9 0 11-18 0 9 9 0 0118 0z" />
+            </svg>
+            <div class="flex-grow">
+                <span class="font-bold uppercase text-green-800">{{ appliedCoupon.code }}</span> applied!
+                <span class="text-xs text-green-600 block mt-0.5">
+                    {{ appliedCoupon.discountType === 'Percentage' ? (appliedCoupon.discountValue + '% off') : ('$' +
+                    appliedCoupon.discountValue + ' off') }}
+                    {{ appliedCoupon.description ? ' - ' + appliedCoupon.description : '' }}
+                </span>
+            </div>
+        </div>
+    </div>
+
+    <!-- Footer Subtotal & Action -->
+    <div
+        class="mt-8 pt-6 border-t border-gray-100 flex flex-col md:flex-row justify-between items-start md:items-center bg-gray-50/50 -mx-8 -mb-8 p-8 rounded-b-2xl gap-4">
+        <div class="w-full md:w-auto">
+            <div class="flex flex-col gap-1">
+                <!-- If discount is applied, show subtotal & discount line -->
+                <div *ngIf="appliedCoupon"
+                    class="flex justify-between md:justify-start gap-8 items-center text-sm text-gray-500">
+                    <span class="w-20">Subtotal:</span>
+                    <span class="font-semibold">${{ subtotal }}</span>
+                </div>
+                <div *ngIf="appliedCoupon"
+                    class="flex justify-between md:justify-start gap-8 items-center text-sm text-green-600">
+                    <span class="w-20">Discount:</span>
+                    <span class="font-semibold">-${{ discountAmount }}</span>
+                </div>
+                <!-- Final Total -->
+                <div class="flex justify-between md:justify-start gap-8 items-center mt-1">
+                    <span class="text-xs text-gray-400 uppercase tracking-wider font-bold block w-20">Total
+                        Amount</span>
+                    <h3 class="text-2xl font-extrabold text-gray-900">${{ appliedCoupon ? (subtotal - discountAmount) :
+                        subtotal }}</h3>
+                </div>
+            </div>
+        </div>
         <button (click)="reqOrder()" [disabled]="isPlacingOrder"
-            class="px-6 py-2 bg-blue-600 text-white font-medium rounded-lg hover:bg-blue-700 disabled:bg-blue-400 transition flex items-center gap-2">
+            class="w-full md:w-auto px-8 py-3 bg-blue-600 text-white font-semibold rounded-xl hover:bg-blue-700 disabled:bg-blue-400 transition shadow-sm hover:shadow flex items-center justify-center gap-2">
             <span *ngIf="isPlacingOrder"
                 class="animate-spin rounded-full h-4 w-4 border-2 border-white border-t-transparent"></span>
             {{ isPlacingOrder ? 'Processing...' : 'Proceed to Payment' }}
@@ -43,8 +166,8 @@
     </div>
 </div>
 } @else {
-<div class="text-center py-12">
-    <p class="text-gray-500 text-lg">Buy products to get payment</p>
+<div class="text-center py-16 bg-white rounded-2xl shadow-sm border border-gray-100 max-w-4xl mx-auto">
+    <p class="text-gray-400 text-base font-medium">Your cart is empty. Buy products to make a payment.</p>
 </div>
 }
 
@@ -70,7 +193,7 @@
         <div class="p-8 flex flex-col items-center">
             <!-- Order Info Summary -->
             <div class="text-center mb-6 w-full">
-                <div class="text-sm text-gray-500 font-medium">Order Number</div>
+                <div class="text-xs text-gray-400 uppercase tracking-wider font-bold">Order Number</div>
                 <div class="font-mono font-bold text-gray-800 text-base mt-0.5">{{ orderNumber }}</div>
 
                 <div class="mt-4 bg-gray-50 rounded-2xl py-3 px-6 border border-gray-100 inline-block">
@@ -80,10 +203,9 @@
             </div>
 
             <!-- KHQR QR Code Frame -->
-            <div class="relative bg-white border border-gray-200 rounded-3xl p-4 shadow-sm mb-6">
-                <img [src]="qrImageBase64" class="w-64 h-64 object-contain rounded-2xl"
-                    alt="Bakong KHQR Code" />
-
+            <div
+                class="relative bg-white border border-gray-200 rounded-3xl p-4 shadow-sm mb-6 flex flex-col items-center">
+                <img [src]="qrImageBase64" class="w-60 h-60 object-contain rounded-2xl mb-4" alt="Bakong KHQR Code" />
 
                 <!-- Real-time payment verification status indicator -->
                 <div
@@ -98,13 +220,14 @@
             </div>
 
             <!-- Modal Footer -->
-            <div class="bg-gray-50 px-6 py-4 flex justify-between gap-3 border-t border-gray-100">
+            <div class="w-full">
                 <button (click)="closeModal()"
-                    class="w-full bg-gray-200 hover:bg-gray-300 text-gray-700 py-3 rounded-xl font-bold transition text-sm">
+                    class="w-full bg-gray-100 hover:bg-gray-200 text-gray-700 py-3 rounded-xl font-bold transition text-sm">
                     Cancel & Close
                 </button>
             </div>
         </div>
     </div>
+</div>
 
-    <app-toast *ngIf="showToast" [message]="toastMessage" (dismissed)="showToast = false"></app-toast>
+<app-toast *ngIf="showToast" [message]="toastMessage" (dismissed)="showToast = false"></app-toast>

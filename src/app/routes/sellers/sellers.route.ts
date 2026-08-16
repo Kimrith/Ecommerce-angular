@@ -7,9 +7,9 @@ import { Setting } from "../../../pages/sellers/setting/setting";
 import { Payments } from "../../../pages/sellers/payments/payments";
 import { SellersLayout } from "../../../layout/sellers-layout/sellers-layout/sellers-layout";
 import { Feedback } from "../../../pages/sellers/feedback/feedback";
-import { Error } from "../../../shared/components/error/error";
 import { AuthGuard } from "../../../Service/Guard/auth-guard";
 import { Login } from "../../../shared/auth/login/login";
+import { Suspended } from "../../../pages/sellers/suspended/suspended";
 
 
 export const sellersRoutes: Routes = [
@@ -48,10 +48,10 @@ export const sellersRoutes: Routes = [
             },
         ]
     },
-    // {
-    //     path: '**',
-    //     component: Error
-    // },
+    {
+        path: 'seller-suspended',
+        component: Suspended // Route to show when suspended
+    },
     {
         path: "login",
         component: Login

@@ -3,6 +3,7 @@ import { CommonModule } from '@angular/common';
 import { Router } from '@angular/router';
 import { environment } from '../../../environments/environment.development';
 import { FavoriteService } from '../../../Service/Favorite/favorite';
+import { ReviewService } from '../../../Service/Review/review';
 import { ToastComponent } from '../../../shared/components/toast';
 
 @Component({
@@ -29,12 +30,18 @@ export class ProductCart implements OnInit {
   showToast = false;
   toastMessage = '';
 
+  // Rating states
+  averageRating: number = 0;
+  reviewCount: number = 0;
+
   private router = inject(Router);
   private favoriteService = inject(FavoriteService);
+  private reviewService = inject(ReviewService);
   private cdr = inject(ChangeDetectorRef);
 
   ngOnInit(): void {
     this.checkIfFavorite();
+    this.loadProductRating();
   }
 
   checkIfFavorite() {
@@ -126,5 +133,35 @@ export class ProductCart implements OnInit {
         }
       });
     }
+  }
+
+  loadProductRating() {
+    const pId = this.product.productId ?? this.product.id;
+    if (!pId) return;
+
+    this.reviewService.getProductReview(pId).subscribe({
+      next: (res: any) => {
+        let reviewsList: any[] = [];
+        if (Array.isArray(res)) {
+          reviewsList = res;
+        } else if (res && Array.isArray(res.$values)) {
+          reviewsList = res.$values;
+        } else if (res && Array.isArray(res.data)) {
+          reviewsList = res.data;
+        }
+
+        this.reviewCount = reviewsList.length;
+        if (this.reviewCount > 0) {
+          const sum = reviewsList.reduce((acc, r) => acc + r.rating, 0);
+          this.averageRating = Math.round((sum / this.reviewCount) * 10) / 10;
+        } else {
+          this.averageRating = 0;
+        }
+        this.cdr.detectChanges();
+      },
+      error: (err) => {
+        console.error('Failed to load rating for card:', err);
+      }
+    });
   }
 }

@@ -167,8 +167,15 @@
               <p class="font-bold text-gray-900 text-sm">{{ item.productName }}</p>
               <p class="text-xs text-gray-500 mt-0.5">${{ item.unitPrice }} &times; {{ item.quantity }}</p>
             </div>
-            <div class="text-right">
-              <p class="font-bold text-gray-900 text-sm">${{ item.totalPrice }}</p>
+            <div class="flex items-center gap-4">
+              <div class="text-right">
+                <p class="font-bold text-gray-900 text-sm">${{ item.totalPrice }}</p>
+              </div>
+              <button *ngIf="canReview(selectedOrder)" (click)="openReviewModal(item)"
+                class="px-3 py-1.5 bg-orange-50 hover:bg-orange-100 text-orange-600 rounded-xl text-xs font-bold transition flex items-center gap-1 cursor-pointer">
+                <span class="material-symbols-outlined text-sm">rate_review</span>
+                Review
+              </button>
             </div>
           </div>
         </div>
@@ -194,3 +201,84 @@
     </div>
   </div>
 </div>
+
+<!-- Premium Review Modal Overlay -->
+<div *ngIf="showReviewModal"
+  class="fixed inset-0 z-[60] flex items-center justify-center bg-black/60 backdrop-blur-sm p-4 animate-fade-in">
+  <div
+    class="bg-white rounded-3xl shadow-2xl max-w-md w-full border border-gray-100 overflow-hidden transform transition-all scale-100">
+    <!-- Modal Header -->
+    <div class="bg-gradient-to-r from-orange-600 to-orange-500 p-6 text-white text-center relative">
+      <h3 class="text-xl font-bold tracking-wide">Write a Review</h3>
+      <p class="text-xs text-orange-100 mt-1">Share your feedback about this product</p>
+
+      <button (click)="closeReviewModal()"
+        class="absolute top-4 right-4 text-white/80 hover:text-white transition focus:outline-none cursor-pointer text-lg leading-none">
+        &times;
+      </button>
+    </div>
+
+    <!-- Modal Body -->
+    <form (submit)="submitReview(); $event.preventDefault()" class="p-6 space-y-4">
+      <div>
+        <label class="block text-xs font-bold text-gray-400 uppercase tracking-wider mb-2">Product</label>
+        <p class="font-bold text-gray-800 text-sm bg-gray-50 p-3 rounded-xl border border-gray-100">{{ reviewProductName
+          }}</p>
+      </div>
+
+      <!-- Rating selection widget -->
+      <div>
+        <label class="block text-xs font-bold text-gray-400 uppercase tracking-wider mb-2">Your Rating</label>
+        <div class="flex items-center gap-1">
+          <button type="button" *ngFor="let star of [1, 2, 3, 4, 5]" (click)="setRating(star)"
+            class="text-2xl transition hover:scale-110 active:scale-90 cursor-pointer focus:outline-none"
+            [class.text-amber-400]="star <= reviewRating" [class.text-gray-200]="star > reviewRating">
+            ★
+          </button>
+        </div>
+      </div>
+
+      <!-- Title Input -->
+      <div>
+        <label class="block text-xs font-bold text-gray-400 uppercase tracking-wider mb-1.5">Review Title</label>
+        <input type="text" [(ngModel)]="reviewTitle" name="title" placeholder="Summarize your review (optional)"
+          class="w-full border border-gray-200 rounded-xl px-4 py-2.5 text-sm outline-none focus:border-orange-500 focus:ring-1 focus:ring-orange-500 transition" />
+      </div>
+
+      <!-- Comment Textarea -->
+      <div>
+        <label class="block text-xs font-bold text-gray-400 uppercase tracking-wider mb-1.5">Comments</label>
+        <textarea [(ngModel)]="reviewComment" name="comment" rows="4"
+          placeholder="What did you like or dislike? (optional)"
+          class="w-full border border-gray-200 rounded-xl px-4 py-2.5 text-sm outline-none focus:border-orange-500 focus:ring-1 focus:ring-orange-500 transition resize-none"></textarea>
+      </div>
+
+      <!-- Error message -->
+      <p *ngIf="reviewError"
+        class="text-xs text-red-600 flex items-center gap-1.5 bg-red-50 border border-red-100 rounded-xl p-3">
+        <svg xmlns="http://www.w3.org/2000/svg" class="h-4 w-4 text-red-500 shrink-0" fill="none" viewBox="0 0 24 24"
+          stroke="currentColor">
+          <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2"
+            d="M12 9v2m0 4h.01m-6.938 4h13.856c1.54 0 2.502-1.667 1.732-3L13.732 4c-.77-1.333-2.694-1.333-3.464 0L3.34 16c-.77 1.333.192 3 1.732 3z" />
+        </svg>
+        <span>{{ reviewError }}</span>
+      </p>
+
+      <!-- Modal Actions -->
+      <div class="flex gap-3 pt-2">
+        <button type="button" (click)="closeReviewModal()"
+          class="flex-1 bg-gray-100 hover:bg-gray-200 text-gray-700 py-3 rounded-xl font-bold transition text-sm cursor-pointer">
+          Cancel
+        </button>
+        <button type="submit" [disabled]="isSubmittingReview"
+          class="flex-1 bg-orange-600 hover:bg-orange-700 text-white py-3 rounded-xl font-bold transition text-sm cursor-pointer disabled:bg-orange-400 flex items-center justify-center gap-2">
+          <span *ngIf="isSubmittingReview"
+            class="animate-spin rounded-full h-4 w-4 border-2 border-white border-t-transparent"></span>
+          {{ isSubmittingReview ? 'Submitting...' : 'Submit' }}
+        </button>
+      </div>
+    </form>
+  </div>
+</div>
+
+<app-toast *ngIf="showToast" [message]="toastMessage" (dismissed)="showToast = false"></app-toast>

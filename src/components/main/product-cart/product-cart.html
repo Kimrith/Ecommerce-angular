@@ -33,8 +33,17 @@
       {{ product.name }}
     </h3>
 
+    <!-- Product Rating Stars -->
+    <div class="flex items-center gap-1 mt-1">
+      <div class="flex items-center text-yellow-400">
+        <span class="material-symbols-outlined text-sm select-none" style="font-variation-settings: 'FILL' 1;">star</span>
+      </div>
+      <span class="text-xs font-bold text-gray-700">{{ reviewCount > 0 ? averageRating : '0.0' }}</span>
+      <span class="text-xs text-gray-400 font-medium">({{ reviewCount }})</span>
+    </div>
+
     <!-- Optional Sales & Revenue Info -->
-    <p class="text-xs text-gray-400 mt-1">
+    <p class="text-xs text-gray-400 mt-1.5">
       Sales: {{ product.salesCount }} | Revenue: ${{ product.revenue }}
     </p>
 

@@ -12,6 +12,7 @@ import { Login } from "../../../shared/auth/login/login";
 import { AuthGuard } from "../../../Service/Guard/auth-guard";
 import { Banner } from "../../../pages/admin/banner/banner";
 import { Coupon } from "../../../pages/admin/coupon/coupon";
+import { Review } from "../../../pages/admin/review/review";
 
 export const adminRoutes: Routes = [
     {
@@ -58,6 +59,10 @@ export const adminRoutes: Routes = [
             {
                 path: 'coupons',
                 component: Coupon
+            },
+            {
+                path: 'review',
+                component: Review
             }
         ]
     },

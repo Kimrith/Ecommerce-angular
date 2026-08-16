@@ -1,5 +1,5 @@
 import { Injectable } from '@angular/core';
-import { HttpClient, HttpHeaders, HttpParams } from '@angular/common/http';
+import { HttpClient, HttpParams } from '@angular/common/http';
 import { Observable, map } from 'rxjs';
 import { environment } from '../../environments/environment.development';
 
@@ -11,43 +11,29 @@ export class OrderService {
 
   constructor(private http: HttpClient) { }
 
-  private getAuthHeaders(): HttpHeaders {
-    let token = localStorage.getItem('authToken') || localStorage.getItem('token') || '';
-    token = token.trim();
-    return new HttpHeaders({
-      'Authorization': `Bearer ${token}`
-    });
-  }
-
   getOrders(): Observable<any> {
-    const headers = this.getAuthHeaders();
-    return this.http.get<any>(this.apiUrl, { headers });
+    return this.http.get<any>(this.apiUrl);
   }
 
   createOrder(orderPayload: any): Observable<any> {
-    const headers = this.getAuthHeaders();
-    return this.http.post<any>(this.apiUrl, orderPayload, { headers });
+    return this.http.post<any>(this.apiUrl, orderPayload);
   }
 
   getOrderStatistics(sellerId?: number): Observable<any> {
-    const headers = this.getAuthHeaders();
     let params = new HttpParams();
     if (sellerId !== undefined && sellerId !== null) {
       params = params.set('sellerId', sellerId.toString());
     }
-    return this.http.get<any>(`${this.apiUrl}/statistics`, { headers, params });
+    return this.http.get<any>(`${this.apiUrl}/statistics`, { params });
   }
 
   updateOrderStatus(orderId: number | string, numericStatus: number): Observable<any> {
-    const headers = this.getAuthHeaders();
-    return this.http.patch(`${this.apiUrl}/${orderId}/status`, { status: numericStatus }, { headers });
+    return this.http.patch(`${this.apiUrl}/${orderId}/status`, { status: numericStatus });
   }
 
-  // 👇 Added OrderItems API method with response mapping
+  // Get OrderItems API method with response mapping
   getOrderItemsByOrderId(orderId: number | string): Observable<any[]> {
-    const headers = this.getAuthHeaders();
-    // Note: OrderItems uses a different route base, so it references environment.apiUrl directly
-    return this.http.get<any>(`${environment.apiUrl}/api/OrderItems/order/${orderId}`, { headers }).pipe(
+    return this.http.get<any>(`${environment.apiUrl}/api/OrderItems/order/${orderId}`).pipe(
       map((res: any) => {
         if (Array.isArray(res)) return res;
         if (res && Array.isArray(res.$values)) return res.$values;
@@ -59,7 +45,6 @@ export class OrderService {
 
   // GetSellerOrder with Pagination and filtering support
   getSellerOrder(sellerId: number, params?: { pageNumber: number; pageSize: number; status?: string; searchTerm?: string }): Observable<any> {
-    const headers = this.getAuthHeaders();
     let httpParams = new HttpParams();
 
     if (params) {
@@ -73,16 +58,14 @@ export class OrderService {
       }
     }
 
-    return this.http.get<any>(`${this.apiUrl}/seller/${sellerId}`, { headers, params: httpParams });
+    return this.http.get<any>(`${this.apiUrl}/seller/${sellerId}`, { params: httpParams });
   }
 
   verifyPayment(orderId: number): Observable<any> {
-    const headers = this.getAuthHeaders();
-    return this.http.get<any>(`${environment.apiUrl}/api/Payment/verify-payment/${orderId}`, { headers });
+    return this.http.get<any>(`${environment.apiUrl}/api/Payment/verify-payment/${orderId}`);
   }
 
   generateQrCode(orderId: number | string): Observable<any> {
-    const headers = this.getAuthHeaders();
-    return this.http.get<any>(`${environment.apiUrl}/api/GenerateQROrders/${orderId}/generate-qr`, { headers });
+    return this.http.get<any>(`${environment.apiUrl}/api/GenerateQROrders/${orderId}/generate-qr`);
   }
 }

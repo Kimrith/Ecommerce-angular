@@ -1,5 +1,5 @@
 import { Injectable } from '@angular/core';
-import { HttpClient, HttpHeaders } from '@angular/common/http';
+import { HttpClient } from '@angular/common/http';
 import { Observable, map } from 'rxjs';
 import { environment } from '../../environments/environment.development';
 import { Coupon } from '../../type/coupon';
@@ -10,23 +10,10 @@ import { Coupon } from '../../type/coupon';
 export class CouponService {
   private apiUrl = `${environment.apiUrl}/api/Coupon`;
 
-  constructor(private http: HttpClient) {}
-
-  private getAuthHeaders(): HttpHeaders {
-    const token = localStorage.getItem('authToken') || localStorage.getItem('token');
-
-    if (!token) {
-      console.warn('Auth token not found in localStorage!');
-    }
-
-    return new HttpHeaders({
-      'Authorization': `Bearer ${token}`
-    });
-  }
+  constructor(private http: HttpClient) { }
 
   getCoupons(): Observable<Coupon[]> {
-    const headers = this.getAuthHeaders();
-    return this.http.get<any>(this.apiUrl, { headers }).pipe(
+    return this.http.get<any>(this.apiUrl).pipe(
       map(response => {
         if (Array.isArray(response)) {
           return response;
@@ -41,22 +28,22 @@ export class CouponService {
   }
 
   getCouponById(id: number): Observable<Coupon> {
-    const headers = this.getAuthHeaders();
-    return this.http.get<Coupon>(`${this.apiUrl}/${id}`, { headers });
+    return this.http.get<Coupon>(`${this.apiUrl}/${id}`);
+  }
+
+  getCouponByCode(code: string): Observable<Coupon> {
+    return this.http.get<Coupon>(`${this.apiUrl}/code/${code}`);
   }
 
   postCoupon(couponData: any): Observable<any> {
-    const headers = this.getAuthHeaders();
-    return this.http.post<any>(this.apiUrl, couponData, { headers });
+    return this.http.post<any>(this.apiUrl, couponData);
   }
 
   updateCoupon(id: number, couponData: any): Observable<any> {
-    const headers = this.getAuthHeaders();
-    return this.http.put<any>(`${this.apiUrl}/${id}`, couponData, { headers });
+    return this.http.put<any>(`${this.apiUrl}/${id}`, couponData);
   }
 
   deleteCoupon(id: number): Observable<any> {
-    const headers = this.getAuthHeaders();
-    return this.http.delete<any>(`${this.apiUrl}/${id}`, { headers });
+    return this.http.delete<any>(`${this.apiUrl}/${id}`);
   }
 }
