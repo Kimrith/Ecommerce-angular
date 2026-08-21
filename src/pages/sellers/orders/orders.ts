@@ -14,7 +14,7 @@ import { OrderService } from '../../../Service/Order/order';
 export class Orders implements OnInit {
   selectedStatus: string = '';
   pageNumber: number = 1;
-  pageSize: number = 10;
+  pageSize: number = 6;
   totalItems: number = 0;
   totalPages: number = 1;
 

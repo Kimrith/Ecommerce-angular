@@ -5,11 +5,12 @@ import { ProductService } from '../../../Service/products/product-service';
 import { CategoriesService, Category } from '../../../Service/categories/categories-service';
 import { ToastComponent } from '../../../shared/components/toast';
 import { environment } from '../../../environments/environment.development';
+import { SellerAddProductVariant } from '../add-product-variant/add-product-variant';
 
 @Component({
   selector: 'app-product-form-modal',
   standalone: true,
-  imports: [CommonModule, FormsModule, ToastComponent],
+  imports: [CommonModule, FormsModule, ToastComponent, SellerAddProductVariant],
   templateUrl: './product-form-modal.html',
   styleUrl: './product-form-modal.css',
 })
@@ -19,6 +20,7 @@ export class ProductFormModal implements OnInit {
   @Output() productAdded = new EventEmitter<void>();
 
   @Input() editProduct: any = null;
+  defaultProductImage = 'https://encrypted-tbn0.gstatic.com/images?q=tbn:ANd9GcR-YKwoMPIgLj0eGd4fimf49IclMWAIbMJQRe_r21HTcJ0TCmDfQk9CJSU&s=10';
 
   product = {
     name: '',
@@ -41,6 +43,10 @@ export class ProductFormModal implements OnInit {
 
   imgBaseUrl = environment.apiUrl;
 
+  variants: any[] = [];
+  showAddVariantModal = false;
+  selectedVariantToEdit: any = null;
+
   constructor(
     private productService: ProductService,
     private categoriesService: CategoriesService,
@@ -60,6 +66,7 @@ export class ProductFormModal implements OnInit {
       this.product.size = this.editProduct.size || '';
       this.product.color = this.editProduct.color || '';
       this.imagePreview = this.editProduct.imageUrl ? this.imgBaseUrl + this.editProduct.imageUrl : null;
+      this.fetchVariants(this.editProduct.id);
     }
   }
 
@@ -156,10 +163,10 @@ export class ProductFormModal implements OnInit {
       next: (response) => {
         console.log(this.editProduct ? 'Product updated successfully' : 'Product created successfully', response);
         this.triggerToast(this.editProduct ? 'Product updated successfully!' : 'Product created successfully!');
-        
+
         // Emit refresh event to parent table immediately
         this.productAdded.emit();
-        
+
         // Delay modal closing so the success toast is fully visible
         setTimeout(() => {
           this.closeModal();
@@ -174,6 +181,66 @@ export class ProductFormModal implements OnInit {
 
   closeModal() {
     this.close.emit();
+  }
+
+  fetchVariants(productId: number) {
+    this.productService.getProductVariants(productId).subscribe({
+      next: (res: any) => {
+        if (Array.isArray(res)) {
+          this.variants = res;
+        } else if (res && Array.isArray(res.$values)) {
+          this.variants = res.$values;
+        } else if (res && Array.isArray(res.data)) {
+          this.variants = res.data;
+        } else if (res && Array.isArray(res.items)) {
+          this.variants = res.items;
+        } else {
+          this.variants = [];
+        }
+        this.cdr.detectChanges();
+      },
+      error: (err) => {
+        console.error('Error fetching variants:', err);
+        this.variants = [];
+        this.cdr.detectChanges();
+      }
+    });
+  }
+
+  openAddVariantModal() {
+    this.selectedVariantToEdit = null;
+    this.showAddVariantModal = true;
+  }
+
+  openEditVariantModal(variant: any) {
+    this.selectedVariantToEdit = variant;
+    this.showAddVariantModal = true;
+  }
+
+  closeAddVariantModal() {
+    this.showAddVariantModal = false;
+    this.selectedVariantToEdit = null;
+    if (this.editProduct) {
+      this.fetchVariants(this.editProduct.id);
+    }
+  }
+
+  deleteVariant(variantId: number, event: Event) {
+    event.stopPropagation();
+    if (confirm('Are you sure you want to delete this variant?')) {
+      this.productService.deleteProductVariant(variantId).subscribe({
+        next: () => {
+          this.triggerToast('Variant deleted successfully.');
+          if (this.editProduct) {
+            this.fetchVariants(this.editProduct.id);
+          }
+        },
+        error: (err) => {
+          console.error('Error deleting variant:', err);
+          this.triggerToast('Failed to delete variant.');
+        }
+      });
+    }
   }
 
   @HostListener('document:keydown.escape')

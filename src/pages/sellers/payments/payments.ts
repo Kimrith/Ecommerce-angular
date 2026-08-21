@@ -4,11 +4,12 @@ import { FormsModule } from '@angular/forms';
 import { PaymentService } from '../../../Service/Payment/payment';
 import { OrderService } from '../../../Service/Order/order';
 import { ToastComponent } from '../../../shared/components/toast';
+import { Pagination } from '../../../shared/components/sellers-layout/pagination/pagination';
 
 @Component({
   selector: 'app-payments',
   standalone: true,
-  imports: [CommonModule, FormsModule, ToastComponent],
+  imports: [CommonModule, FormsModule, ToastComponent, Pagination],
   templateUrl: './payments.html',
   styleUrl: './payments.css',
 })
@@ -24,6 +25,12 @@ export class Payments implements OnInit {
 
   // Transaction list (from payments)
   transactions: any[] = [];
+
+  // Pagination Properties
+  pageNumber: number = 1;
+  pageSize: number = 7;
+  totalItems: number = 0;
+  totalPages: number = 1;
 
   // Bakong Config Form
   config = {
@@ -74,41 +81,14 @@ export class Payments implements OnInit {
       next: (res: any) => {
         this.stats.totalRevenue = res.totalRevenue || 0;
         this.stats.pendingPayout = (res.pendingCount || 0) * 15;
-        this.stats.availableBalance = Math.max(0, this.stats.totalRevenue - this.stats.pendingPayout);
+        this.stats.availableBalance = res.availableBalance || 0;
         this.cdr.detectChanges();
       },
       error: (err) => console.error('Failed to load payment statistics', err)
     });
 
-    // 2. Load Transactions from Seller Payments Service matching your exact PascalCase payload
-    this.paymentService.sellerPayments(this.sellerId, 1, 10).subscribe({
-      next: (res: any) => {
-        const paymentList = res.data || res.$values || [];
-
-        let calculatedRevenue = 0;
-
-        this.transactions = paymentList.map((p: any) => {
-          // Since StatusString is "1" (the number as string), use PaymentStatus enum lookup
-          let resolvedStatus = this.paymentStatusMap[p.Status] || 'Unknown';
-
-          // Accumulate revenue if Completed (Status === 1)
-          if (p.Status === 1) {
-            calculatedRevenue += p.Amount || 0;
-          }
-
-          return {
-            transactionId: p.OrderNumber || `#PAY-${p.Id}`,
-            date: p.CreatedAt,
-            amount: p.Amount,
-            status: resolvedStatus
-          };
-        });
-
-        this.stats.totalRevenue = calculatedRevenue;
-        this.cdr.detectChanges();
-      },
-      error: (err) => console.error('Failed to load transaction history', err)
-    });
+    // 2. Load Transactions
+    this.loadTransactions();
 
     // 3. Load Bakong KHQR configuration
     this.paymentService.getSellerBakongConfig().subscribe({
@@ -131,6 +111,34 @@ export class Payments implements OnInit {
         console.log('No existing KHQR config found', err);
       }
     });
+  }
+
+  loadTransactions(): void {
+    this.paymentService.sellerPayments(this.sellerId, this.pageNumber, this.pageSize).subscribe({
+      next: (res: any) => {
+        const paymentList = res.data || res.$values || [];
+
+        this.transactions = paymentList.map((p: any) => {
+          let resolvedStatus = this.paymentStatusMap[p.Status] || 'Unknown';
+          return {
+            transactionId: p.OrderNumber || `#PAY-${p.Id}`,
+            date: p.CreatedAt,
+            amount: p.Amount,
+            status: resolvedStatus
+          };
+        });
+
+        this.totalItems = res.totalItems || res.TotalItems || 0;
+        this.totalPages = res.totalPages || res.TotalPages || 1;
+        this.cdr.detectChanges();
+      },
+      error: (err) => console.error('Failed to load transaction history', err)
+    });
+  }
+
+  onPageChanged(page: number): void {
+    this.pageNumber = page;
+    this.loadTransactions();
   }
 
   saveConfig(): void {

@@ -5,7 +5,6 @@
     <h1 class="text-2xl font-bold text-orange-500">
       ShopSphere
     </h1>
-
     <p class="mt-1 text-sm text-slate-500">
       Admin Dashboard
     </p>
@@ -13,92 +12,118 @@
 
   <!-- Navigation -->
   <nav class="flex-1 overflow-y-auto px-4 py-6">
-
     <p class="mb-3 px-3 text-xs font-semibold uppercase tracking-wider text-slate-400">
       Main
     </p>
 
     <div class="space-y-2">
-
-      <a routerLink="/admin" routerLinkActive="bg-orange-100 text-orange-600"
+      <a routerLink="/admin" routerLinkActive="bg-orange-100 text-orange-600 font-semibold"
         [routerLinkActiveOptions]="{ exact: true }"
         class="flex items-center gap-3 rounded-xl px-4 py-3 text-slate-700 transition hover:bg-slate-100">
         <span class="material-symbols-outlined">dashboard</span>
         <span>Dashboard</span>
       </a>
 
-      <a routerLink="/admin/customer" routerLinkActive="bg-orange-100 text-orange-600"
+      <a routerLink="/admin/customer" routerLinkActive="bg-orange-100 text-orange-600 font-semibold"
         class="flex items-center gap-3 rounded-xl px-4 py-3 text-slate-700 transition hover:bg-slate-100">
         <span class="material-symbols-outlined">group</span>
         <span>Customer</span>
       </a>
 
-      <a routerLink="/admin/sellers" routerLinkActive="bg-orange-100 text-orange-600"
+      <a routerLink="/admin/sellers" routerLinkActive="bg-orange-100 text-orange-600 font-semibold"
         class="flex items-center gap-3 rounded-xl px-4 py-3 text-slate-700 transition hover:bg-slate-100">
         <span class="material-symbols-outlined">storefront</span>
         <span>Sellers</span>
       </a>
 
-      <a routerLink="/admin/products" routerLinkActive="bg-orange-100 text-orange-600"
+      <a routerLink="/admin/products" routerLinkActive="bg-orange-100 text-orange-600 font-semibold"
         class="flex items-center gap-3 rounded-xl px-4 py-3 text-slate-700 transition hover:bg-slate-100">
         <span class="material-symbols-outlined">inventory_2</span>
         <span>Products</span>
       </a>
 
-      <a routerLink="/admin/categories" routerLinkActive="bg-orange-100 text-orange-600"
+      <a routerLink="/admin/categories" routerLinkActive="bg-orange-100 text-orange-600 font-semibold"
         class="flex items-center gap-3 rounded-xl px-4 py-3 text-slate-700 transition hover:bg-slate-100">
         <span class="material-symbols-outlined">category</span>
         <span>Categories</span>
       </a>
 
-      <a routerLink="/admin/orders" routerLinkActive="bg-orange-100 text-orange-600"
+      <a routerLink="/admin/orders" routerLinkActive="bg-orange-100 text-orange-600 font-semibold"
         class="flex items-center gap-3 rounded-xl px-4 py-3 text-slate-700 transition hover:bg-slate-100">
         <span class="material-symbols-outlined">shopping_cart</span>
         <span>Orders</span>
       </a>
 
-      <a routerLink="/admin/payments" routerLinkActive="bg-orange-100 text-orange-600"
+      <a routerLink="/admin/payments" routerLinkActive="bg-orange-100 text-orange-600 font-semibold"
         class="flex items-center gap-3 rounded-xl px-4 py-3 text-slate-700 transition hover:bg-slate-100">
         <span class="material-symbols-outlined">payments</span>
         <span>Payments</span>
       </a>
 
-      <a routerLink="/admin/reports" routerLinkActive="bg-orange-100 text-orange-600"
+      <a routerLink="/admin/reports" routerLinkActive="bg-orange-100 text-orange-600 font-semibold"
         class="flex items-center gap-3 rounded-xl px-4 py-3 text-slate-700 transition hover:bg-slate-100">
         <span class="material-symbols-outlined">monitoring</span>
         <span>Reports</span>
       </a>
 
-      <a routerLink="/admin/banners" routerLinkActive="bg-orange-100 text-orange-600"
+      <a routerLink="/admin/banners" routerLinkActive="bg-orange-100 text-orange-600 font-semibold"
         class="flex items-center gap-3 rounded-xl px-4 py-3 text-slate-700 transition hover:bg-slate-100">
         <span class="material-symbols-outlined">campaign</span>
         <span>Banners</span>
       </a>
 
-      <a routerLink="/admin/coupons" routerLinkActive="bg-orange-100 text-orange-600"
+      <a routerLink="/admin/coupons" routerLinkActive="bg-orange-100 text-orange-600 font-semibold"
         class="flex items-center gap-3 rounded-xl px-4 py-3 text-slate-700 transition hover:bg-slate-100">
         <span class="material-symbols-outlined">redeem</span>
         <span>Coupons</span>
       </a>
-      <a routerLink="/admin/review" routerLinkActive="bg-orange-100 text-orange-600"
+
+      <a routerLink="/admin/review" routerLinkActive="bg-orange-100 text-orange-600 font-semibold"
         class="flex items-center gap-3 rounded-xl px-4 py-3 text-slate-700 transition hover:bg-slate-100">
-        <span class="material-symbols-outlined">redeem</span>
+        <span class="material-symbols-outlined">rate_review</span>
         <span>Review</span>
       </a>
-
     </div>
-
   </nav>
 
   <!-- Footer -->
   <div class="border-t border-slate-200 p-4">
-
-    <button routerLink="/login"
-      class="flex w-full items-center justify-center gap-2 rounded-xl bg-red-50 px-4 py-3 text-red-600 transition hover:bg-red-100">
-      <span>🚪</span>
-      <span>Login</span>
+    <button (click)="openLogoutModal()"
+      class="flex w-full items-center justify-center gap-2 rounded-xl bg-red-50 px-4 py-3 text-red-600 font-medium transition hover:bg-red-100">
+      <span class="material-symbols-outlined text-xl">logout</span>
+      <span>Logout</span>
     </button>
-
   </div>
 
 </aside>
+
+@if (logoutToggle) {
+<!-- Backdrop -->
+<div class="fixed inset-0 z-50 flex items-center justify-center bg-slate-900/50 backdrop-blur-sm p-4">
+  <!-- Modal Card -->
+  <div class="w-full max-w-sm rounded-2xl bg-white p-6 shadow-xl border border-slate-100 transform transition-all">
+    <!-- Icon & Header -->
+    <div class="flex flex-col items-center text-center">
+      <div class="flex h-12 w-12 items-center justify-center rounded-full bg-red-50 text-red-500 mb-4">
+        <span class="material-symbols-outlined text-2xl">logout</span>
+      </div>
+      <h3 class="text-lg font-bold text-slate-800">Log out of ShopSphere?</h3>
+      <p class="mt-2 text-sm text-slate-500">
+        Are you sure you want to log out? You will need to sign in again to access the admin panel.
+      </p>
+    </div>
+
+    <!-- Action Buttons -->
+    <div class="mt-6 flex items-center gap-3">
+      <button type="button" (click)="cancelLogout()"
+        class="flex-1 rounded-xl border border-slate-200 py-2.5 text-sm font-medium text-slate-600 hover:bg-slate-50 transition active:scale-[0.98]">
+        Cancel
+      </button>
+      <button type="button" (click)="logout()"
+        class="flex-1 rounded-xl bg-red-500 py-2.5 text-sm font-medium text-white shadow-sm hover:bg-red-600 transition active:scale-[0.98]">
+        Log Out
+      </button>
+    </div>
+  </div>
+</div>
+}

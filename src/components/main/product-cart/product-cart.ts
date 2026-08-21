@@ -5,6 +5,7 @@ import { environment } from '../../../environments/environment.development';
 import { FavoriteService } from '../../../Service/Favorite/favorite';
 import { ReviewService } from '../../../Service/Review/review';
 import { ToastComponent } from '../../../shared/components/toast';
+import { ProductService } from '../../../Service/products/product-service';
 
 @Component({
   selector: 'app-product-cart',
@@ -34,14 +35,18 @@ export class ProductCart implements OnInit {
   averageRating: number = 0;
   reviewCount: number = 0;
 
+  productVariant: any[] = [];
+
   private router = inject(Router);
   private favoriteService = inject(FavoriteService);
   private reviewService = inject(ReviewService);
   private cdr = inject(ChangeDetectorRef);
+  private productService = inject(ProductService);
 
   ngOnInit(): void {
     this.checkIfFavorite();
     this.loadProductRating();
+    this.loadingProductVariant();
   }
 
   checkIfFavorite() {
@@ -62,7 +67,7 @@ export class ProductCart implements OnInit {
             const favProductId = fav.productId ?? fav.product?.id ?? fav.product?.productId;
             return favProductId === pId;
           });
-          
+
           this.product.isFavorite = isFav;
           this.cdr.detectChanges();
         },
@@ -133,6 +138,20 @@ export class ProductCart implements OnInit {
         }
       });
     }
+  }
+
+  loadingProductVariant() {
+    const pId = this.product.productId ?? this.product.id;
+    if (!pId) return;
+
+    this.productService.getProductVariants(pId).subscribe({
+      next: (res: any) => {
+        this.productVariant = Array.isArray(res) ? res : (res.data || res.$values || []);
+        console.warn("count productVaraint: ", this.productVariant.length)
+        this.cdr.detectChanges();
+      },
+      error: (err) => console.error('Failed to load product variant', err)
+    });
   }
 
   loadProductRating() {

@@ -157,79 +157,81 @@
         </tbody>
       </table>
     </div>
-  </div>
 
-  <!-- Bakong Config Modal -->
-  <div *ngIf="showConfigModal" class="fixed inset-0 z-50 flex items-center justify-center p-4">
-    <!-- Backdrop -->
-    <div (click)="showConfigModal = false" class="absolute inset-0 bg-slate-900/40 backdrop-blur-xs"></div>
+    <!-- Bakong Config Modal -->
+    <div *ngIf="showConfigModal" class="fixed inset-0 z-50 flex items-center justify-center p-4">
+      <!-- Backdrop -->
+      <div (click)="showConfigModal = false" class="absolute inset-0 bg-slate-900/40 backdrop-blur-xs"></div>
 
-    <!-- Modal Card -->
-    <div
-      class="relative bg-white w-full max-w-lg rounded-2xl shadow-xl border border-slate-100 overflow-hidden animate-in zoom-in-95 duration-200">
-      <div class="border-b border-slate-100 px-6 py-4 flex items-center justify-between">
-        <h3 class="text-lg font-bold text-slate-900">Set Up Bakong KHQR</h3>
-        <button (click)="showConfigModal = false" class="text-slate-400 hover:text-slate-600 transition-colors">
-          <span class="material-symbols-outlined text-xl">close</span>
-        </button>
+      <!-- Modal Card -->
+      <div
+        class="relative bg-white w-full max-w-lg rounded-2xl shadow-xl border border-slate-100 overflow-hidden animate-in zoom-in-95 duration-200">
+        <div class="border-b border-slate-100 px-6 py-4 flex items-center justify-between">
+          <h3 class="text-lg font-bold text-slate-900">Set Up Bakong KHQR</h3>
+          <button (click)="showConfigModal = false" class="text-slate-400 hover:text-slate-600 transition-colors">
+            <span class="material-symbols-outlined text-xl">close</span>
+          </button>
+        </div>
+
+        <form class="p-6 space-y-4">
+          <div class="grid grid-cols-2 gap-4">
+            <div class="col-span-2 space-y-1">
+              <label class="text-xs font-bold text-slate-500 uppercase tracking-wider">Bakong ID *</label>
+              <input [(ngModel)]="config.bakongId" name="bakongId" type="text" placeholder="name@account"
+                class="block w-full rounded-xl border border-slate-200 px-4 py-2.5 text-sm focus:border-blue-500 focus:ring-4 focus:ring-blue-500/10 focus:outline-none transition-all" />
+            </div>
+
+            <div class="space-y-1">
+              <label class="text-xs font-bold text-slate-500 uppercase tracking-wider">Merchant Name *</label>
+              <input [(ngModel)]="config.merchantName" name="merchantName" type="text" placeholder="John Store"
+                class="block w-full rounded-xl border border-slate-200 px-4 py-2.5 text-sm focus:border-blue-500 focus:ring-4 focus:ring-blue-500/10 focus:outline-none transition-all" />
+            </div>
+
+            <div class="space-y-1">
+              <label class="text-xs font-bold text-slate-500 uppercase tracking-wider">Merchant City</label>
+              <input [(ngModel)]="config.merchantCity" name="merchantCity" type="text" placeholder="Phnom Penh"
+                class="block w-full rounded-xl border border-slate-200 px-4 py-2.5 text-sm focus:border-blue-500 focus:ring-4 focus:ring-blue-500/10 focus:outline-none transition-all" />
+            </div>
+
+            <div class="space-y-1">
+              <label class="text-xs font-bold text-slate-500 uppercase tracking-wider">Acquiring ID</label>
+              <input [(ngModel)]="config.acquiringId" name="acquiringId" type="text" placeholder="12345"
+                class="block w-full rounded-xl border border-slate-200 px-4 py-2.5 text-sm focus:border-blue-500 focus:ring-4 focus:ring-blue-500/10 focus:outline-none transition-all" />
+            </div>
+
+            <div class="space-y-1">
+              <label class="text-xs font-bold text-slate-500 uppercase tracking-wider">API Base URL</label>
+              <input [(ngModel)]="config.apiBaseUrl" name="apiBaseUrl" type="text"
+                class="block w-full rounded-xl border border-slate-200 px-4 py-2.5 text-sm focus:border-blue-500 focus:ring-4 focus:ring-blue-500/10 focus:outline-none transition-all" />
+            </div>
+
+            <div class="col-span-2 space-y-1">
+              <label class="text-xs font-bold text-slate-500 uppercase tracking-wider">Bearer Token (Optional)</label>
+              <input [(ngModel)]="config.token" name="token" type="text" placeholder="Bearer..."
+                class="block w-full rounded-xl border border-slate-200 px-4 py-2.5 text-sm focus:border-blue-500 focus:ring-4 focus:ring-blue-500/10 focus:outline-none transition-all" />
+            </div>
+          </div>
+
+          <div class="flex justify-end gap-3 pt-4 border-t border-slate-100">
+            <button type="button" (click)="showConfigModal = false"
+              class="rounded-xl border border-slate-200 bg-white hover:bg-slate-50 px-4 py-2.5 text-sm font-semibold text-slate-700 active:scale-[0.98] transition-all">
+              Cancel
+            </button>
+            <button type="button" (click)="saveConfig()"
+              class="rounded-xl bg-blue-600 hover:bg-blue-700 px-5 py-2.5 text-sm font-semibold text-white shadow-xs hover:shadow-md active:scale-[0.98] transition-all">
+              Save Configuration
+            </button>
+          </div>
+        </form>
       </div>
-
-      <form class="p-6 space-y-4">
-        <div class="grid grid-cols-2 gap-4">
-          <div class="col-span-2 space-y-1">
-            <label class="text-xs font-bold text-slate-500 uppercase tracking-wider">Bakong ID *</label>
-            <input [(ngModel)]="config.bakongId" name="bakongId" type="text" placeholder="name@account"
-              class="block w-full rounded-xl border border-slate-200 px-4 py-2.5 text-sm focus:border-blue-500 focus:ring-4 focus:ring-blue-500/10 focus:outline-none transition-all" />
-          </div>
-
-          <div class="space-y-1">
-            <label class="text-xs font-bold text-slate-500 uppercase tracking-wider">Merchant Name *</label>
-            <input [(ngModel)]="config.merchantName" name="merchantName" type="text" placeholder="John Store"
-              class="block w-full rounded-xl border border-slate-200 px-4 py-2.5 text-sm focus:border-blue-500 focus:ring-4 focus:ring-blue-500/10 focus:outline-none transition-all" />
-          </div>
-
-          <div class="space-y-1">
-            <label class="text-xs font-bold text-slate-500 uppercase tracking-wider">Merchant City</label>
-            <input [(ngModel)]="config.merchantCity" name="merchantCity" type="text" placeholder="Phnom Penh"
-              class="block w-full rounded-xl border border-slate-200 px-4 py-2.5 text-sm focus:border-blue-500 focus:ring-4 focus:ring-blue-500/10 focus:outline-none transition-all" />
-          </div>
-
-          <div class="space-y-1">
-            <label class="text-xs font-bold text-slate-500 uppercase tracking-wider">Acquiring ID</label>
-            <input [(ngModel)]="config.acquiringId" name="acquiringId" type="text" placeholder="12345"
-              class="block w-full rounded-xl border border-slate-200 px-4 py-2.5 text-sm focus:border-blue-500 focus:ring-4 focus:ring-blue-500/10 focus:outline-none transition-all" />
-          </div>
-
-          <div class="space-y-1">
-            <label class="text-xs font-bold text-slate-500 uppercase tracking-wider">API Base URL</label>
-            <input [(ngModel)]="config.apiBaseUrl" name="apiBaseUrl" type="text"
-              class="block w-full rounded-xl border border-slate-200 px-4 py-2.5 text-sm focus:border-blue-500 focus:ring-4 focus:ring-blue-500/10 focus:outline-none transition-all" />
-          </div>
-
-          <div class="col-span-2 space-y-1">
-            <label class="text-xs font-bold text-slate-500 uppercase tracking-wider">Bearer Token (Optional)</label>
-            <input [(ngModel)]="config.token" name="token" type="text" placeholder="Bearer..."
-              class="block w-full rounded-xl border border-slate-200 px-4 py-2.5 text-sm focus:border-blue-500 focus:ring-4 focus:ring-blue-500/10 focus:outline-none transition-all" />
-          </div>
-        </div>
-
-        <div class="flex justify-end gap-3 pt-4 border-t border-slate-100">
-          <button type="button" (click)="showConfigModal = false"
-            class="rounded-xl border border-slate-200 bg-white hover:bg-slate-50 px-4 py-2.5 text-sm font-semibold text-slate-700 active:scale-[0.98] transition-all">
-            Cancel
-          </button>
-          <button type="button" (click)="saveConfig()"
-            class="rounded-xl bg-blue-600 hover:bg-blue-700 px-5 py-2.5 text-sm font-semibold text-white shadow-xs hover:shadow-md active:scale-[0.98] transition-all">
-            Save Configuration
-          </button>
-        </div>
-      </form>
     </div>
-  </div>
 
-  <!-- Toast Notification -->
-  @if(showToast) {
-  <app-toast [message]="toastMessage" (dismissed)="showToast = false">
-  </app-toast>
-  }
+    <!-- Toast Notification -->
+    @if(showToast) {
+    <app-toast [message]="toastMessage" (dismissed)="showToast = false">
+    </app-toast>
+    }
+  </div>
+  <app-pagination [pageNumber]="pageNumber" [pageSize]="pageSize" [totalItems]="totalItems" [totalPages]="totalPages"
+    (pageChange)="onPageChanged($event)" [itemLabel]="'transactions'"></app-pagination>
 </div>

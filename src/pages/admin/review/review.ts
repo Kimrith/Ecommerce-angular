@@ -3,26 +3,29 @@ import { CommonModule } from '@angular/common';
 import { FormsModule } from '@angular/forms';
 import { ReviewService } from '../../../Service/Review/review';
 import { ToastComponent } from '../../../shared/components/toast';
+import { Pagination } from '../../../shared/components/admin/pagination/pagination';
 
 @Component({
   selector: 'app-review',
   standalone: true,
-  imports: [CommonModule, FormsModule, ToastComponent],
+  imports: [CommonModule, FormsModule, ToastComponent, Pagination],
   templateUrl: './review.html',
   styleUrl: './review.css',
 })
 export class Review implements OnInit {
   reviews: any[] = [];
-  filteredReviews: any[] = [];
+  paginatedReviews: any[] = [];
   isLoading = true;
-  selectedFilter = 'all';
 
-  // Stats
+  // Pagination states
+  pageNumber: number = 1;
+  pageSize: number = 7;
+  totalItems: number = 0;
+  totalPages: number = 1;
+
   totalReviews = 0;
-  approvedCount = 0;
-  pendingCount = 0;
 
-  // Modals / Details
+  // Details
   selectedReview: any = null;
 
   // Toast States
@@ -55,8 +58,8 @@ export class Review implements OnInit {
     this.reviewService.getAllReviews().subscribe({
       next: (data) => {
         this.reviews = data;
-        this.calculateStats();
-        this.filterReviews(this.selectedFilter);
+        this.totalReviews = this.reviews.length;
+        this.applyPagination();
         this.isLoading = false;
         this.cdr.detectChanges();
       },
@@ -68,73 +71,21 @@ export class Review implements OnInit {
     });
   }
 
-  calculateStats() {
-    this.totalReviews = this.reviews.length;
-    this.approvedCount = this.reviews.filter(r => r.isApproved === true).length;
-    this.pendingCount = this.reviews.filter(r => r.isApproved === false || r.isApproved === null || r.isApproved === undefined).length;
-  }
-
-  filterReviews(filter: string) {
-    this.selectedFilter = filter;
-    if (filter === 'all') {
-      this.filteredReviews = [...this.reviews];
-    } else if (filter === 'approved') {
-      this.filteredReviews = this.reviews.filter(r => r.isApproved === true);
-    } else if (filter === 'pending') {
-      this.filteredReviews = this.reviews.filter(r => r.isApproved === false || r.isApproved === null || r.isApproved === undefined);
+  applyPagination() {
+    this.totalItems = this.reviews.length;
+    this.totalPages = Math.ceil(this.totalItems / this.pageSize) || 1;
+    if (this.pageNumber > this.totalPages) {
+      this.pageNumber = this.totalPages;
     }
+    const start = (this.pageNumber - 1) * this.pageSize;
+    const end = start + this.pageSize;
+    this.paginatedReviews = this.reviews.slice(start, end);
   }
 
-  approveReview(review: any) {
-    this.reviewService.editReview(review.id, { isApproved: true }).subscribe({
-      next: (updatedReview) => {
-        this.triggerToast('Review approved successfully!');
-        
-        // Update locally
-        const index = this.reviews.findIndex(r => r.id === review.id);
-        if (index > -1) {
-          this.reviews[index].isApproved = true;
-        }
-        
-        if (this.selectedReview && this.selectedReview.id === review.id) {
-          this.selectedReview.isApproved = true;
-        }
-
-        this.calculateStats();
-        this.filterReviews(this.selectedFilter);
-        this.cdr.detectChanges();
-      },
-      error: (err) => {
-        console.error('Failed to approve review:', err);
-        this.triggerToast('Failed to approve review.');
-      }
-    });
-  }
-
-  rejectReview(review: any) {
-    this.reviewService.editReview(review.id, { isApproved: false }).subscribe({
-      next: (updatedReview) => {
-        this.triggerToast('Review rejected/suspended.');
-        
-        // Update locally
-        const index = this.reviews.findIndex(r => r.id === review.id);
-        if (index > -1) {
-          this.reviews[index].isApproved = false;
-        }
-
-        if (this.selectedReview && this.selectedReview.id === review.id) {
-          this.selectedReview.isApproved = false;
-        }
-
-        this.calculateStats();
-        this.filterReviews(this.selectedFilter);
-        this.cdr.detectChanges();
-      },
-      error: (err) => {
-        console.error('Failed to reject review:', err);
-        this.triggerToast('Failed to reject review.');
-      }
-    });
+  onPageChange(newPage: number) {
+    this.pageNumber = newPage;
+    this.applyPagination();
+    this.cdr.detectChanges();
   }
 
   deleteReview(review: any) {
@@ -144,13 +95,13 @@ export class Review implements OnInit {
       next: () => {
         this.triggerToast('Review deleted permanently.');
         this.reviews = this.reviews.filter(r => r.id !== review.id);
+        this.totalReviews = this.reviews.length;
         
         if (this.selectedReview && this.selectedReview.id === review.id) {
           this.selectedReview = null;
         }
 
-        this.calculateStats();
-        this.filterReviews(this.selectedFilter);
+        this.applyPagination();
         this.cdr.detectChanges();
       },
       error: (err) => {

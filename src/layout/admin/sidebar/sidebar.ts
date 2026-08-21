@@ -1,5 +1,5 @@
-import { Component } from '@angular/core';
-import { RouterLink, RouterLinkActive } from '@angular/router';
+import { Component, inject } from '@angular/core';
+import { Router, RouterLink, RouterLinkActive } from '@angular/router';
 
 @Component({
   selector: 'app-sidebar',
@@ -8,8 +8,22 @@ import { RouterLink, RouterLinkActive } from '@angular/router';
   styleUrl: './sidebar.css',
 })
 export class Sidebar {
+  private router = inject(Router);
 
-  logout() {
-    alert('d')
+  logoutToggle = false;
+
+  openLogoutModal(): void {
+    this.logoutToggle = true;
+  }
+
+  cancelLogout(): void {
+    this.logoutToggle = false;
+  }
+
+  logout(): void {
+    localStorage.removeItem('adminToken');
+    localStorage.removeItem('adminData');
+    this.logoutToggle = false;
+    this.router.navigate(['/login']);
   }
 }

@@ -24,6 +24,7 @@ export class Product implements OnInit {
   selectedItem: any = null;
   selectedProductToEdit: any = null;
   imageUrl = environment.apiUrl;
+  defaultImage = 'https://encrypted-tbn0.gstatic.com/images?q=tbn:ANd9GcR-YKwoMPIgLj0eGd4fimf49IclMWAIbMJQRe_r21HTcJ0TCmDfQk9CJSU&s=10';
 
   // Filter & Search state variables
   searchTerm: string = '';
@@ -286,7 +287,7 @@ export class Product implements OnInit {
         product.availableQuantity = res.availableQuantity;
         product.initialStock = res.stockQuantity;
         product.isEditingStock = false;
-        
+
         this.loadStatistics();
         this.triggerToast('Stock updated successfully');
         this.cdr.detectChanges();

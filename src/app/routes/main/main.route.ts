@@ -16,7 +16,8 @@ import { Login } from '../../../shared/auth/login/login';
 import { Error } from '../../../shared/components/error/error';
 import { OrderList } from '../../../components/main/order-list/order-list';
 import { Favorite } from '../../../components/main/favorite/favorite';
-
+import { CustomerSuspended } from '../../../pages/main/suspended/suspended';
+import { AuthGuard } from '../../../Service/Guard/auth-guard';
 
 export const mainRoutes: Routes = [
 
@@ -42,17 +43,20 @@ export const mainRoutes: Routes = [
 
       {
         path: 'setting',
-        component: Setting
+        component: Setting,
+        canActivate: [AuthGuard]
       },
 
       {
         path: 'orders',
-        component: Order
+        component: Order,
+        canActivate: [AuthGuard]
       },
 
       {
         path: 'paymentmethod',
-        component: Paymentmethod
+        component: Paymentmethod,
+        canActivate: [AuthGuard]
       },
 
       {
@@ -72,12 +76,14 @@ export const mainRoutes: Routes = [
 
       {
         path: 'order/list',
-        component: OrderList
+        component: OrderList,
+        canActivate: [AuthGuard]
       },
 
       {
         path: 'favorite',
-        component: Favorite
+        component: Favorite,
+        canActivate: [AuthGuard]
       }
     ]
   },
@@ -93,9 +99,9 @@ export const mainRoutes: Routes = [
     component: Login
   },
 
-  // {
-  //   path: '**',
-  //   component: Error
-  // }
+  {
+    path: 'customer-suspended',
+    component: CustomerSuspended
+  }
 
 ];

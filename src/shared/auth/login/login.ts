@@ -42,11 +42,21 @@ export class Login {
 
         // Redirect based on user role
         if (userRole === 'Customer') {
+          const status = (response.status || (response.user && response.user.status) || '').toString().trim().toLowerCase();
+          if (status === 'suspended' || status === 'inactive') {
+            this.router.navigate(['/customer-suspended']);
+            return;
+          }
           this.router.navigate(['/']);
           return;
         }
 
         if (userRole === 'Seller') {
+          const status = (response.status || (response.user && response.user.status) || '').toString().trim().toLowerCase();
+          if (status === 'suspended' || status === 'inactive') {
+            this.router.navigate(['/seller-suspended']);
+            return;
+          }
           this.router.navigate(['/sellers']);
           return;
         }
@@ -61,7 +71,13 @@ export class Login {
       },
       error: (error) => {
         console.error('Login failed', error);
-        alert('Wrong email or password.');
+        const serverMessage = error?.error?.message || error?.error?.details || '';
+        
+        if (serverMessage.toLowerCase().includes('suspended') || serverMessage.toLowerCase().includes('inactive')) {
+          this.router.navigate(['/customer-suspended']);
+        } else {
+          alert(serverMessage || 'Wrong email or password.');
+        }
       }
     });
   }

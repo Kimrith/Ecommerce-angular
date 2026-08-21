@@ -18,22 +18,22 @@
 
         <p class="mt-2 text-gray-500">
           @if (searchTerm) {
-            Showing results for "<span class="font-semibold text-gray-900 text-indigo-600">{{ searchTerm }}</span>"
+          Showing results for "<span class="font-semibold text-gray-900 text-indigo-600">{{ searchTerm }}</span>"
           } @else {
-            Discover our complete collection of high-quality products.
+          Discover our complete collection of high-quality products.
           }
         </p>
       </div>
 
       <!-- Sort -->
       <div class="w-full sm:w-64">
-        <select
+        <select [value]="sortBy" (change)="onSortChange($event)"
           class="w-full px-4 py-3 rounded-xl border border-gray-200 bg-white focus:ring-2 focus:ring-indigo-500 focus:outline-none">
-          <option>Newest</option>
-          <option>Best Selling</option>
-          <option>Most Popular</option>
-          <option>Price: Low to High</option>
-          <option>Price: High to Low</option>
+          <option value="newest">Newest</option>
+          <option value="best_selling">Best Selling</option>
+          <option value="most_popular">Most Popular</option>
+          <option value="price_asc">Price: Low to High</option>
+          <option value="price_desc">Price: High to Low</option>
         </select>
       </div>
     </div>

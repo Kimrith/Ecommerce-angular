@@ -23,7 +23,9 @@
         </td>
 
         <td class="px-6 py-4">
-          <img [src]="imgBaseUrl + product.imageUrl" class="w-14 h-14 rounded-lg object-cover">
+          <img [src]="product.imageUrl ? (imgBaseUrl + product.imageUrl) : defaultProductImage"
+            (error)="$any($event.target).src = defaultProductImage" [alt]="product.name || 'Product image'"
+            class="w-14 h-14 rounded-lg object-cover">
         </td>
 
         <td class="px-6 py-4 font-semibold">

@@ -20,6 +20,10 @@ export class Auths {
     return this.http.post<any>(`${this.authUrl}/login`, loginData);
   }
 
+  refreshToken(refreshToken: string): Observable<any> {
+    return this.http.post<any>(`${this.authUrl}/refresh-token`, { refreshToken });
+  }
+
   getAllusers(): Observable<any> {
     return this.http.get<any>(`${this.userUrl}`);
   }

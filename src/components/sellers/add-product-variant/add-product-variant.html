@@ -1,0 +1,245 @@
+<div class="fixed inset-0 z-[60] flex items-center justify-center bg-slate-900/70 backdrop-blur-sm p-4"
+    (click)="closeModal()">
+    <div class="w-full max-w-3xl max-h-[90vh] overflow-y-auto rounded-3xl bg-white shadow-2xl"
+        (click)="$event.stopPropagation()">
+        <!-- Header -->
+        <div class="sticky top-0 z-10 flex items-center justify-between border-b border-slate-100 bg-white px-7 py-5">
+            <div>
+                <span class="text-xs font-bold uppercase tracking-wider text-indigo-600">
+                    Product Variant
+                </span>
+
+                <h2 class="mt-1 text-2xl font-extrabold text-slate-900">
+                    {{ editVariant ? 'Edit Variant' : 'Add New Variant' }}
+                </h2>
+
+                <p class="mt-1 text-sm text-slate-500">
+                    {{ editVariant ? 'Update size, color, pricing, stock, status, or image for this variant.' : 'Add
+                    size, color, pricing, stock, and an image for this product.' }}
+                </p>
+            </div>
+
+            <button type="button" (click)="closeModal()"
+                class="rounded-full p-2.5 text-slate-400 transition hover:bg-slate-100 hover:text-slate-700 cursor-pointer">
+                <svg class="h-5 w-5" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                    <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M6 18L18 6M6 6l12 12" />
+                </svg>
+            </button>
+        </div>
+
+        <!-- Form -->
+        <form class="space-y-7 p-7" (ngSubmit)="saveVariant()">
+            <!-- Product information -->
+            <div class="rounded-2xl border border-indigo-100 bg-indigo-50 p-4">
+                <div class="flex items-center justify-between">
+                    <div>
+                        <p class="text-xs font-semibold uppercase tracking-wide text-indigo-500">
+                            Selected Product
+                        </p>
+
+                        <p class="mt-1 font-bold text-indigo-900">
+                            Product ID: #{{ productId }}
+                        </p>
+                    </div>
+
+                    <div class="flex h-10 w-10 items-center justify-center rounded-xl bg-indigo-600 text-white">
+                        <svg class="h-5 w-5" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                            <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2"
+                                d="M20 7l-8-4-8 4m16 0l-8 4m8-4v10l-8 4m0-10L4 7m8 4v10M4 7v10l8 4" />
+                        </svg>
+                    </div>
+                </div>
+            </div>
+
+            <!-- Basic information -->
+            <section class="space-y-4">
+                <div>
+                    <h3 class="font-bold text-slate-900">Variant Information</h3>
+                    <p class="text-sm text-slate-500">
+                        Enter the identifying attributes of this variant.
+                    </p>
+                </div>
+
+                <div class="grid grid-cols-1 gap-5 md:grid-cols-2">
+                    <div class="md:col-span-2">
+                        <label class="mb-2 block text-sm font-semibold text-slate-700">
+                            Variant title
+                        </label>
+
+                        <input type="text" name="title" [(ngModel)]="variant.title" placeholder="Example: Black / Large"
+                            class="w-full rounded-xl border border-slate-200 px-4 py-3 text-slate-800 outline-none transition focus:border-indigo-500 focus:ring-4 focus:ring-indigo-100"
+                            required />
+                    </div>
+
+                    <div>
+                        <label class="mb-2 block text-sm font-semibold text-slate-700">
+                            SKU
+                        </label>
+
+                        <input type="text" name="sku" [(ngModel)]="variant.sku" placeholder="Example: SHIRT-BLK-L"
+                            class="w-full rounded-xl border border-slate-200 px-4 py-3 text-slate-800 outline-none transition focus:border-indigo-500 focus:ring-4 focus:ring-indigo-100"
+                            required />
+                    </div>
+
+                    <div>
+                        <label class="mb-2 block text-sm font-semibold text-slate-700">
+                            Barcode
+                        </label>
+
+                        <input type="text" name="barcode" [(ngModel)]="variant.barcode" placeholder="Optional barcode"
+                            class="w-full rounded-xl border border-slate-200 px-4 py-3 text-slate-800 outline-none transition focus:border-indigo-500 focus:ring-4 focus:ring-indigo-100" />
+                    </div>
+
+                    <div>
+                        <label class="mb-2 block text-sm font-semibold text-slate-700">
+                            Size
+                        </label>
+
+                        <input type="text" name="size" [(ngModel)]="variant.size" placeholder="Example: S, M, L, XL"
+                            class="w-full rounded-xl border border-slate-200 px-4 py-3 text-slate-800 outline-none transition focus:border-indigo-500 focus:ring-4 focus:ring-indigo-100" />
+                    </div>
+
+                    <div>
+                        <label class="mb-2 block text-sm font-semibold text-slate-700">
+                            Color
+                        </label>
+
+                        <input type="text" name="color" [(ngModel)]="variant.color" placeholder="Example: Black"
+                            class="w-full rounded-xl border border-slate-200 px-4 py-3 text-slate-800 outline-none transition focus:border-indigo-500 focus:ring-4 focus:ring-indigo-100" />
+                    </div>
+                </div>
+            </section>
+
+            <!-- Pricing and stock -->
+            <section class="space-y-4 border-t border-slate-100 pt-6">
+                <div>
+                    <h3 class="font-bold text-slate-900">Pricing and Inventory</h3>
+                    <p class="text-sm text-slate-500">
+                        Set the price and stock quantity for this variant.
+                    </p>
+                </div>
+
+                <div class="grid grid-cols-1 gap-5 md:grid-cols-4">
+                    <div>
+                        <label class="mb-2 block text-sm font-semibold text-slate-700">
+                            Price
+                        </label>
+
+                        <div class="relative">
+                            <span class="absolute left-4 top-1/2 -translate-y-1/2 text-slate-400">
+                                $
+                            </span>
+
+                            <input type="number" name="price" [(ngModel)]="variant.price" min="0" step="0.01"
+                                placeholder="0.00"
+                                class="w-full rounded-xl border border-slate-200 py-3 pl-8 pr-4 text-slate-800 outline-none transition focus:border-indigo-500 focus:ring-4 focus:ring-indigo-100"
+                                required />
+                        </div>
+                    </div>
+
+                    <div>
+                        <label class="mb-2 block text-sm font-semibold text-slate-700">
+                            Discount price
+                        </label>
+
+                        <div class="relative">
+                            <span class="absolute left-4 top-1/2 -translate-y-1/2 text-slate-400">
+                                $
+                            </span>
+
+                            <input type="number" name="discountPrice" [(ngModel)]="variant.discountPrice" min="0"
+                                step="0.01" placeholder="0.00"
+                                class="w-full rounded-xl border border-slate-200 py-3 pl-8 pr-4 text-slate-800 outline-none transition focus:border-indigo-500 focus:ring-4 focus:ring-indigo-100" />
+                        </div>
+                    </div>
+
+                    <div>
+                        <label class="mb-2 block text-sm font-semibold text-slate-700">
+                            Initial stock
+                        </label>
+
+                        <input type="number" name="initialStock" [(ngModel)]="variant.initialStock" min="0"
+                            placeholder="0"
+                            class="w-full rounded-xl border border-slate-200 px-4 py-3 text-slate-800 outline-none transition focus:border-indigo-500 focus:ring-4 focus:ring-indigo-100"
+                            required />
+                    </div>
+                </div>
+            </section>
+
+            <!-- Image upload -->
+            <section class="space-y-4 border-t border-slate-100 pt-6">
+                <div>
+                    <h3 class="font-bold text-slate-900">Variant Image</h3>
+                    <p class="text-sm text-slate-500">
+                        Upload a clear image representing this variant.
+                    </p>
+                </div>
+
+                <div class="flex flex-col sm:flex-row items-center gap-5">
+                    <!-- Existing Image Preview -->
+                    <div *ngIf="existingImageUrl && !selectedImage"
+                        class="relative w-28 h-28 rounded-2xl overflow-hidden border border-slate-200 shadow-sm shrink-0 flex items-center justify-center bg-slate-50">
+                        <img [src]="'http://localhost:5117' + existingImageUrl" alt="Current Image"
+                            class="w-full h-full object-cover">
+                        <span
+                            class="absolute bottom-0 left-0 right-0 bg-slate-900/60 text-[10px] text-white text-center py-0.5 font-medium">Current
+                            Image</span>
+                    </div>
+
+                    <!-- File Dropzone -->
+                    <label
+                        class="flex-1 w-full flex cursor-pointer flex-col items-center justify-center rounded-2xl border-2 border-dashed border-slate-300 bg-slate-50 px-6 py-8 text-center transition hover:border-indigo-400 hover:bg-indigo-50">
+                        <svg class="mb-3 h-10 w-10 text-slate-400" fill="none" stroke="currentColor"
+                            viewBox="0 0 24 24">
+                            <path stroke-linecap="round" stroke-linejoin="round" stroke-width="1.5"
+                                d="M7 16a4 4 0 01-.88-7.903A5 5 0 0115.9 6L16 6a5 5 0 011 9.9M12 12v9m0-9l-3 3m3-3l3 3" />
+                        </svg>
+
+                        <span class="font-semibold text-slate-700">
+                            {{ selectedImageName ? selectedImageName : 'Click to upload variant image' }}
+                        </span>
+
+                        <span class="mt-1 text-xs text-slate-400">
+                            PNG, JPG or WEBP (Max 5MB)
+                        </span>
+
+                        <input type="file" class="hidden" accept="image/png,image/jpeg,image/webp"
+                            (change)="onImageSelected($event)" />
+                    </label>
+                </div>
+            </section>
+
+            <!-- Footer -->
+            <div
+                class="flex flex-col-reverse gap-3 border-t border-slate-100 pt-6 sm:flex-row sm:justify-between items-center">
+                <div>
+                    <!-- Delete Button shown only in Edit Mode -->
+                    <button *ngIf="editVariant" type="button" (click)="deleteVariant()"
+                        class="w-full sm:w-auto rounded-xl border border-rose-200 bg-rose-50 px-6 py-3 text-sm font-semibold text-rose-600 transition hover:bg-rose-100 flex items-center justify-center gap-2 cursor-pointer">
+                        <svg class="w-4 h-4" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                            <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2"
+                                d="M19 7l-.867 12.142A2 2 0 0116.138 21H7.862a2 2 0 01-1.995-1.858L5 7m5 4v6m4-6v6m1-10V4a1 1 0 00-1-1h-4a1 1 0 00-1 1v3M4 7h16" />
+                        </svg>
+                        Delete Variant
+                    </button>
+                </div>
+
+                <div class="flex flex-col-reverse gap-3 w-full sm:w-auto sm:flex-row justify-end">
+                    <button type="button" (click)="closeModal()"
+                        class="rounded-xl border border-slate-200 bg-white px-6 py-3 text-sm font-semibold text-slate-700 transition hover:bg-slate-100 cursor-pointer">
+                        Cancel
+                    </button>
+
+                    <button type="submit"
+                        class="rounded-xl bg-indigo-600 px-6 py-3 text-sm font-semibold text-white shadow-lg shadow-indigo-200 transition hover:bg-indigo-700 cursor-pointer">
+                        {{ editVariant ? 'Update Variant' : 'Save Variant' }}
+                    </button>
+                </div>
+            </div>
+        </form>
+    </div>
+
+    @if (showSuccessToast) {
+    <app-toast [message]="toastMessage" (dismissed)="showSuccessToast = false"></app-toast>
+    }
+</div>
