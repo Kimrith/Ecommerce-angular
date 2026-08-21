@@ -5,7 +5,8 @@
       <div>
         <h2 class="text-2xl font-bold text-gray-800">{{ editProduct ? 'Edit Product' : 'Add New Product' }}</h2>
         <p class="mt-1 text-sm text-gray-500">
-          {{ editProduct ? 'Update the information below to modify the product.' : 'Fill in the information below to create a new product.' }}
+          {{ editProduct ? 'Update the information below to modify the product.' : 'Fill in the information below to
+          create a new product.' }}
         </p>
       </div>
 
@@ -25,15 +26,6 @@
           <input [(ngModel)]="product.name" name="name" type="text" placeholder="Nike Air Max"
             class="w-full rounded-xl border border-gray-300 px-4 py-3 outline-none focus:border-orange-500 focus:ring-2 focus:ring-orange-200" />
         </div>
-
-        <!-- SKU -->
-        <div>
-          <label class="mb-2 block text-sm font-medium text-gray-700"> SKU </label>
-
-          <input [(ngModel)]="product.sku" name="sku" type="text" placeholder="SKU-10001"
-            class="w-full rounded-xl border border-gray-300 px-4 py-3 outline-none focus:border-orange-500 focus:ring-2 focus:ring-orange-200" />
-        </div>
-
         <!-- Category -->
         <div>
           <label class="mb-2 block text-sm font-medium text-gray-700"> Category </label>
@@ -129,11 +121,15 @@
       <!-- Product Images -->
       <div class="mt-5">
         <label class="mb-2 block text-sm font-medium text-gray-700"> Product Images </label>
-        
+
         <div class="flex items-center gap-4 mb-3" *ngIf="existingImageUrl && !product.images.length">
-          <div class="relative w-20 h-20 rounded-xl overflow-hidden border border-gray-200 shadow-sm flex items-center justify-center bg-gray-50 shrink-0">
-            <img [src]="'http://localhost:5117' + existingImageUrl" alt="Current Image" class="w-full h-full object-cover">
-            <span class="absolute bottom-0 left-0 right-0 bg-black/60 text-[9px] text-white text-center py-0.5 font-medium">Current Image</span>
+          <div
+            class="relative w-20 h-20 rounded-xl overflow-hidden border border-gray-200 shadow-sm flex items-center justify-center bg-gray-50 shrink-0">
+            <img [src]="'http://localhost:5117' + existingImageUrl" alt="Current Image"
+              class="w-full h-full object-cover">
+            <span
+              class="absolute bottom-0 left-0 right-0 bg-black/60 text-[9px] text-white text-center py-0.5 font-medium">Current
+              Image</span>
           </div>
         </div>
 

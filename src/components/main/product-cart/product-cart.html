@@ -22,7 +22,7 @@
     }
   </div>
 
-  <div class="p-5">
+  <div (click)="viewProductDetails(product.productId)" class="p-5">
     <!-- Slug / Category -->
     <span class="text-xs font-semibold uppercase tracking-wider text-orange-500">
       {{ product.slug }}
@@ -36,7 +36,8 @@
     <!-- Product Rating Stars -->
     <div class="flex items-center gap-1 mt-1">
       <div class="flex items-center text-yellow-400">
-        <span class="material-symbols-outlined text-sm select-none" style="font-variation-settings: 'FILL' 1;">star</span>
+        <span class="material-symbols-outlined text-sm select-none"
+          style="font-variation-settings: 'FILL' 1;">star</span>
       </div>
       <span class="text-xs font-bold text-gray-700">{{ reviewCount > 0 ? averageRating : '0.0' }}</span>
       <span class="text-xs text-gray-400 font-medium">({{ reviewCount }})</span>
@@ -56,6 +57,9 @@
         class="bg-orange-500 hover:bg-orange-600 text-white px-5 py-2 rounded-xl transition whitespace-nowrap text-sm">
         View Details
       </button>
+      <div class="text-xs text-slate-500 font-medium">
+        Variants: {{ productVariant.length }}
+      </div>
     </div>
   </div>
 </div>

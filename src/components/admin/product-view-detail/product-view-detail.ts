@@ -2,6 +2,7 @@ import { Component, Input, Output, EventEmitter, OnInit, OnChanges, SimpleChange
 import { CommonModule } from '@angular/common';
 import { ProductService } from '../../../Service/products/product-service';
 import { AddProductVariant } from '../add-product-variant/add-product-variant';
+import { environment } from '../../../environments/environment.development';
 
 @Component({
   selector: 'app-product-view-detail',
@@ -20,6 +21,9 @@ export class ProductViewDetail implements OnInit, OnChanges {
   showAddVariantModal: boolean = false;
   showProductDetail: boolean = true;
   selectedVariantToEdit: any = null;
+
+  imgUrl = environment.apiUrl
+  defaultImage = "https://encrypted-tbn0.gstatic.com/images?q=tbn:ANd9GcR-YKwoMPIgLj0eGd4fimf49IclMWAIbMJQRe_r21HTcJ0TCmDfQk9CJSU&s=10"
 
   constructor(
     private productService: ProductService,

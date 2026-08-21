@@ -1,9 +1,11 @@
 import { ChangeDetectorRef, Component, OnInit } from '@angular/core';
-import { ActivatedRoute, RouterLink } from '@angular/router';
+import { ActivatedRoute, Router, RouterLink } from '@angular/router';
 import { ProductCart } from '../product-cart/product-cart';
 import { Pagination } from '../../../shared/components/main-layout/pagination/pagination';
 import { ProductService } from '../../../Service/products/product-service';
 import { CategoriesService } from '../../../Service/categories/categories-service';
+import { combineLatest } from 'rxjs';
+import { environment } from '../../../environments/environment.development';
 
 @Component({
   selector: 'app-category-detail',
@@ -15,27 +17,31 @@ export class CategoryDetail implements OnInit {
   categoryId: number = 0;
   category: any = null;
   products: any[] = []; // Strongly typed as an array
+  sortBy: string = 'newest';
+  imgUrls = environment.apiUrl
 
-  imgs = [
-    {
-      id: 1,
-      img: 'https://images.unsplash.com/photo-1512436991641-6745cdb1723f?w=1600'
-    },
-  ];
+  defaultCategoriesimg = "https://encrypted-tbn0.gstatic.com/images?q=tbn:ANd9GcR-YKwoMPIgLj0eGd4fimf49IclMWAIbMJQRe_r21HTcJ0TCmDfQk9CJSU&s=10"
 
   constructor(
     private route: ActivatedRoute,
+    private router: Router,
     private productService: ProductService,
     private categoriesService: CategoriesService,
     private cdr: ChangeDetectorRef
   ) { }
 
   ngOnInit(): void {
-    this.route.paramMap.subscribe((params) => {
-      const idParam = params.get('id');
-      if (idParam) {
-        this.categoryId = +idParam;
-        this.loadCategoryDetail();
+    combineLatest([this.route.paramMap, this.route.queryParams]).subscribe({
+      next: ([paramMap, queryParams]) => {
+        const idParam = paramMap.get('id');
+        if (idParam) {
+          const newCategoryId = +idParam;
+          if (newCategoryId !== this.categoryId) {
+            this.categoryId = newCategoryId;
+            this.loadCategoryDetail();
+          }
+        }
+        this.sortBy = queryParams['sortBy'] || 'newest';
         this.loadProducts();
       }
     });
@@ -54,7 +60,7 @@ export class CategoryDetail implements OnInit {
   }
 
   loadProducts() {
-    this.productService.getAllProduct(1, 100, undefined, this.categoryId, 'Approved').subscribe({
+    this.productService.getAllProduct(1, 100, undefined, this.categoryId, 'Approved', this.sortBy).subscribe({
       next: (response: any) => {
         let items: any[] = [];
         if (Array.isArray(response)) {
@@ -74,6 +80,15 @@ export class CategoryDetail implements OnInit {
       error: (err) => {
         console.error('Error fetching category products', err);
       },
+    });
+  }
+
+  onSortChange(event: any) {
+    const value = event.target.value;
+    this.router.navigate([], {
+      relativeTo: this.route,
+      queryParams: { sortBy: value },
+      queryParamsHandling: 'merge'
     });
   }
 }

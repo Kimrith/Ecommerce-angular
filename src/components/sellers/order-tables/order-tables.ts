@@ -88,10 +88,13 @@ export class OrderTables implements OnInit, OnChanges {
       status: this.selectedStatus || undefined,
       searchTerm: this.searchTerm || undefined
     };
+    
+    console.log('loadOrders called with params:', params);
 
     // 1. Fetch orders from the API first
     this.orderService.getSellerOrder(sellerId, params).subscribe({
       next: (res: any) => {
+        console.log('loadOrders API Response:', res);
         const orderList = res.data || [];
 
         // Map initial order state and set payment status to 'Checking...'

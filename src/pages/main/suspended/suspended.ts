@@ -1,14 +1,16 @@
 import { Component } from '@angular/core';
 import { Router } from '@angular/router';
+import { CommonModule } from '@angular/common';
 
 @Component({
-  selector: 'app-suspended',
-  imports: [],
+  selector: 'app-customer-suspended',
+  standalone: true,
+  imports: [CommonModule],
   templateUrl: './suspended.html',
   styleUrl: './suspended.css',
 })
-export class Suspended {
-  isContactOpen = false
+export class CustomerSuspended {
+  isContactOpen = false;
 
   constructor(private router: Router) { }
 
@@ -17,6 +19,6 @@ export class Suspended {
   }
 
   contactSupport() {
-    this.isContactOpen = !this.isContactOpen
+    this.isContactOpen = !this.isContactOpen;
   }
 }

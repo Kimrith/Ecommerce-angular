@@ -95,7 +95,10 @@
 
         @if (isEditMode && typeof seller.image === 'string' && seller.image) {
         <div class="mb-3 flex items-center gap-3">
-          <img [src]="imageUrl + seller.image" alt="Current Profile" class="h-14 w-14 rounded-xl object-cover border" />
+          <img [src]="seller.image ? (imageUrl + seller.image) : defaultProfileImage"
+            (error)="$any($event.target).src = defaultProfileImage" alt="Current Profile"
+            class="h-14 w-14 rounded-xl object-cover border" />
+
           <span class="text-xs text-gray-500">Current image uploaded. Select a new file below only if you want to
             replace it.</span>
         </div>

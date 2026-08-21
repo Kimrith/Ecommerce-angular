@@ -25,7 +25,8 @@
         <div class="flex flex-col sm:flex-row sm:items-center justify-between gap-4 py-4 first:pt-0 last:pb-0">
             <!-- Left: Product Details -->
             <div class="flex items-center gap-4">
-                <img [src]="imageUrl + item.imageUrl" [alt]="item.name"
+                <img [src]="item.imageUrl ? (imageUrl + item.imageUrl) : defaultProductImage"
+                    (error)="$any($event.target).src = defaultProductImage" [alt]="item.name || 'Product Image'"
                     class="w-16 h-16 object-cover rounded-xl border border-gray-200 shadow-sm" />
                 <div>
                     <h4 class="font-bold text-gray-800 text-base">{{ item.name }}</h4>
@@ -37,20 +38,22 @@
                     </div>
                 </div>
             </div>
-            
+
             <!-- Right: Actions & Total Price -->
-            <div class="flex items-center justify-between sm:justify-end gap-6 border-t border-gray-50 pt-3 sm:border-0 sm:pt-0">
+            <div
+                class="flex items-center justify-between sm:justify-end gap-6 border-t border-gray-50 pt-3 sm:border-0 sm:pt-0">
                 <!-- Interactive Quantity Controls -->
                 <div class="flex items-center gap-1.5 border border-gray-200 rounded-xl p-1 bg-gray-50/50">
-                    <button (click)="decreaseQuantity(item)" 
-                            class="w-7 h-7 flex items-center justify-center rounded-lg hover:bg-white text-gray-600 hover:text-gray-900 active:scale-95 transition shadow-sm border border-transparent hover:border-gray-100"
-                            title="Decrease quantity">
+                    <button (click)="decreaseQuantity(item)"
+                        class="w-7 h-7 flex items-center justify-center rounded-lg hover:bg-white text-gray-600 hover:text-gray-900 active:scale-95 transition shadow-sm border border-transparent hover:border-gray-100"
+                        title="Decrease quantity">
                         <span class="material-symbols-outlined text-sm font-bold">remove</span>
                     </button>
-                    <span class="text-sm font-bold text-gray-800 min-w-6 text-center select-none">{{ item.quantity }}</span>
-                    <button (click)="increaseQuantity(item)" 
-                            class="w-7 h-7 flex items-center justify-center rounded-lg hover:bg-white text-gray-600 hover:text-gray-900 active:scale-95 transition shadow-sm border border-transparent hover:border-gray-100"
-                            title="Increase quantity">
+                    <span class="text-sm font-bold text-gray-800 min-w-6 text-center select-none">{{ item.quantity
+                        }}</span>
+                    <button (click)="increaseQuantity(item)"
+                        class="w-7 h-7 flex items-center justify-center rounded-lg hover:bg-white text-gray-600 hover:text-gray-900 active:scale-95 transition shadow-sm border border-transparent hover:border-gray-100"
+                        title="Increase quantity">
                         <span class="material-symbols-outlined text-sm font-bold">add</span>
                     </button>
                 </div>
@@ -62,9 +65,9 @@
                 </div>
 
                 <!-- Remove Button -->
-                <button (click)="removeFromCart(item)" 
-                        class="p-2 text-red-500 hover:text-red-700 hover:bg-red-50 rounded-xl transition active:scale-95 flex items-center justify-center" 
-                        title="Remove item">
+                <button (click)="removeFromCart(item)"
+                    class="p-2 text-red-500 hover:text-red-700 hover:bg-red-50 rounded-xl transition active:scale-95 flex items-center justify-center"
+                    title="Remove item">
                     <span class="material-symbols-outlined text-lg">delete</span>
                 </button>
             </div>
@@ -198,7 +201,9 @@
 
                 <div class="mt-4 bg-gray-50 rounded-2xl py-3 px-6 border border-gray-100 inline-block">
                     <span class="text-xs text-gray-400 uppercase block tracking-wider font-bold">Amount to Pay</span>
-                    <span class="text-3xl font-extrabold text-gray-900">${{ totalAmount }}</span>
+                    <span class="text-3xl font-extrabold text-gray-900">${{ appliedCoupon ? (subtotal - discountAmount)
+                        :
+                        subtotal }}</span>
                 </div>
             </div>
 

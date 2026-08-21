@@ -1,59 +1,68 @@
-<header class="bg-white border-b border-slate-200 px-6 py-4 flex items-center justify-between">
+<header
+  class="sticky top-0 z-30 flex h-16 w-full items-center justify-between border-b border-slate-200/80 bg-white/80 px-4 sm:px-6 backdrop-blur-md transition-all">
 
-  <!-- Left -->
-  <div>
-    <h1 class="text-xl font-bold text-slate-900">
-      Seller
-    </h1>
-
-    <p class="text-sm text-slate-500">
-      Manage your store
-    </p>
-  </div>
-
-
-  <!-- Right -->
-  <div class="flex items-center gap-4">
-
-
-    <!-- Notification -->
-    <button
-      class="relative w-10 h-10 rounded-xl hover:bg-slate-100 transition flex items-center justify-center">
-
-      🔔
-
-      <span
-        class="absolute top-1 right-1 w-2.5 h-2.5 bg-orange-500 rounded-full">
-      </span>
-
-    </button>
-
-
-
-    <!-- Profile -->
-    <div class="flex items-center gap-3 cursor-pointer">
-
-      <img
-        src="https://i.pravatar.cc/100"
-        class="w-10 h-10 rounded-full object-cover"
-        alt="Admin">
-
-
-      <div class="hidden md:block">
-
-        <p class="text-sm font-semibold text-slate-900">
-          Admin User
-        </p>
-
-        <p class="text-xs text-slate-500">
-          Administrator
-        </p>
-
-      </div>
-
+  <!-- Left: Brand / Title -->
+  <div class="flex items-center gap-3">
+    <div
+      class="flex h-9 w-9 items-center justify-center rounded-lg bg-indigo-50 text-indigo-600 border border-indigo-100">
+      <!-- Storefront Icon -->
+      <svg xmlns="http://www.w3.org/2000/svg" class="h-5 w-5" fill="none" viewBox="0 0 24 24" stroke="currentColor"
+        stroke-width="2">
+        <path stroke-linecap="round" stroke-linejoin="round"
+          d="M3 3h2l.4 2M7 13h10l4-8H5.4M7 13L5.4 5M7 13l-2.293 2.293c-.63.63-.184 1.707.707 1.707H17m0 0a2 2 0 100 4 2 2 0 000-4zm-8 2a2 2 0 11-4 0 2 2 0 014 0z" />
+      </svg>
     </div>
 
-
+    <div>
+      <h1 class="text-base sm:text-lg font-bold text-slate-900 leading-tight">
+        Seller Hub
+      </h1>
+      <p class="text-xs text-slate-400 font-medium hidden sm:block">
+        Manage your store & inventory
+      </p>
+    </div>
   </div>
 
+  <!-- Right: Actions & User Profile -->
+  <div class="flex items-center gap-3">
+    <div class="h-6 w-px bg-slate-200"></div>
+    <!-- Profile Link Card -->
+    <a routerLink="/sellers/setting"
+      class="group flex items-center gap-3 rounded-xl p-1.5 pl-2 pr-3 transition hover:bg-slate-50 focus:outline-none focus:ring-2 focus:ring-indigo-500/20">
+      <!-- Avatar with Online Badge -->
+      <div class="relative flex-shrink-0">
+        <img [src]="profileImageUrl" [alt]="sellerProfile?.fullName || 'Seller Avatar'"
+          class="h-9 w-9 rounded-full object-cover ring-2 ring-slate-100 group-hover:ring-indigo-100 transition shadow-sm"
+          onerror="this.src='https://ui-avatars.com/api/?name=Seller&background=e0e7ff&color=4f46e5'" />
+        <span class="absolute bottom-0 right-0 h-2.5 w-2.5 rounded-full bg-emerald-500 ring-2 ring-white"
+          title="Active"></span>
+      </div>
+
+      <!-- User Details -->
+      <div class="hidden text-left md:block">
+        <div class="flex items-center gap-1.5">
+          <p class="text-sm font-semibold text-slate-800 group-hover:text-indigo-600 transition leading-tight">
+            {{ sellerProfile?.fullName || 'Loading...' }}
+          </p>
+          @if (sellerProfile?.role) {
+          <span
+            class="inline-flex items-center rounded-md bg-indigo-50 px-1.5 py-0.5 text-[10px] font-semibold text-indigo-700 uppercase tracking-wide">
+            {{ sellerProfile?.role }}
+          </span>
+          }
+        </div>
+        <p class="text-xs text-slate-400 font-medium">
+          {{ sellerProfile?.shopName || 'My Store' }}
+        </p>
+      </div>
+
+      <!-- Settings Chevron -->
+      <svg xmlns="http://www.w3.org/2000/svg"
+        class="hidden h-4 w-4 text-slate-400 group-hover:text-slate-600 md:block transition" fill="none"
+        viewBox="0 0 24 24" stroke="currentColor">
+        <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M19 9l-7 7-7-7" />
+      </svg>
+    </a>
+
+  </div>
 </header>

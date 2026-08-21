@@ -49,8 +49,8 @@
                             {{ getStatusText(product.status) }}
                         </span>
 
-                        <img [src]="product.imageUrl ? 'http://localhost:5117' + product.imageUrl : 'https://via.placeholder.com/400'"
-                            [alt]="product.name"
+                        <img [src]="product.imageUrl ? (imgUrl + product.imageUrl) : defaultImage"
+                            (error)="$any($event.target).src = defaultImage" [alt]="product.name || 'Product Image'"
                             class="object-cover w-full h-full group-hover:scale-105 transition-transform duration-300">
                     </div>
 

@@ -19,9 +19,7 @@
     <ul class="space-y-1">
       <!-- Dashboard -->
       <li>
-        <RouterLink 
-          routerLink="/sellers"
-          routerLinkActive="bg-orange-50 text-orange-600 font-semibold"
+        <RouterLink routerLink="/sellers" routerLinkActive="bg-orange-50 text-orange-600 font-semibold"
           [routerLinkActiveOptions]="{exact:true}"
           class="flex items-center gap-3 px-3 py-3 rounded-xl text-slate-600 hover:bg-slate-100 transition">
           <span class="material-symbols-outlined">dashboard</span>
@@ -33,9 +31,7 @@
 
       <!-- Products -->
       <li>
-        <RouterLink
-          routerLink="/sellers/products"
-          routerLinkActive="bg-orange-50 text-orange-600 font-semibold"
+        <RouterLink routerLink="/sellers/products" routerLinkActive="bg-orange-50 text-orange-600 font-semibold"
           class="flex items-center gap-3 px-3 py-3 rounded-xl text-slate-600 hover:bg-slate-100 transition">
           <span class="material-symbols-outlined">inventory_2</span>
           <span>Products</span>
@@ -43,9 +39,7 @@
       </li>
       <!-- Categories -->
       <li>
-        <RouterLink
-          routerLink="/sellers/categories"
-          routerLinkActive="bg-orange-50 text-orange-600 font-semibold"
+        <RouterLink routerLink="/sellers/categories" routerLinkActive="bg-orange-50 text-orange-600 font-semibold"
           class="flex items-center gap-3 px-3 py-3 rounded-xl text-slate-600 hover:bg-slate-100 transition">
           <span class="material-symbols-outlined">category</span>
           <span>Categories</span>
@@ -53,9 +47,7 @@
       </li>
       <!-- Orders -->
       <li>
-        <RouterLink
-          routerLink="/sellers/orders"
-          routerLinkActive="bg-orange-50 text-orange-600 font-semibold"
+        <RouterLink routerLink="/sellers/orders" routerLinkActive="bg-orange-50 text-orange-600 font-semibold"
           class="flex items-center gap-3 px-3 py-3 rounded-xl text-slate-600 hover:bg-slate-100 transition">
           <span class="material-symbols-outlined">shopping_cart</span>
           <span>Orders</span>
@@ -63,9 +55,7 @@
       </li>
       <!-- FeedBack -->
       <li>
-        <RouterLink
-          routerLink="/sellers/feedback"
-          routerLinkActive="bg-orange-50 text-orange-600 font-semibold"
+        <RouterLink routerLink="/sellers/feedback" routerLinkActive="bg-orange-50 text-orange-600 font-semibold"
           class="flex items-center gap-3 px-3 py-3 rounded-xl text-slate-600 hover:bg-slate-100 transition">
           <span class="material-symbols-outlined">reviews</span>
           <span>FeedBack</span>
@@ -73,9 +63,7 @@
       </li>
       <!-- Users -->
       <li>
-        <RouterLink
-          routerLink="/sellers/setting"
-          routerLinkActive="bg-orange-50 text-orange-600 font-semibold"
+        <RouterLink routerLink="/sellers/setting" routerLinkActive="bg-orange-50 text-orange-600 font-semibold"
           class="flex items-center gap-3 px-3 py-3 rounded-xl text-slate-600 hover:bg-slate-100 transition">
           <span class="material-symbols-outlined">settings</span>
           <span>Setting</span>
@@ -83,9 +71,7 @@
       </li>
       <!-- Payments -->
       <li>
-        <RouterLink
-          routerLink="/sellers/payments"
-          routerLinkActive="bg-orange-50 text-orange-600 font-semibold"
+        <RouterLink routerLink="/sellers/payments" routerLinkActive="bg-orange-50 text-orange-600 font-semibold"
           class="flex items-center gap-3 px-3 py-3 rounded-xl text-slate-600 hover:bg-slate-100 transition">
           <span class="material-symbols-outlined">payments</span>
           <span>Payments</span>
@@ -95,16 +81,46 @@
   </nav>
   <!-- Bottom -->
   <div class="border-t border-slate-200 pt-4">
-    <RouterLink
-      routerLink="/"
+    <RouterLink routerLink="/"
       class="flex items-center gap-3 px-3 py-3 rounded-xl text-slate-600 hover:bg-slate-100 transition">
       <span class="material-symbols-outlined">arrow_back</span>
       <span>Back To Store</span>
     </RouterLink>
-    <button
+    <button (click)="clearData()"
       class="flex w-full mt-2 items-center gap-3 px-3 py-3 rounded-xl text-red-500 hover:bg-red-50 transition">
       <span class="material-symbols-outlined">logout</span>
       <span>Logout</span>
     </button>
   </div>
 </div>
+
+@if (logoutToggle) {
+<!-- Backdrop -->
+<div class="fixed inset-0 z-50 flex items-center justify-center bg-slate-900/50 backdrop-blur-sm p-4 animate-fadeIn">
+  <!-- Modal Card -->
+  <div class="w-full max-w-sm rounded-2xl bg-white p-6 shadow-xl border border-slate-100 transform transition-all">
+    <!-- Icon & Header -->
+    <div class="flex flex-col items-center text-center">
+      <div class="flex h-12 w-12 items-center justify-center rounded-full bg-red-50 text-red-500 mb-4">
+        <span class="material-symbols-outlined text-2xl">logout</span>
+      </div>
+      <h3 class="text-lg font-bold text-slate-800">Log out of ShopSphere?</h3>
+      <p class="mt-2 text-sm text-slate-500">
+        Are you sure you want to log out? You will need to sign in again to access the seller panel.
+      </p>
+    </div>
+
+    <!-- Action Buttons -->
+    <div class="mt-6 flex items-center gap-3">
+      <button type="button" (click)="cancelLogout()"
+        class="flex-1 rounded-xl border border-slate-200 py-2.5 text-sm font-medium text-slate-600 hover:bg-slate-50 transition active:scale-[0.98]">
+        Cancel
+      </button>
+      <button type="button" (click)="logout()"
+        class="flex-1 rounded-xl bg-red-500 py-2.5 text-sm font-medium text-white shadow-sm hover:bg-red-600 transition active:scale-[0.98]">
+        Log Out
+      </button>
+    </div>
+  </div>
+</div>
+}

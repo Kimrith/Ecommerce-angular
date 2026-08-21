@@ -4,6 +4,7 @@ import { FormsModule } from '@angular/forms';
 import { Auths } from '../../../Service/Auth/auths';
 import { SellerForm } from '../../../type/auth';
 import { ToastComponent } from '../../../shared/components/toast'; // Adjust path to your toast component
+import { environment } from '../../../environments/environment.development';
 
 @Component({
   selector: 'app-add-seller-form-model',
@@ -24,7 +25,8 @@ export class AddSellerFormModel implements OnInit {
   private cdr = inject(ChangeDetectorRef);
 
   isEditMode = false;
-  imageUrl = '';
+  imageUrl = environment.apiUrl;
+  defaultProfileImage = 'https://encrypted-tbn0.gstatic.com/images?q=tbn:ANd9GcR-YKwoMPIgLj0eGd4fimf49IclMWAIbMJQRe_r21HTcJ0TCmDfQk9CJSU&s=10';
 
   seller: SellerForm = {
     firstName: '',

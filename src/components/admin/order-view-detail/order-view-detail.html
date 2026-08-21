@@ -148,6 +148,7 @@
                         <thead
                             class="bg-slate-50 border-b border-slate-100 text-xs font-semibold uppercase text-slate-500">
                             <tr>
+                                <th class="px-5 py-3">ID</th>
                                 <th class="px-5 py-3">Product Name</th>
                                 <th class="px-5 py-3 text-center">Qty</th>
                                 <th class="px-5 py-3 text-right">Unit Price</th>
@@ -158,14 +159,12 @@
                             @for (item of orderItems; track item.id) {
                             <tr class="hover:bg-slate-50/50 transition-colors">
                                 <td class="px-5 py-4">
-                                    <p class="font-semibold text-slate-900">{{ item.productName }}</p>
-                                    <!-- @if (item.variantName) {
-                                    <p class="text-xs text-slate-500 mt-0.5">Variant: {{ item.variantName }}</p>
-                                    }
-                                    @if (item.sku) {
-                                    <p class="text-xs text-slate-400 mt-0.5 font-mono">SKU: {{ item.sku }}</p>
-                                    } -->
+                                    <p class="font-semibold text-slate-900">{{ item.productId }}</p>
                                 </td>
+                                <td class="px-5 py-4">
+                                    <p class="font-semibold text-slate-900">{{ item.productName }}</p>
+                                </td>
+
                                 <td class="px-5 py-4 text-center text-slate-700 font-medium">
                                     {{ item.quantity }}
                                 </td>

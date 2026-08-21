@@ -50,7 +50,7 @@ export class Setting implements OnInit {
   // Toast
   showToast = false;
   toastMessage = '';
-  
+
   // Loading states
   isSavingProfile = false;
   isUpdatingPassword = false;
@@ -60,7 +60,7 @@ export class Setting implements OnInit {
     private authsService: Auths,
     private addressService: AddressService,
     private cdr: ChangeDetectorRef,
-    private router: Router
+    private router: Router,
   ) {}
 
   ngOnInit(): void {
@@ -96,14 +96,14 @@ export class Setting implements OnInit {
             this.email = user.email || '';
             this.phoneNumber = user.phoneNumber || '';
             this.profileImageUrl = user.profileImageUrl || '';
-            
+
             // Sync local storage if name or image changed on server
             userData.fullName = this.fullName;
             userData.email = this.email;
             userData.profileImageUrl = this.profileImageUrl;
             userData.phoneNumber = this.phoneNumber;
             localStorage.setItem('userData', JSON.stringify(userData));
-            
+
             this.loadAddresses();
             this.cdr.detectChanges();
           },
@@ -116,7 +116,7 @@ export class Setting implements OnInit {
             this.profileImageUrl = userData.profileImageUrl || '';
             this.loadAddresses();
             this.cdr.detectChanges();
-          }
+          },
         });
       }
     } catch (e) {
@@ -148,7 +148,7 @@ export class Setting implements OnInit {
         console.error('Failed to load addresses', err);
         this.isLoadingAddresses = false;
         this.cdr.detectChanges();
-      }
+      },
     });
   }
 
@@ -178,7 +178,7 @@ export class Setting implements OnInit {
     formData.append('FullName', this.fullName);
     formData.append('Email', this.email);
     formData.append('PhoneNumber', this.phoneNumber || '');
-    
+
     // Status is active for logged-in users
     formData.append('Status', 'Active');
 
@@ -190,7 +190,7 @@ export class Setting implements OnInit {
       next: (res: any) => {
         this.isSavingProfile = false;
         this.triggerToast('Profile updated successfully!');
-        
+
         // Update local storage
         const userDataStr = localStorage.getItem('userData');
         if (userDataStr) {
@@ -206,7 +206,7 @@ export class Setting implements OnInit {
         }
 
         // Notify Navbar to update dynamic avatar
-        window.dispatchEvent(new Event('cartUpdated')); 
+        window.dispatchEvent(new Event('cartUpdated'));
         this.imagePreview = null;
         this.selectedFile = null;
         this.cdr.detectChanges();
@@ -215,7 +215,7 @@ export class Setting implements OnInit {
         this.isSavingProfile = false;
         this.triggerToast(err.error?.message || 'Failed to update profile.');
         this.cdr.detectChanges();
-      }
+      },
     });
   }
 
@@ -256,7 +256,7 @@ export class Setting implements OnInit {
         this.isUpdatingPassword = false;
         this.triggerToast(err.error?.message || 'Failed to update password.');
         this.cdr.detectChanges();
-      }
+      },
     });
   }
 
@@ -307,24 +307,26 @@ export class Setting implements OnInit {
       country: this.country.trim(),
       postalCode: this.postalCode.trim() || '12000',
       addressType: this.addressType,
-      isDefault: this.isDefault
+      isDefault: this.isDefault,
     };
 
     if (this.isEditingAddress && this.editingAddressId) {
       // Edit
-      this.addressService.updateAddress(this.editingAddressId, this.userId, addressPayload).subscribe({
-        next: () => {
-          this.isSavingAddress = false;
-          this.showAddressForm = false;
-          this.triggerToast('Address updated successfully!');
-          this.loadAddresses();
-        },
-        error: (err) => {
-          this.isSavingAddress = false;
-          this.triggerToast(err.error?.message || 'Failed to update address.');
-          this.cdr.detectChanges();
-        }
-      });
+      this.addressService
+        .updateAddress(this.editingAddressId, this.userId, addressPayload)
+        .subscribe({
+          next: () => {
+            this.isSavingAddress = false;
+            this.showAddressForm = false;
+            this.triggerToast('Address updated successfully!');
+            this.loadAddresses();
+          },
+          error: (err) => {
+            this.isSavingAddress = false;
+            this.triggerToast(err.error?.message || 'Failed to update address.');
+            this.cdr.detectChanges();
+          },
+        });
     } else {
       // Create
       this.addressService.createAddress(this.userId, addressPayload).subscribe({
@@ -338,7 +340,7 @@ export class Setting implements OnInit {
           this.isSavingAddress = false;
           this.triggerToast(err.error?.message || 'Failed to add address.');
           this.cdr.detectChanges();
-        }
+        },
       });
     }
   }
@@ -354,7 +356,7 @@ export class Setting implements OnInit {
       error: (err) => {
         console.error(err);
         this.triggerToast('Failed to delete address.');
-      }
+      },
     });
   }
 
@@ -367,7 +369,7 @@ export class Setting implements OnInit {
       country: address.country,
       postalCode: address.postalCode,
       addressType: address.addressType,
-      isDefault: true
+      isDefault: true,
     };
 
     this.addressService.updateAddress(address.id, this.userId, addressPayload).subscribe({
@@ -378,7 +380,7 @@ export class Setting implements OnInit {
       error: (err) => {
         console.error(err);
         this.triggerToast('Failed to set address as default.');
-      }
+      },
     });
   }
 
@@ -387,7 +389,7 @@ export class Setting implements OnInit {
     localStorage.removeItem('token');
     localStorage.removeItem('userData');
     localStorage.removeItem('cart');
-    
+
     // Notify Navbar to reset counts
     window.dispatchEvent(new Event('cartUpdated'));
 
@@ -398,7 +400,11 @@ export class Setting implements OnInit {
   }
 
   deleteAccount() {
-    if (!confirm('Are you sure you want to delete your account? This action is permanent and cannot be undone!')) {
+    if (
+      !confirm(
+        'Are you sure you want to delete your account? This action is permanent and cannot be undone!',
+      )
+    ) {
       return;
     }
     // Suspend user on backend and log out
@@ -409,7 +415,7 @@ export class Setting implements OnInit {
       error: (err) => {
         console.error(err);
         this.triggerToast('Failed to delete account. Please try again.');
-      }
+      },
     });
   }
 }

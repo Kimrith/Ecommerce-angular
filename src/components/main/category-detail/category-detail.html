@@ -2,9 +2,8 @@
 
   <!-- Banner -->
   <section class="relative h-56 md:h-72 rounded-3xl overflow-hidden mb-8">
-    @for (img of imgs; track img.id) {
-    <img [src]="img.img" class="w-full h-full object-cover" alt="Category">
-    }
+    <img [src]="category?.imageUrl ? (imgUrls + '/' + category.imageUrl) : defaultCategoriesimg"
+      [alt]="category?.name || 'Category'" class="w-full h-full object-cover">
 
     <div class="absolute inset-0 bg-black/40"></div>
 
@@ -55,13 +54,12 @@
       </p>
     </div>
 
-    <select class="px-4 py-2 rounded-xl border border-gray-200 focus:ring-2 focus:ring-indigo-500">
-
-      <option>Newest</option>
-      <option>Most Popular</option>
-      <option>Price: Low to High</option>
-      <option>Price: High to Low</option>
-
+    <select [value]="sortBy" (change)="onSortChange($event)"
+      class="px-4 py-2 rounded-xl border border-gray-200 focus:ring-2 focus:ring-indigo-500 focus:outline-none bg-white">
+      <option value="newest">Newest</option>
+      <option value="most_popular">Most Popular</option>
+      <option value="price_asc">Price: Low to High</option>
+      <option value="price_desc">Price: High to Low</option>
     </select>
 
   </div>

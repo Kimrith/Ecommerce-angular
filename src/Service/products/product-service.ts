@@ -36,7 +36,8 @@ export class ProductService {
     pageSize: number = 10,
     searchTerm?: string,
     categoryId?: number | null,
-    status?: number | string | null
+    status?: number | string | null,
+    sortBy?: string
   ): Observable<any> {
     let params = new HttpParams()
       .set('pageNumber', pageNumber.toString())
@@ -56,6 +57,9 @@ export class ProductService {
         statusStr = names[statusNum] || statusStr;
       }
       params = params.set('status', statusStr);
+    }
+    if (sortBy) {
+      params = params.set('sortBy', sortBy);
     }
 
     return this.http.get<any>(this.apiUrl, { params });
@@ -125,10 +129,34 @@ export class ProductService {
 
   // seller
 
-  getProductSeller(sellerId: number, pageNumber: number = 1, pageSize: number = 1000) {
-    const params = new HttpParams()
+  getProductSeller(
+    sellerId: number,
+    pageNumber: number = 1,
+    pageSize: number = 10,
+    searchTerm?: string,
+    categoryId?: string | number | null,
+    status?: string | number | null
+  ) {
+    let params = new HttpParams()
       .set('pageNumber', pageNumber.toString())
       .set('pageSize', pageSize.toString());
+
+    if (searchTerm) {
+      params = params.set('searchTerm', searchTerm);
+    }
+    if (categoryId !== undefined && categoryId !== null && categoryId !== '') {
+      params = params.set('categoryId', categoryId.toString());
+    }
+    if (status !== undefined && status !== null && status !== '') {
+      const statusNum = Number(status);
+      let statusStr = status.toString();
+      if (!isNaN(statusNum)) {
+        const names = ['Draft', 'Pending', 'Approved', 'Rejected', 'Archived', 'Suspended'];
+        statusStr = names[statusNum] || statusStr;
+      }
+      params = params.set('status', statusStr);
+    }
+
     return this.http.get<any>(`${this.apiUrl}/seller/${sellerId}`, { params });
   }
 }

@@ -33,6 +33,7 @@ export class OrderList implements OnInit, OnDestroy {
   qrImageBase64: string = '';
   md5: string = '';
   paymentStatusMessage = 'Waiting for payment scan...';
+  defaultProductImage = "https://encrypted-tbn0.gstatic.com/images?q=tbn:ANd9GcR-YKwoMPIgLj0eGd4fimf49IclMWAIbMJQRe_r21HTcJ0TCmDfQk9CJSU&s=10"
 
   // Coupon states
   couponCode: string = '';
@@ -226,7 +227,14 @@ export class OrderList implements OnInit, OnDestroy {
     if (savedCart !== null && savedCart !== '') {
       this.hasCartData = true;
       try {
-        this.cartItems = JSON.parse(savedCart);
+        const parsedItems = JSON.parse(savedCart);
+
+        // Map items to ensure they use effectivePrice/discountPrice if present
+        this.cartItems = parsedItems.map((item: any) => ({
+          ...item,
+          price: item.effectivePrice ?? item.discountPrice ?? item.price
+        }));
+
         this.calculateTotal();
       } catch (e) {
         this.cartItems = [];
@@ -252,7 +260,7 @@ export class OrderList implements OnInit, OnDestroy {
   }
 
   removeFromCart(item: any) {
-    this.cartItems = this.cartItems.filter(cartItem => 
+    this.cartItems = this.cartItems.filter(cartItem =>
       !(cartItem.productId === item.productId && cartItem.variantId === item.variantId)
     );
     this.updateCartStorage();

@@ -1,4 +1,4 @@
-<aside class="space-y-6 font-sans">
+<aside class="h-[700px] overflow-y-auto space-y-6 font-sans pr-2">
 
   <!-- Page Navigation -->
   <div class="bg-white p-5 rounded-2xl border border-slate-200 shadow-xl shadow-slate-200/50">
@@ -93,6 +93,8 @@
           class="flex items-center gap-3 py-2 px-3 rounded-xl transition-all hover:bg-slate-100 hover:text-slate-900">
           <span class="material-symbols-outlined text-lg">category</span>
           <span class="flex-1">{{ category.name }}</span>
+          <span class="text-xs px-2 py-0.5 rounded-full bg-slate-100 text-slate-500 font-medium">{{
+            category.productCount }}</span>
         </a>
       </li>
       }

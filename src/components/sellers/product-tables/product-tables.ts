@@ -17,15 +17,53 @@ export class ProductTables implements OnInit, OnChanges {
   @Output() productsLoaded = new EventEmitter<number>();
   @Output() totalItemsChange = new EventEmitter<number>();
   @Output() totalPagesChange = new EventEmitter<number>();
-  @Input() searchTerm: string = '';
-  @Input() selectedCategoryId: string = '';
-  @Input() selectedStatus: string = '';
-  @Input() pageNumber: number = 1;
-  @Input() pageSize: number = 7;
+  private _searchTerm: string = '';
+  @Input()
+  get searchTerm(): string { return this._searchTerm; }
+  set searchTerm(val: string) {
+    this._searchTerm = val;
+    this.getProductSeller();
+  }
+
+  private _selectedCategoryId: string = '';
+  @Input()
+  get selectedCategoryId(): string { return this._selectedCategoryId; }
+  set selectedCategoryId(val: string) {
+    this._selectedCategoryId = val;
+    this.getProductSeller();
+  }
+
+  private _selectedStatus: string = '';
+  @Input()
+  get selectedStatus(): string { return this._selectedStatus; }
+  set selectedStatus(val: string) {
+    this._selectedStatus = val;
+    this.getProductSeller();
+  }
+
+  private _pageNumber: number = 1;
+  @Input()
+  get pageNumber(): number { return this._pageNumber; }
+  set pageNumber(val: number) {
+    this._pageNumber = val;
+    this.getProductSeller();
+  }
+
+  private _pageSize: number = 7;
+  @Input()
+  get pageSize(): number { return this._pageSize; }
+  set pageSize(val: number) {
+    this._pageSize = val;
+    this.getProductSeller();
+  }
+
   @Input() showSizeColor: boolean = false;
 
   productData: any[] = [];
+  totalItems: number = 0;
+  totalPages: number = 1;
   imgBaseUrl = environment.apiUrl;
+  defaultProductImage = 'https://encrypted-tbn0.gstatic.com/images?q=tbn:ANd9GcR-YKwoMPIgLj0eGd4fimf49IclMWAIbMJQRe_r21HTcJ0TCmDfQk9CJSU&s=10';
 
   toastMessage = '';
   showSuccessToast = false;
@@ -51,38 +89,49 @@ export class ProductTables implements OnInit, OnChanges {
   }
 
   getProductSeller() {
-    // 1. Debug what's actually in localStorage on refresh
     const rawUserData = localStorage.getItem('userData') || localStorage.getItem('currentUser');
     console.log('Raw localStorage userData on refresh:', rawUserData);
 
     const currentUser = rawUserData ? JSON.parse(rawUserData) : {};
-    const sellerId = currentUser.userId || currentUser.sellerId || 24; // fallback safety
+    const sellerId = currentUser.userId || currentUser.sellerId || 24;
 
     console.log('Resolved Seller ID for API:', sellerId);
 
-    this.productService.getProductSeller(sellerId).subscribe({
+    this.productService.getProductSeller(
+      sellerId,
+      this.pageNumber,
+      this.pageSize,
+      this.searchTerm,
+      this.selectedCategoryId,
+      this.selectedStatus
+    ).subscribe({
       next: (data) => {
         console.log('API Response payload:', data);
 
+        let items: any[] = [];
         if (Array.isArray(data)) {
-          this.productData = data;
+          items = data;
         } else if (data && Array.isArray(data.items)) {
-          this.productData = data.items;
+          items = data.items;
         } else if (data && data.items && Array.isArray(data.items.$values)) {
-          this.productData = data.items.$values;
+          items = data.items.$values;
         } else if (data && Array.isArray(data.$values)) {
-          this.productData = data.$values;
+          items = data.$values;
         } else if (data && data.data) {
           if (Array.isArray(data.data)) {
-            this.productData = data.data;
+            items = data.data;
           } else if (Array.isArray(data.data.$values)) {
-            this.productData = data.data.$values;
+            items = data.data.$values;
           } else {
-            this.productData = [];
+            items = [];
           }
         } else {
-          this.productData = [];
+          items = [];
         }
+
+        this.productData = items;
+        this.totalItems = data.totalItems ?? items.length;
+        this.totalPages = data.totalPages ?? 1;
 
         // Force UI refresh cycle in case zone runner misses async event on hard reload
         this.productsLoaded.emit(this.totalItems);
@@ -111,38 +160,11 @@ export class ProductTables implements OnInit, OnChanges {
   }
 
   get allFilteredProducts() {
-    let temp = [...this.productData];
-    if (this.searchTerm && this.searchTerm.trim() !== '') {
-      const search = this.searchTerm.toLowerCase().trim();
-      temp = temp.filter(p =>
-        (p.name && p.name.toLowerCase().includes(search)) ||
-        (p.sku && p.sku.toLowerCase().includes(search)) ||
-        (p.description && p.description.toLowerCase().includes(search))
-      );
-    }
-    if (this.selectedCategoryId && this.selectedCategoryId !== '') {
-      temp = temp.filter(p => p.categoryId && p.categoryId.toString() === this.selectedCategoryId.toString());
-    }
-    if (this.selectedStatus !== undefined && this.selectedStatus !== '') {
-      const targetVal = this.getStatusValue(this.selectedStatus);
-      temp = temp.filter(p => this.getStatusValue(p.status) === targetVal);
-    }
-    return temp;
+    return this.productData;
   }
 
   get filteredProducts() {
-    const page = Number(this.pageNumber || 1);
-    const size = Number(this.pageSize || 10);
-    const startIndex = (page - 1) * size;
-    return this.allFilteredProducts.slice(startIndex, startIndex + size);
-  }
-
-  get totalItems(): number {
-    return this.allFilteredProducts.length;
-  }
-
-  get totalPages(): number {
-    return Math.max(1, Math.ceil(this.totalItems / this.pageSize));
+    return this.productData;
   }
 
   triggerToast(message: string) {

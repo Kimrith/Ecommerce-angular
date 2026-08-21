@@ -1,6 +1,6 @@
 import { Component, OnInit, OnDestroy, ChangeDetectorRef } from '@angular/core';
 import { CommonModule } from '@angular/common';
-import { ActivatedRoute } from '@angular/router';
+import { ActivatedRoute, Router } from '@angular/router';
 import { ProductCart } from '../product-cart/product-cart';
 import { Pagination } from '../../../shared/components/main-layout/pagination/pagination';
 import { ProductService } from '../../../Service/products/product-service';
@@ -21,21 +21,24 @@ export class Products implements OnInit, OnDestroy {
   totalCount: number = 0;
   isLoading: boolean = false;
   searchTerm: string = '';
+  sortBy: string = 'newest';
 
   private queryParamsSubscription!: Subscription;
 
   constructor(
     private productService: ProductService,
     private route: ActivatedRoute,
+    private router: Router,
     private cdr: ChangeDetectorRef,
-  ) {}
+  ) { }
 
   ngOnInit(): void {
     // Listen to query parameters dynamically
     this.queryParamsSubscription = this.route.queryParams.subscribe({
       next: (params) => {
         this.searchTerm = params['search'] || '';
-        this.pageNumber = 1; // Reset to page 1 for new search queries
+        this.sortBy = params['sortBy'] || 'newest';
+        this.pageNumber = 1; // Reset to page 1 for new search/sort queries
         this.loadProducts();
       }
     });
@@ -51,7 +54,7 @@ export class Products implements OnInit, OnDestroy {
     this.isLoading = true;
 
     this.productService
-      .getAllProduct(this.pageNumber, this.pageSize, this.searchTerm)
+      .getAllProduct(this.pageNumber, this.pageSize, this.searchTerm, null, 'Approved', this.sortBy)
       .pipe(
         finalize(() => {
           this.isLoading = false;
@@ -76,5 +79,14 @@ export class Products implements OnInit, OnDestroy {
   onPageChange(newPage: number) {
     this.pageNumber = newPage;
     this.loadProducts();
+  }
+
+  onSortChange(event: any) {
+    const value = event.target.value;
+    this.router.navigate([], {
+      relativeTo: this.route,
+      queryParams: { sortBy: value },
+      queryParamsHandling: 'merge'
+    });
   }
 }

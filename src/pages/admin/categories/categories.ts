@@ -21,7 +21,6 @@ export class Categories implements OnInit {
   categories: Category[] = [];
   paginatedCategories: Category[] = [];
   imageUrl = environment.apiUrl;
-
   // Pagination states
   pageNumber: number = 1;
   pageSize: number = 7;
