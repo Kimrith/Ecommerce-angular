@@ -4,7 +4,7 @@ import { FormsModule } from '@angular/forms';
 import { ProductService } from '../../../Service/products/product-service';
 import { CategoriesService, Category } from '../../../Service/categories/categories-service';
 import { ToastComponent } from '../../../shared/components/toast';
-import { environment } from '../../../environments/environment.development';
+import { environment } from '../../../environments/environment';
 import { SellerAddProductVariant } from '../add-product-variant/add-product-variant';
 
 @Component({

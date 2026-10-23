@@ -3,7 +3,7 @@ import { CommonModule } from '@angular/common';
 import { FormsModule } from '@angular/forms';
 import { AddSellerFormModel } from '../../../components/admin/add-seller-form-model/add-seller-form-model';
 import { Auths } from '../../../Service/Auth/auths';
-import { environment } from '../../../environments/environment.development';
+import { environment } from '../../../environments/environment';
 import { ToastComponent } from '../../../shared/components/toast';
 import { SellerViewDetail } from '../../../components/admin/seller-view-detail/seller-view-detail';
 import { Pagination } from '../../../shared/components/admin/pagination/pagination';

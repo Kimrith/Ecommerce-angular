@@ -2,20 +2,20 @@
   "version": 2,
   "rewrites": [
     {
-      "source": "/api/:match*",
-      "destination": "http://13.239.98.16/api/:match*"
+      "source": "/api/:path*",
+      "destination": "http://13.239.98.16/api/:path*"
     },
     {
-      "source": "/uploads/:match*",
-      "destination": "http://13.239.98.16/uploads/:match*"
+      "source": "/uploads/:path*",
+      "destination": "http://13.239.98.16/uploads/:path*"
     },
     {
-      "source": "/scalar/:match*",
-      "destination": "http://13.239.98.16/scalar/:match*"
+      "source": "/scalar/:path*",
+      "destination": "http://13.239.98.16/scalar/:path*"
     },
     {
-      "source": "/openapi/:match*",
-      "destination": "http://13.239.98.16/openapi/:match*"
+      "source": "/openapi/:path*",
+      "destination": "http://13.239.98.16/openapi/:path*"
     },
     {
       "source": "/(.*)",

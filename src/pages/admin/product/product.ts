@@ -6,7 +6,7 @@ import { ProductService } from '../../../Service/products/product-service';
 import { CategoriesService } from '../../../Service/categories/categories-service';
 import { ProductViewDetail } from '../../../components/admin/product-view-detail/product-view-detail';
 import { Pagination } from '../../../shared/components/admin/pagination/pagination';
-import { environment } from '../../../environments/environment.development';
+import { environment } from '../../../environments/environment';
 import { ToastComponent } from '../../../shared/components/toast';
 
 @Component({

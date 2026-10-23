@@ -1,7 +1,7 @@
 import { Component, OnInit, ChangeDetectorRef } from '@angular/core';
 import { CommonModule } from '@angular/common';
 import { FormsModule } from '@angular/forms';
-import { environment } from '../../../environments/environment.development';
+import { environment } from '../../../environments/environment';
 import { ToastComponent } from '../../../shared/components/toast';
 import { OrderViewDetail } from '../../../components/admin/order-view-detail/order-view-detail';
 import { OrderService } from '../../../Service/Order/order';

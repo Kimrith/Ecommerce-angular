@@ -3,7 +3,7 @@ import { CommonModule } from '@angular/common';
 import { FormsModule } from '@angular/forms';
 import { BannerService } from '../../../Service/Banner/banner';
 import { Banner as BannerType } from '../../../type/banner';
-import { environment } from '../../../environments/environment.development';
+import { environment } from '../../../environments/environment';
 import { Pagination } from '../../../shared/components/admin/pagination/pagination';
 import { ToastComponent } from '../../../shared/components/toast';
 

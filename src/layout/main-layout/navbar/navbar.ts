@@ -11,7 +11,7 @@ import { CommonModule } from '@angular/common';
 import { FavoriteService } from '../../../Service/Favorite/favorite';
 import { Subscription } from 'rxjs';
 import { filter } from 'rxjs/operators';
-import { environment } from '../../../environments/environment.development';
+import { environment } from '../../../environments/environment';
 import { Auths } from '../../../Service/Auth/auths';
 
 @Component({

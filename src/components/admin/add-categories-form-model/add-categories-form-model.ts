@@ -3,7 +3,7 @@ import { CommonModule } from '@angular/common';
 import { FormsModule } from '@angular/forms';
 import { CategoriesService } from '../../../Service/categories/categories-service';
 import { CreateCategoryRequest } from '../../../type/categories';
-import { environment } from '../../../environments/environment.development';
+import { environment } from '../../../environments/environment';
 
 @Component({
   selector: 'app-add-categories-form-model',

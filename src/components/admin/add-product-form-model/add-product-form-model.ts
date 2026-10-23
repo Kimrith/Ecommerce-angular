@@ -3,7 +3,7 @@ import { FormsModule } from '@angular/forms';
 import { ProductService } from '../../../Service/products/product-service';
 import { CategoriesService, Category } from '../../../Service/categories/categories-service';
 import { CommonModule } from '@angular/common';
-import { environment } from '../../../environments/environment.development';
+import { environment } from '../../../environments/environment';
 
 @Component({
   selector: 'app-add-product-form-model',

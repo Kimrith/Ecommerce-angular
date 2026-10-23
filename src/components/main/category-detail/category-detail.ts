@@ -5,7 +5,7 @@ import { Pagination } from '../../../shared/components/main-layout/pagination/pa
 import { ProductService } from '../../../Service/products/product-service';
 import { CategoriesService } from '../../../Service/categories/categories-service';
 import { combineLatest } from 'rxjs';
-import { environment } from '../../../environments/environment.development';
+import { environment } from '../../../environments/environment';
 
 @Component({
   selector: 'app-category-detail',

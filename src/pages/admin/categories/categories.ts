@@ -3,7 +3,7 @@ import { CommonModule } from '@angular/common';
 import { FormsModule } from '@angular/forms';
 import { AddCategoriesFormModel } from '../../../components/admin/add-categories-form-model/add-categories-form-model';
 import { CategoriesService, Category } from '../../../Service/categories/categories-service';
-import { environment } from '../../../environments/environment.development';
+import { environment } from '../../../environments/environment';
 import { CategoryStatistics } from '../../../type/categories';
 import { Pagination } from '../../../shared/components/admin/pagination/pagination';
 

@@ -3,7 +3,7 @@ import { CommonModule } from '@angular/common';
 import { FormsModule } from '@angular/forms';
 import { CategoriesService } from '../../../Service/categories/categories-service';
 import { ToastComponent } from '../../../shared/components/toast';
-import { environment } from '../../../environments/environment.development';
+import { environment } from '../../../environments/environment';
 
 @Component({
   selector: 'app-categories-form-model',

@@ -2,7 +2,7 @@ import { Component, OnInit, OnDestroy, ChangeDetectorRef, inject } from '@angula
 import { BannerService } from '../../../../Service/Banner/banner';
 import { Banner as BannerType } from '../../../../type/banner'; // Adjust path if needed
 import { CommonModule } from '@angular/common';
-import { environment } from '../../../../environments/environment.development';
+import { environment } from '../../../../environments/environment';
 
 @Component({
   selector: 'app-banner',

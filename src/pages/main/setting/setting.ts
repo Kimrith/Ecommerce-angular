@@ -5,7 +5,7 @@ import { Router } from '@angular/router';
 import { Auths } from '../../../Service/Auth/auths';
 import { AddressService } from '../../../Service/Address/address-service';
 import { ToastComponent } from '../../../shared/components/toast';
-import { environment } from '../../../environments/environment.development';
+import { environment } from '../../../environments/environment';
 
 @Component({
   selector: 'app-setting',

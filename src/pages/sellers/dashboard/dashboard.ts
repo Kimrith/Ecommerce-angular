@@ -5,7 +5,7 @@ import Chart from 'chart.js/auto';
 import { Subscription } from 'rxjs';
 import { ProductService } from '../../../Service/products/product-service';
 import { OrderService } from '../../../Service/Order/order';
-import { environment } from '../../../environments/environment.development';
+import { environment } from '../../../environments/environment';
 
 @Component({
   selector: 'app-dashboard',

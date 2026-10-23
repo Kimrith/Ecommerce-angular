@@ -2,7 +2,7 @@ import { Component, OnInit, Input, Output, EventEmitter, OnChanges, SimpleChange
 import { CommonModule } from '@angular/common';
 import { CategoriesService } from '../../../Service/categories/categories-service';
 import { ChangeDetectorRef } from '@angular/core';
-import { environment } from '../../../environments/environment.development';
+import { environment } from '../../../environments/environment';
 
 @Component({
   selector: 'app-categories-tables',
