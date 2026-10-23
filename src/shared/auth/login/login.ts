@@ -1,7 +1,7 @@
 import { Component } from '@angular/core';
 import { RouterLink, Router } from '@angular/router';
 import { NgIf } from '@angular/common';
-import { FormsModule } from '@angular/forms';
+import { FormBuilder, FormGroup, Validators, ReactiveFormsModule } from '@angular/forms';
 import { Auths } from '../../../Service/Auth/auths';
 
 @Component({
@@ -10,27 +10,47 @@ import { Auths } from '../../../Service/Auth/auths';
   imports: [
     RouterLink,
     NgIf,
-    FormsModule
+    ReactiveFormsModule
   ],
   templateUrl: './login.html',
   styleUrl: './login.css',
 })
 export class Login {
   showPassword = false;
+  loginForm: FormGroup;
 
-  credentials = {
-    email: '',
-    password: ''
-  };
+  get credentials() {
+    return this.loginForm.value;
+  }
 
-  constructor(private authsService: Auths, private router: Router) { }
+  constructor(
+    private authsService: Auths,
+    private router: Router,
+    private fb: FormBuilder
+  ) {
+    this.loginForm = this.fb.group({
+      email: ['', [Validators.required, Validators.email, Validators.maxLength(100)]],
+      password: ['', [Validators.required, Validators.maxLength(100)]],
+      remember: [false]
+    });
+  }
 
   togglePassword() {
     this.showPassword = !this.showPassword;
   }
 
   onLogin() {
-    this.authsService.login(this.credentials).subscribe({
+    if (this.loginForm.invalid) {
+      this.loginForm.markAllAsTouched();
+      return;
+    }
+
+    const payload = {
+      email: this.loginForm.get('email')?.value?.trim(),
+      password: this.loginForm.get('password')?.value
+    };
+
+    this.authsService.login(payload).subscribe({
       next: (response) => {
         console.log('Login successful', response);
 

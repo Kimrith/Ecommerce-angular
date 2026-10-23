@@ -125,7 +125,7 @@
         <div class="flex items-center gap-4 mb-3" *ngIf="existingImageUrl && !product.images.length">
           <div
             class="relative w-20 h-20 rounded-xl overflow-hidden border border-gray-200 shadow-sm flex items-center justify-center bg-gray-50 shrink-0">
-            <img [src]="'http://localhost:5117' + existingImageUrl" alt="Current Image"
+            <img [src]="apiUrl + existingImageUrl" alt="Current Image"
               class="w-full h-full object-cover">
             <span
               class="absolute bottom-0 left-0 right-0 bg-black/60 text-[9px] text-white text-center py-0.5 font-medium">Current
