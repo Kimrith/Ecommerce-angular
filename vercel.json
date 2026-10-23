@@ -1,0 +1,25 @@
+{
+  "version": 2,
+  "rewrites": [
+    {
+      "source": "/api/:path*",
+      "destination": "http://13.239.98.16/api/:path*"
+    },
+    {
+      "source": "/uploads/:path*",
+      "destination": "http://13.239.98.16/uploads/:path*"
+    },
+    {
+      "source": "/scalar/:path*",
+      "destination": "http://13.239.98.16/scalar/:path*"
+    },
+    {
+      "source": "/openapi/:path*",
+      "destination": "http://13.239.98.16/openapi/:path*"
+    },
+    {
+      "source": "/(.*)",
+      "destination": "/index.html"
+    }
+  ]
+}

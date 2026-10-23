@@ -3,7 +3,7 @@ import { CommonModule } from '@angular/common';
 import { HttpClient, HttpHeaders } from '@angular/common/http';
 import { Router } from '@angular/router';
 import { FormsModule } from '@angular/forms';
-import { environment } from '../../../environments/environment.development';
+import { environment } from '../../../environments/environment';
 import { OrderService } from '../../../Service/Order/order';
 import { ReviewService } from '../../../Service/Review/review';
 import { ToastComponent } from '../../../shared/components/toast';

@@ -3,6 +3,7 @@ import { CommonModule } from '@angular/common';
 import { FormsModule } from '@angular/forms';
 import { ProductService } from '../../../Service/products/product-service';
 import { ToastComponent } from '../../../shared/components/toast';
+import { environment } from '../../../environments/environment';
 
 @Component({
   selector: 'app-seller-add-product-variant',
@@ -17,6 +18,7 @@ export class SellerAddProductVariant implements OnInit {
   @Input() editVariant: any = null; // If passed, we are in edit mode
   @Output() close = new EventEmitter<void>();
 
+  apiUrl = environment.apiUrl;
   selectedImage: File | null = null;
   selectedImageName: string | null = null; // Track file name for UI
   existingImageUrl: string | null = null; // Track existing image URL if editing

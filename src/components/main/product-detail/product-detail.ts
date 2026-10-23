@@ -2,7 +2,7 @@ import { Location, CommonModule } from '@angular/common';
 import { Component, OnInit, ChangeDetectorRef } from '@angular/core';
 import { ActivatedRoute, Router, RouterLink } from '@angular/router';
 import { FormsModule } from '@angular/forms';
-import { environment } from '../../../environments/environment.development';
+import { environment } from '../../../environments/environment';
 import { finalize } from 'rxjs';
 import { ProductService } from '../../../Service/products/product-service';
 import { ReviewService } from '../../../Service/Review/review';

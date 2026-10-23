@@ -7,7 +7,7 @@ import { forkJoin, of } from 'rxjs';
 import { catchError } from 'rxjs/operators';
 import { Auths } from '../../../Service/Auth/auths';
 import { OrderService } from '../../../Service/Order/order';
-import { environment } from '../../../environments/environment.development';
+import { environment } from '../../../environments/environment';
 import { ToastComponent } from '../../../shared/components/toast';
 import { ProductService } from '../../../Service/products/product-service';
 import { Pagination } from '../../../shared/components/admin/pagination/pagination';

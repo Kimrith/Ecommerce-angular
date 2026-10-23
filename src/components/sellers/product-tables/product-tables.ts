@@ -1,7 +1,7 @@
 import { Component, OnInit, ChangeDetectorRef, Output, EventEmitter, Input, OnChanges, SimpleChanges } from '@angular/core';
 import { CommonModule } from '@angular/common';
 import { ProductService } from '../../../Service/products/product-service';
-import { environment } from '../../../environments/environment.development';
+import { environment } from '../../../environments/environment';
 import { ToastComponent } from '../../../shared/components/toast';
 
 @Component({

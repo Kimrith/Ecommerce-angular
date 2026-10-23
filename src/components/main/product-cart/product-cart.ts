@@ -1,7 +1,7 @@
 import { Component, Input, inject, ChangeDetectorRef, OnInit } from '@angular/core';
 import { CommonModule } from '@angular/common';
 import { Router } from '@angular/router';
-import { environment } from '../../../environments/environment.development';
+import { environment } from '../../../environments/environment';
 import { FavoriteService } from '../../../Service/Favorite/favorite';
 import { ReviewService } from '../../../Service/Review/review';
 import { ToastComponent } from '../../../shared/components/toast';

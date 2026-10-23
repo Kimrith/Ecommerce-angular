@@ -175,7 +175,7 @@
                                             class="w-12 h-12 rounded-lg bg-slate-100 overflow-hidden shrink-0 border border-slate-200 flex items-center justify-center">
                                             <img *ngIf="v.imageUrl; else placeholderIcon"
                                                 class="w-full h-full object-cover"
-                                                [src]="'http://localhost:5117' + v.imageUrl" alt="Variant">
+                                                [src]="imgUrl + v.imageUrl" alt="Variant">
                                             <ng-template #placeholderIcon>
                                                 <svg class="w-5 h-5 text-slate-300" fill="none" stroke="currentColor"
                                                     viewBox="0 0 24 24">

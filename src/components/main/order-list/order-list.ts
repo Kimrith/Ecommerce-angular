@@ -2,7 +2,7 @@ import { Component, OnInit, OnDestroy, ChangeDetectorRef, inject } from '@angula
 import { CommonModule } from '@angular/common';
 import { Router } from '@angular/router';
 import { FormsModule } from '@angular/forms';
-import { environment } from '../../../environments/environment.development';
+import { environment } from '../../../environments/environment';
 import { OrderService } from '../../../Service/Order/order';
 import { AddressService } from '../../../Service/Address/address-service';
 import { CouponService } from '../../../Service/Coupon/coupon';

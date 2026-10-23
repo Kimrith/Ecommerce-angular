@@ -81,6 +81,18 @@ export const mainRoutes: Routes = [
       },
 
       {
+        path: 'checkout',
+        component: OrderList,
+        canActivate: [AuthGuard]
+      },
+
+      {
+        path: 'profile',
+        component: Setting,
+        canActivate: [AuthGuard]
+      },
+
+      {
         path: 'favorite',
         component: Favorite,
         canActivate: [AuthGuard]

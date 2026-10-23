@@ -66,7 +66,8 @@ export const csrfInterceptor: HttpInterceptorFn = (req, next) => {
 
   const customReq = req.clone({
     setHeaders: headers,
-    body: body
+    body: body,
+    withCredentials: true
   });
 
   return next(customReq).pipe(

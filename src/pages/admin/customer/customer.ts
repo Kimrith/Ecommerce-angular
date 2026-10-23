@@ -2,7 +2,7 @@ import { Component, OnInit, ChangeDetectorRef } from '@angular/core';
 import { CommonModule } from '@angular/common';
 import { FormsModule } from '@angular/forms';
 import { Auths } from '../../../Service/Auth/auths';
-import { environment } from '../../../environments/environment.development';
+import { environment } from '../../../environments/environment';
 import { CustomerViewDetail } from '../../../components/admin/customer-view-detail/customer-view-detail';
 import { ToastComponent } from '../../../shared/components/toast';
 import { Pagination } from '../../../shared/components/admin/pagination/pagination';
@@ -49,14 +49,10 @@ export class Customer implements OnInit {
     if (!path) return '';
     if (path.startsWith('http')) return path;
 
-    let base = this.imageUrl;
-    if (base.includes('localhost:7223') || base.includes('127.0.0.1:7223')) {
-      base = base.replace('7223', '5117').replace('https://', 'http://');
-    }
-
+    const base = this.imageUrl || '';
     const baseClean = base.endsWith('/') ? base.slice(0, -1) : base;
     const cleanPath = path.startsWith('/') ? path : '/' + path;
-    return baseClean + cleanPath;
+    return baseClean ? baseClean + cleanPath : cleanPath;
   }
 
   ngOnInit() {

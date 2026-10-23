@@ -4,7 +4,7 @@ import { FormsModule } from '@angular/forms';
 import { Auths } from '../../../Service/Auth/auths';
 import { SellerForm } from '../../../type/auth';
 import { ToastComponent } from '../../../shared/components/toast'; // Adjust path to your toast component
-import { environment } from '../../../environments/environment.development';
+import { environment } from '../../../environments/environment';
 
 @Component({
   selector: 'app-add-seller-form-model',

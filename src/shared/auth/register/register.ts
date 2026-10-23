@@ -32,14 +32,14 @@ export class Register {
     private ngZone: NgZone
   ) {
     this.registerForm = this.fb.group({
-      firstName: ['', Validators.required],
-      lastName: ['', Validators.required],
-      email: ['', [Validators.required, Validators.email]],
-      phone: ['', Validators.required],
-      password: ['', [Validators.required, Validators.minLength(6)]],
-      confirmPassword: ['', Validators.required],
+      firstName: ['', [Validators.required, Validators.maxLength(50)]],
+      lastName: ['', [Validators.required, Validators.maxLength(50)]],
+      email: ['', [Validators.required, Validators.email, Validators.maxLength(100)]],
+      phone: ['', [Validators.required, Validators.maxLength(20), Validators.pattern(/^[0-9+\-\s()]{7,20}$/)]],
+      password: ['', [Validators.required, Validators.minLength(6), Validators.maxLength(100)]],
+      confirmPassword: ['', [Validators.required, Validators.maxLength(100)]],
       role: ['Customer', Validators.required],
-      shopName: [''],
+      shopName: ['', [Validators.maxLength(100)]],
       terms: [false, Validators.requiredTrue],
       newsletter: [false]
     }, { validators: this.passwordMatchValidator });
